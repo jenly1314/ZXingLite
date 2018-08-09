@@ -1,0 +1,147 @@
+/*
+ * Copyright (C) 2018 Jenly Yu
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.king.zxing.app;
+
+import android.Manifest;
+import android.content.Intent;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
+import com.king.zxing.CaptureActivity;
+import com.king.zxing.Intents;
+
+import java.util.List;
+
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.EasyPermissions;
+
+public class MainActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks{
+
+    public static final String KEY_TITLE = "key_title";
+    public static final String KEY_IS_QR_CODE = "key_code";
+
+    public static final int REQUEST_CODE = 0X01;
+
+    public static final int RC_CAMERA = 0X01;
+
+    private Class<?> cls;
+    private String title;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK){
+            if(data!=null){
+                //识别结果
+                String result = data.getStringExtra(Intents.Scan.RESULT);
+                Toast.makeText(this,result,Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        // Forward results to EasyPermissions
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+    }
+
+    @Override
+    public void onPermissionsGranted(int requestCode, List<String> list) {
+        // Some permissions have been granted
+        startScan(cls,title);
+    }
+
+    @Override
+    public void onPermissionsDenied(int requestCode, List<String> list) {
+        // Some permissions have been denied
+        // ...
+    }
+
+    /**
+     * 检测拍摄权限
+     * @param cls
+     * @param title
+     */
+    @AfterPermissionGranted(RC_CAMERA)
+    private void checkCameraPermissions(Class<?> cls,String title){
+        this.cls = cls;
+        this.title = title;
+        String[] perms = {Manifest.permission.CAMERA};
+        if (EasyPermissions.hasPermissions(this, perms)) {//有权限
+            startScan(cls,title);
+        } else {
+            // Do not have permissions, request them now
+            EasyPermissions.requestPermissions(this, getString(R.string.permission_camera),
+                    RC_CAMERA, perms);
+        }
+    }
+
+    /**
+     * 扫码
+     * @param cls
+     * @param title
+     */
+    private void startScan(Class<?> cls,String title){
+        ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeCustomAnimation(this,R.anim.in,R.anim.out);
+        Intent intent = new Intent(this, cls);
+        intent.putExtra(KEY_TITLE,title);
+        ActivityCompat.startActivityForResult(this,intent,REQUEST_CODE,optionsCompat.toBundle());
+    }
+
+    /**
+     * 生成二维码/条形码
+     * @param isQRCode
+     */
+    private void startCode(boolean isQRCode){
+        Intent intent = new Intent(this,CodeActivity.class);
+        intent.putExtra(KEY_IS_QR_CODE,isQRCode);
+        intent.putExtra(KEY_TITLE,isQRCode ? getString(R.string.qr_code) : getString(R.string.bar_code));
+        startActivity(intent);
+    }
+
+    public void OnClick(View v){
+        switch (v.getId()){
+            case R.id.btn1:
+                checkCameraPermissions(CaptureActivity.class, ((Button)v).getText().toString());
+                break;
+            case R.id.btn2:
+                checkCameraPermissions(EasyCaptureActivity.class,((Button)v).getText().toString());
+                break;
+            case R.id.btn3:
+                checkCameraPermissions(CustomCaptureActivity.class,((Button)v).getText().toString());
+                break;
+            case R.id.btn4:
+                startCode(false);
+                break;
+            case R.id.btn5:
+                startCode(true);
+                break;
+        }
+
+    }
+}

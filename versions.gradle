@@ -1,0 +1,62 @@
+//App 
+def app_version = [:]
+app_version.versionCode = 1
+app_version.versionName = "1.0.0"
+ext.app_version = app_version
+
+//build version
+def build_versions = [:]
+build_versions.minSdk = 16
+build_versions.targetSdk = 27
+build_versions.compileSdk = 27
+build_versions.buildTools = "27.0.3"
+ext.build_versions = build_versions
+
+ext.deps = [:]
+
+// App dependencies
+def versions = [:]
+//support
+versions.supportLibrary = "27.1.1"
+versions.constraintLayout = "1.1.2"
+
+//test
+versions.junit = "4.12"
+versions.runner = "1.0.2"
+versions.rules = "1.0.2"
+versions.espresso = "3.0.2"
+
+//zxing
+versions.zxing = "3.3.3"
+
+versions.easypermissions = "1.3.0"
+
+
+
+//support
+def support = [:]
+support.design = "com.android.support:design:$versions.supportLibrary"
+support.appcompat = "com.android.support:appcompat-v7:$versions.supportLibrary"
+support.constraintlayout = "com.android.support.constraint:constraint-layout:$versions.constraintLayout"
+deps.support = support
+
+//test
+def test = [:]
+test.junit = "junit:junit:$versions.junit"
+test.runner = "com.android.support.test:runner:$versions.runner"
+test.espresso = "com.android.support.test.espresso:espresso-core:$versions.espresso"
+deps.test = test
+
+//zxing
+deps.zxing = "com.google.zxing:core:$versions.zxing"
+
+//permission
+deps.easypermissions = "pub.devrel:easypermissions:$versions.easypermissions"
+
+ext.deps = deps
+
+def addRepos(RepositoryHandler handler) {
+    handler.google()
+    handler.jcenter()
+}
+ext.addRepos = this.&addRepos
