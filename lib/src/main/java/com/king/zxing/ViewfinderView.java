@@ -85,6 +85,7 @@ public final class ViewfinderView extends View {
     private final float labelTextSize;
     public static int scannerStart = 0;
     public static int scannerEnd = 0;
+    private boolean isShowResultPoint;
 
     private List<ResultPoint> possibleResultPoints;
     private List<ResultPoint> lastPossibleResultPoints;
@@ -320,7 +321,15 @@ public final class ViewfinderView extends View {
         invalidate();
     }
 
-//    /**
+    public boolean isShowResultPoint() {
+        return isShowResultPoint;
+    }
+
+    public void setShowResultPoint(boolean showResultPoint) {
+        isShowResultPoint = showResultPoint;
+    }
+
+    //    /**
 //     * Draw a bitmap with the result points highlighted instead of the live scanning display.
 //     *
 //     * @param barcode An image of the decoded barcode.
@@ -331,15 +340,18 @@ public final class ViewfinderView extends View {
 //    }
 
     public void addPossibleResultPoint(ResultPoint point) {
-        List<ResultPoint> points = possibleResultPoints;
-        synchronized (points) {
-            points.add(point);
-            int size = points.size();
-            if (size > MAX_RESULT_POINTS) {
-                // trim it
-                points.subList(0, size - MAX_RESULT_POINTS / 2).clear();
+        if(isShowResultPoint){
+            List<ResultPoint> points = possibleResultPoints;
+            synchronized (points) {
+                points.add(point);
+                int size = points.size();
+                if (size > MAX_RESULT_POINTS) {
+                    // trim it
+                    points.subList(0, size - MAX_RESULT_POINTS / 2).clear();
+                }
             }
         }
+
     }
 
 }

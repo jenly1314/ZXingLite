@@ -167,12 +167,10 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
         handler = null;
         lastResult = null;
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-
-        if (prefs.getBoolean(Preferences.KEY_DISABLE_AUTO_ORIENTATION, true)) {
-            setRequestedOrientation(getCurrentOrientation());
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         } else {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         }
 
         resetStatusView();

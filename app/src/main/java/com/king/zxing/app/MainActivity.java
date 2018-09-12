@@ -16,16 +16,26 @@
 package com.king.zxing.app;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
+import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+
+import com.google.zxing.DecodeHintType;
+import com.google.zxing.common.StringUtils;
 import com.king.zxing.CaptureActivity;
 import com.king.zxing.Intents;
+import com.king.zxing.app.util.UriUtils;
+import com.king.zxing.util.CodeUtils;
 
 import java.util.List;
 
@@ -37,9 +47,12 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
     public static final String KEY_TITLE = "key_title";
     public static final String KEY_IS_QR_CODE = "key_code";
 
-    public static final int REQUEST_CODE = 0X01;
+    public static final int REQUEST_CODE_SCAN = 0X01;
+    public static final int REQUEST_CODE_PHOTO = 0X02;
 
     public static final int RC_CAMERA = 0X01;
+
+    public static final int RC_READ_PHOTO = 0X02;
 
     private Class<?> cls;
     private String title;
@@ -53,13 +66,46 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == RESULT_OK){
-            if(data!=null){
-                //识别结果
-                String result = data.getStringExtra(Intents.Scan.RESULT);
-                Toast.makeText(this,result,Toast.LENGTH_SHORT).show();
+        if(resultCode == RESULT_OK && data!=null){
+            switch (requestCode){
+                case REQUEST_CODE_SCAN:
+                    String result = data.getStringExtra(Intents.Scan.RESULT);
+                    Toast.makeText(this,result,Toast.LENGTH_SHORT).show();
+                    break;
+                case REQUEST_CODE_PHOTO:
+                    parsePhoto(data);
+                    break;
             }
+
         }
+    }
+
+    private void parsePhoto(Intent data){
+        final String path = UriUtils.INSTANCE.getImagePath(this,data);
+        Log.d("Jenly","path:" + path);
+        if(TextUtils.isEmpty(path)){
+            return;
+        }
+        //异步解析
+        asyncThread(new Runnable() {
+            @Override
+            public void run() {
+                final String result = CodeUtils.parseCode(path);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.d("Jenly","result:" + result);
+                        Toast.makeText(getContext(),result,Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+            }
+        });
+
+    }
+
+    private Context getContext(){
+        return this;
     }
 
     @Override
@@ -73,7 +119,12 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
     @Override
     public void onPermissionsGranted(int requestCode, List<String> list) {
         // Some permissions have been granted
-        startScan(cls,title);
+        switch (requestCode){
+            case RC_CAMERA:
+                startScan(cls,title);
+                break;
+        }
+
     }
 
     @Override
@@ -101,6 +152,10 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         }
     }
 
+    private void asyncThread(Runnable runnable){
+        new Thread(runnable).start();
+    }
+
     /**
      * 扫码
      * @param cls
@@ -110,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeCustomAnimation(this,R.anim.in,R.anim.out);
         Intent intent = new Intent(this, cls);
         intent.putExtra(KEY_TITLE,title);
-        ActivityCompat.startActivityForResult(this,intent,REQUEST_CODE,optionsCompat.toBundle());
+        ActivityCompat.startActivityForResult(this,intent,REQUEST_CODE_SCAN,optionsCompat.toBundle());
     }
 
     /**
@@ -122,6 +177,24 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         intent.putExtra(KEY_IS_QR_CODE,isQRCode);
         intent.putExtra(KEY_TITLE,isQRCode ? getString(R.string.qr_code) : getString(R.string.bar_code));
         startActivity(intent);
+    }
+
+    private void startPhotoCode(){
+        Intent pickIntent = new Intent(Intent.ACTION_PICK,
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        pickIntent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+        startActivityForResult(pickIntent, REQUEST_CODE_PHOTO);
+    }
+
+    @AfterPermissionGranted(RC_READ_PHOTO)
+    private void checkExternalStoragePermissions(){
+        String[] perms = {Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        if (EasyPermissions.hasPermissions(this, perms)) {//有权限
+            startPhotoCode();
+        }else{
+            EasyPermissions.requestPermissions(this, getString(R.string.permission_external_storage),
+                    RC_READ_PHOTO, perms);
+        }
     }
 
     public void OnClick(View v){
@@ -140,6 +213,9 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                 break;
             case R.id.btn5:
                 startCode(true);
+                break;
+            case R.id.btn6:
+                checkExternalStoragePermissions();
                 break;
         }
 

@@ -47,7 +47,7 @@ public class CodeActivity extends AppCompatActivity {
         if(isQRCode){
             createQRCode(getString(R.string.app_name));
         }else{
-            createBarCode(getString(R.string.app_name));
+            createBarCode("1234567890");
         }
     }
 
@@ -69,7 +69,7 @@ public class CodeActivity extends AppCompatActivity {
      */
     private void createBarCode(String content){
         //生成条形码最好放子线程生成防止阻塞UI，这里只是演示
-        Bitmap bitmap = CodeUtils.createBarCode(content, BarcodeFormat.CODE_128,800,200);
+        Bitmap bitmap = CodeUtils.createBarCode(content, BarcodeFormat.CODE_128,800,200,null,true);
         //显示条形码
         ivCode.setImageBitmap(bitmap);
     }

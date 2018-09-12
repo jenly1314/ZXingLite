@@ -123,6 +123,7 @@ final class CameraConfigurationManager {
         display.getSize(theScreenResolution);
         screenResolution = theScreenResolution;
         Log.i(TAG, "Screen resolution in current orientation: " + screenResolution);
+
         cameraResolution = CameraConfigurationUtils.findBestPreviewSizeValue(parameters, screenResolution);
         Log.i(TAG, "Camera resolution: " + cameraResolution);
         bestPreviewSize = CameraConfigurationUtils.findBestPreviewSizeValue(parameters, screenResolution);
@@ -156,6 +157,9 @@ final class CameraConfigurationManager {
         }
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+
+        theCamera.setDisplayOrientation(90);
+        theCamera.setParameters(parameters);
 
         initializeTorch(parameters, prefs, safeMode);
 

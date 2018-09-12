@@ -25,6 +25,7 @@ import android.util.Log;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -44,7 +45,7 @@ public final class CameraConfigurationUtils {
     private static final int MIN_PREVIEW_PIXELS = 480 * 320; // normal screen
     private static final float MAX_EXPOSURE_COMPENSATION = 1.5f;
     private static final float MIN_EXPOSURE_COMPENSATION = 0.0f;
-    private static final double MAX_ASPECT_DISTORTION = 0.15;
+    private static final double MAX_ASPECT_DISTORTION = 0.10;
     private static final int MIN_FPS = 10;
     private static final int MAX_FPS = 20;
     private static final int AREA_PER_1000 = 400;
@@ -270,7 +271,7 @@ public final class CameraConfigurationUtils {
         }
     }
 
-    public static Point findBestPreviewSizeValue(Camera.Parameters parameters, Point screenResolution) {
+    public static Point findBestPreviewSizeValue(Camera.Parameters parameters,final Point screenResolution) {
 
         List<Camera.Size> rawSupportedSizes = parameters.getSupportedPreviewSizes();
         if (rawSupportedSizes == null) {
@@ -282,6 +283,7 @@ public final class CameraConfigurationUtils {
             return new Point(defaultSize.width, defaultSize.height);
         }
 
+
         if (Log.isLoggable(TAG, Log.INFO)) {
             StringBuilder previewSizesString = new StringBuilder();
             for (Camera.Size size : rawSupportedSizes) {
@@ -291,7 +293,7 @@ public final class CameraConfigurationUtils {
         }
 
         double screenAspectRatio = screenResolution.x / (double) screenResolution.y;
-
+        Log.i(TAG, "screenAspectRatio: " + screenAspectRatio);
         // Find a suitable size, with max resolution
         int maxResolution = 0;
         Camera.Size maxResPreviewSize = null;
@@ -304,10 +306,13 @@ public final class CameraConfigurationUtils {
             }
 
             boolean isCandidatePortrait = realWidth < realHeight;
-            int maybeFlippedWidth = isCandidatePortrait ? realHeight : realWidth;
-            int maybeFlippedHeight = isCandidatePortrait ? realWidth : realHeight;
+            int maybeFlippedWidth = isCandidatePortrait ? realWidth: realHeight ;
+            int maybeFlippedHeight = isCandidatePortrait ? realHeight : realWidth;
+            Log.i(TAG, String.format("maybeFlipped:%d * %d",maybeFlippedWidth,maybeFlippedHeight));
             double aspectRatio = maybeFlippedWidth / (double) maybeFlippedHeight;
+            Log.i(TAG, "aspectRatio: " + aspectRatio);
             double distortion = Math.abs(aspectRatio - screenAspectRatio);
+            Log.i(TAG, "distortion: " + distortion);
             if (distortion > MAX_ASPECT_DISTORTION) {
                 continue;
             }
@@ -323,6 +328,21 @@ public final class CameraConfigurationUtils {
                 maxResolution = resolution;
                 maxResPreviewSize = size;
             }
+        }
+
+        if (!rawSupportedSizes.isEmpty()) {
+            Collections.sort(rawSupportedSizes, new Comparator<Camera.Size>() {
+                @Override
+                public int compare(Camera.Size o1, Camera.Size o2) {
+                    int delta1 = Math.abs(o1.height-screenResolution.x);
+                    int delta2 = Math.abs(o2.height-screenResolution.x);
+                    return delta1 - delta2;
+                }
+            });
+            Camera.Size bestPreview = rawSupportedSizes.get(0);
+            Point bestSize = new Point(bestPreview.width, bestPreview.height);
+            Log.i(TAG, "Using largest suitable bestSize: " + bestSize);
+            return bestSize;
         }
 
         // If no exact match, use largest preview size. This was not a great idea on older devices because
