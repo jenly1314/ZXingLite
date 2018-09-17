@@ -119,11 +119,6 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
     @Override
     public void onPermissionsGranted(int requestCode, List<String> list) {
         // Some permissions have been granted
-        switch (requestCode){
-            case RC_CAMERA:
-                startScan(cls,title);
-                break;
-        }
 
     }
 
@@ -135,13 +130,9 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
 
     /**
      * 检测拍摄权限
-     * @param cls
-     * @param title
      */
     @AfterPermissionGranted(RC_CAMERA)
-    private void checkCameraPermissions(Class<?> cls,String title){
-        this.cls = cls;
-        this.title = title;
+    private void checkCameraPermissions(){
         String[] perms = {Manifest.permission.CAMERA};
         if (EasyPermissions.hasPermissions(this, perms)) {//有权限
             startScan(cls,title);
@@ -200,13 +191,19 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
     public void OnClick(View v){
         switch (v.getId()){
             case R.id.btn1:
-                checkCameraPermissions(CaptureActivity.class, ((Button)v).getText().toString());
+                this.cls = CaptureActivity.class;
+                this.title = ((Button)v).getText().toString();
+                checkCameraPermissions();
                 break;
             case R.id.btn2:
-                checkCameraPermissions(EasyCaptureActivity.class,((Button)v).getText().toString());
+                this.cls = EasyCaptureActivity.class;
+                this.title = ((Button)v).getText().toString();
+                checkCameraPermissions();
                 break;
             case R.id.btn3:
-                checkCameraPermissions(CustomCaptureActivity.class,((Button)v).getText().toString());
+                this.cls = CustomCaptureActivity.class;
+                this.title = ((Button)v).getText().toString();
+                checkCameraPermissions();
                 break;
             case R.id.btn4:
                 startCode(false);
