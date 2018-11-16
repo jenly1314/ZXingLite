@@ -28,6 +28,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Shader;
+import android.support.annotation.ColorRes;
 import android.support.v4.content.ContextCompat;
 import android.text.Layout;
 import android.text.StaticLayout;
@@ -81,10 +82,10 @@ public final class ViewfinderView extends View {
     //扫描区域提示文本
     private String labelText;
     //扫描区域提示文本颜色
-    private final int labelTextColor;
-    private final float labelTextSize;
-    public static int scannerStart = 0;
-    public static int scannerEnd = 0;
+    private int labelTextColor;
+    private float labelTextSize;
+    public int scannerStart = 0;
+    public int scannerEnd = 0;
     private boolean isShowResultPoint;
 
     private List<ResultPoint> possibleResultPoints;
@@ -140,6 +141,22 @@ public final class ViewfinderView extends View {
 
     public void setCameraManager(CameraManager cameraManager) {
         this.cameraManager = cameraManager;
+    }
+
+    public void setLabelText(String labelText) {
+        this.labelText = labelText;
+    }
+
+    public void setLabelTextColor(int color) {
+        this.labelTextColor = color;
+    }
+
+    public void setLabelTextColorResource(@ColorRes int id){
+        this.labelTextColor = ContextCompat.getColor(getContext(),id);
+    }
+
+    public void setLabelTextSize(float textSize) {
+        this.labelTextSize = textSize;
     }
 
     @SuppressLint("DrawAllocation")
@@ -329,7 +346,7 @@ public final class ViewfinderView extends View {
         isShowResultPoint = showResultPoint;
     }
 
-    //    /**
+//    /**
 //     * Draw a bitmap with the result points highlighted instead of the live scanning display.
 //     *
 //     * @param barcode An image of the decoded barcode.

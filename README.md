@@ -36,17 +36,17 @@ ZXingLite for Android 是ZXing的精简版，优化扫码和生成二维码功�
 <dependency>
   <groupId>com.king.zxing</groupId>
   <artifactId>zxing-lite</artifactId>
-  <version>1.0.2</version>
+  <version>1.0.3</version>
   <type>pom</type>
 </dependency>
 ```
 ### Gradle:
 ```gradle
-implementation 'com.king.zxing:zxing-lite:1.0.2'
+implementation 'com.king.zxing:zxing-lite:1.0.3'
 ```
 ### Lvy:
 ```lvy
-<dependency org='com.king.zxing' name='zxing-lite' rev='1.0.2'>
+<dependency org='com.king.zxing' name='zxing-lite' rev='1.0.3'>
   <artifact name='$AID' ext='pom'></artifact>
 </dependency>
 ```
@@ -84,6 +84,9 @@ api 'com.google.zxing:core:3.3.3'
 
 代码示例 （二维码/条形码）
 ```Java
+    //跳转的默认扫码界面
+    startActivityForResult(new Intent(context,CaptureActivity.class),requestCode);
+
     //生成二维码
     CodeUtils.createQRCode(content,600,logo);
     //生成条形码

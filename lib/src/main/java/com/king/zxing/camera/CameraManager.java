@@ -58,6 +58,7 @@ public final class CameraManager {
     private int requestedCameraId = OpenCameraInterface.NO_REQUESTED_CAMERA;
     private int requestedFramingRectWidth;
     private int requestedFramingRectHeight;
+
     /**
      * Preview frames are delivered here, which we pass on to the registered handler. Make sure to
      * clear the handler so it will only receive one message.
@@ -229,9 +230,11 @@ public final class CameraManager {
             int width = findDesiredDimensionInRange(screenResolution.x, MIN_FRAME_WIDTH, MAX_FRAME_WIDTH);
             int height = findDesiredDimensionInRange(screenResolution.y, MIN_FRAME_HEIGHT, MAX_FRAME_HEIGHT);
 
-            int leftOffset = (screenResolution.x - width) / 2;
-            int topOffset = (screenResolution.y - height) / 2;
-            framingRect = new Rect(leftOffset, topOffset, leftOffset + width, topOffset + height);
+            int size = Math.min(width,height);
+
+            int leftOffset = (screenResolution.x - size) / 2;
+            int topOffset = (screenResolution.y - size) / 2;
+            framingRect = new Rect(leftOffset, topOffset, leftOffset + size, topOffset + size);
             Log.d(TAG, "Calculated framing rect: " + framingRect);
         }
         return framingRect;
@@ -334,9 +337,12 @@ public final class CameraManager {
         if (rect == null) {
             return null;
         }
+        int size = Math.min(width,height);
+        int left = (width-size)/2;
+        int top = (height-size)/2;
         // Go ahead and assume it's YUV rather than die.
-        return new PlanarYUVLuminanceSource(data, width, height, 0, 0,
-                width, height, false);
+        return new PlanarYUVLuminanceSource(data, width, height, left, top,
+                left + size, top + size, false);
     }
 
 }
