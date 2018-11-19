@@ -158,6 +158,10 @@ final class CameraConfigurationManager {
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
+        if(parameters.isZoomSupported()){
+            parameters.setZoom(parameters.getMaxZoom() / 10);
+        }
+
         theCamera.setDisplayOrientation(90);
         theCamera.setParameters(parameters);
 
