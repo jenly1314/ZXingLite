@@ -178,7 +178,11 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
         handler = null;
         lastResult = null;
 
-        setRequestedOrientation(getCurrentOrientation());
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        } else {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        }
 
         resetStatusView();
 
@@ -270,26 +274,26 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
         }
     }
 
-    private int getCurrentOrientation() {
-        int rotation = getWindowManager().getDefaultDisplay().getRotation();
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            switch (rotation) {
-                case Surface.ROTATION_0:
-                case Surface.ROTATION_90:
-                    return ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
-                default:
-                    return ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE;
-            }
-        } else {
-            switch (rotation) {
-                case Surface.ROTATION_0:
-                case Surface.ROTATION_270:
-                    return ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
-                default:
-                    return ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT;
-            }
-        }
-    }
+//    private int getCurrentOrientation() {
+//        int rotation = getWindowManager().getDefaultDisplay().getRotation();
+//        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+//            switch (rotation) {
+//                case Surface.ROTATION_0:
+//                case Surface.ROTATION_90:
+//                    return ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
+//                default:
+//                    return ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE;
+//            }
+//        } else {
+//            switch (rotation) {
+//                case Surface.ROTATION_0:
+//                case Surface.ROTATION_270:
+//                    return ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+//                default:
+//                    return ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT;
+//            }
+//        }
+//    }
 
     private static boolean isZXingURL(String dataString) {
         if (dataString == null) {

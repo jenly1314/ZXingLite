@@ -132,6 +132,8 @@ public final class ViewfinderView extends View {
         textPadding = array.getDimension(R.styleable.ViewfinderView_textPadding,TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,24,getResources().getDisplayMetrics()));
         textLocation = TextLocation.getFromInt(array.getInt(R.styleable.ViewfinderView_textLocation,0));
 
+        array.recycle();
+
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         textPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
         scannerAlpha = 0;
