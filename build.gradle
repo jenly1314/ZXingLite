@@ -33,5 +33,6 @@ allprojects {
             charSet 'UTF-8'
             links "http://docs.oracle.com/javase/8/docs/api"
         }
+        options.addStringOption('Xdoclint:none', '-quiet')
     }
 }
