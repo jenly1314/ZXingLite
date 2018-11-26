@@ -796,7 +796,7 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
                 return super.onTouchEvent(event);
             }
             if (event.getPointerCount() == 1) {//单点触控，聚焦
-                focusOnTouch(event,camera);
+//                focusOnTouch(event,camera);
             } else {
                 switch (event.getAction() & MotionEvent.ACTION_MASK) {//多点触控
                     case MotionEvent.ACTION_POINTER_DOWN:
