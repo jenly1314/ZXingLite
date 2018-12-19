@@ -23,11 +23,11 @@ ZXingLite for Android 是ZXing的精简版，优化扫码和生成二维码功�
 | cornerColor | color |<font color=#1FB3E2>#FF1FB3E2</font>| 扫描区边角的颜色 |
 | laserColor | color |<font color=#1FB3E2>#FF1FB3E2</font>| 扫描区激光线的颜色 |
 | resultPointColor | color |<font color=#EFBD21>#C0EFBD21</font>| 扫描区结果点的颜色 |
-| text | string |  | 扫描提示文本信息 |
-| textColor | color |<font color=#C0C0C0>#FFC0C0C0</font>| 提示文本字体颜色 |
-| textSize | dimension |14sp| 提示文本字体大小 |
-| textPadding | dimension |24dp| 提示文本距离扫描区的间距 |
-| textLocation | enum |top| 提示文本信息显示的位置 |
+| labelText | string |  | 扫描提示文本信息 |
+| labelTextColor | color |<font color=#C0C0C0>#FFC0C0C0</font>| 提示文本字体颜色 |
+| labelTextSize | dimension |14sp| 提示文本字体大小 |
+| labelTextPadding | dimension |24dp| 提示文本距离扫描区的间距 |
+| labelTextLocation | enum |top| 提示文本信息显示的位置 |
 
 ## 引入
 
@@ -36,17 +36,17 @@ ZXingLite for Android 是ZXing的精简版，优化扫码和生成二维码功�
 <dependency>
   <groupId>com.king.zxing</groupId>
   <artifactId>zxing-lite</artifactId>
-  <version>1.0.3</version>
+  <version>1.0.4</version>
   <type>pom</type>
 </dependency>
 ```
 ### Gradle:
 ```gradle
-implementation 'com.king.zxing:zxing-lite:1.0.3'
+implementation 'com.king.zxing:zxing-lite:1.0.4'
 ```
 ### Lvy:
 ```lvy
-<dependency org='com.king.zxing' name='zxing-lite' rev='1.0.3'>
+<dependency org='com.king.zxing' name='zxing-lite' rev='1.0.4'>
   <artifact name='$AID' ext='pom'></artifact>
 </dependency>
 ```

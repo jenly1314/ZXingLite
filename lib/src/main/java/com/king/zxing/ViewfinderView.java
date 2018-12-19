@@ -77,8 +77,8 @@ public final class ViewfinderView extends View {
     private final int cornerColor;
     private final int resultPointColor;
     private int scannerAlpha;
-    private final float textPadding;
-    private TextLocation textLocation;
+    private final float labelTextPadding;
+    private TextLocation labelTextLocation;
     //扫描区域提示文本
     private String labelText;
     //扫描区域提示文本颜色
@@ -86,7 +86,7 @@ public final class ViewfinderView extends View {
     private float labelTextSize;
     public int scannerStart = 0;
     public int scannerEnd = 0;
-    private boolean isShowResultPoint;
+    private boolean isShowResultPoint = true;
 
     private List<ResultPoint> possibleResultPoints;
     private List<ResultPoint> lastPossibleResultPoints;
@@ -126,11 +126,11 @@ public final class ViewfinderView extends View {
         laserColor = array.getColor(R.styleable.ViewfinderView_laserColor, ContextCompat.getColor(context,R.color.viewfinder_laser));
         resultPointColor = array.getColor(R.styleable.ViewfinderView_resultPointColor, ContextCompat.getColor(context,R.color.viewfinder_result_point_color));
 
-        labelText = array.getString(R.styleable.ViewfinderView_text);
-        labelTextColor = array.getColor(R.styleable.ViewfinderView_textColor, ContextCompat.getColor(context,R.color.viewfinder_text_color));
-        labelTextSize = array.getDimension(R.styleable.ViewfinderView_textSize, TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP,14f,getResources().getDisplayMetrics()));
-        textPadding = array.getDimension(R.styleable.ViewfinderView_textPadding,TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,24,getResources().getDisplayMetrics()));
-        textLocation = TextLocation.getFromInt(array.getInt(R.styleable.ViewfinderView_textLocation,0));
+        labelText = array.getString(R.styleable.ViewfinderView_labelText);
+        labelTextColor = array.getColor(R.styleable.ViewfinderView_labelTextColor, ContextCompat.getColor(context,R.color.viewfinder_text_color));
+        labelTextSize = array.getDimension(R.styleable.ViewfinderView_labelTextSize, TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP,14f,getResources().getDisplayMetrics()));
+        labelTextPadding = array.getDimension(R.styleable.ViewfinderView_labelTextPadding,TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,24,getResources().getDisplayMetrics()));
+        labelTextLocation = TextLocation.getFromInt(array.getInt(R.styleable.ViewfinderView_labelTextLocation,0));
 
         array.recycle();
 
@@ -219,6 +219,10 @@ public final class ViewfinderView extends View {
                 paint.setColor(resultPointColor);
                 synchronized (currentPossible) {
                     for (ResultPoint point : currentPossible) {
+                        if(point.getX()<frame.left || point.getX()>frame.right ||
+                                point.getY()<frame.top || point.getY()>frame.bottom){
+                                continue;
+                        }
                         canvas.drawCircle(frameLeft + (int) (point.getX() * scaleX),
                                 frameTop + (int) (point.getY() * scaleY),
                                 POINT_SIZE, paint);
@@ -255,11 +259,11 @@ public final class ViewfinderView extends View {
             textPaint.setTextSize(labelTextSize);
             textPaint.setTextAlign(Paint.Align.CENTER);
             StaticLayout staticLayout = new StaticLayout(labelText,textPaint,canvas.getWidth(), Layout.Alignment.ALIGN_NORMAL,1.0f,0.0f,true);
-            if(textLocation == TextLocation.BOTTOM){
-                canvas.translate(frame.left + frame.width() / 2,frame.bottom + textPadding);
+            if(labelTextLocation == TextLocation.BOTTOM){
+                canvas.translate(frame.left + frame.width() / 2,frame.bottom + labelTextPadding);
                 staticLayout.draw(canvas);
             }else{
-                canvas.translate(frame.left + frame.width() / 2,frame.top - textPadding - staticLayout.getHeight());
+                canvas.translate(frame.left + frame.width() / 2,frame.top - labelTextPadding - staticLayout.getHeight());
                 staticLayout.draw(canvas);
             }
         }

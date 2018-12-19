@@ -5,11 +5,11 @@
         <attr name="cornerColor" format="color"/>
         <attr name="laserColor" format="color"/>
         <attr name="resultPointColor" format="color"/>
-        <attr name="text" format="string"/>
-        <attr name="textColor" format="color"/>
-        <attr name="textSize" format="dimension"/>
-        <attr name="textPadding" format="dimension"/>
-        <attr name="textLocation" format="enum">
+        <attr name="labelText" format="string"/>
+        <attr name="labelTextColor" format="color"/>
+        <attr name="labelTextSize" format="dimension"/>
+        <attr name="labelTextPadding" format="dimension"/>
+        <attr name="labelTextLocation" format="enum">
             <enum name="top" value="0"/>
             <enum name="bottom" value="1"/>
         </attr>

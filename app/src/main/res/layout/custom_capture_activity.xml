@@ -13,13 +13,13 @@
         android:id="@+id/viewfinder_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:text="@string/tips_scan_code"
-        app:textSize="@dimen/size_14sp"
+        app:labelText="@string/tips_scan_code"
+        app:labelTextSize="@dimen/size_14sp"
         app:laserColor="@color/colorAccent"
         app:frameColor="@color/colorPrimary"
         app:cornerColor="@color/colorPrimary"
         app:resultPointColor="@color/colorAccent"
-        app:textLocation="bottom"/>
+        app:labelTextLocation="bottom"/>
     <ImageView
         android:id="@+id/ivFlash"
         android:layout_width="wrap_content"
