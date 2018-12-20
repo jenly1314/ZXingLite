@@ -10,7 +10,7 @@
 [![Blog](https://img.shields.io/badge/blog-Jenly-9933CC.svg)](http://blog.csdn.net/jenly121)
 
 ZXingLite for Android 是ZXing的精简版，基于ZXing库优化扫码和生成二维码/条形码功能，扫码界面完全支持自定义，也可一行代码使用默认实现的扫码功能。总之你想要的都在这里。
->简单如斯，你不试试？
+>简单如斯，你不试试？ Come on~
 
 ## Gif 展示
 ![Image](GIF.gif)
