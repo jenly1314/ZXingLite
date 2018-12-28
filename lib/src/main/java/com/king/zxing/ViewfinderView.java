@@ -86,7 +86,7 @@ public final class ViewfinderView extends View {
     private float labelTextSize;
     public int scannerStart = 0;
     public int scannerEnd = 0;
-    private boolean isShowResultPoint = true;
+    private boolean isShowResultPoint = false;
 
     private List<ResultPoint> possibleResultPoints;
     private List<ResultPoint> lastPossibleResultPoints;
