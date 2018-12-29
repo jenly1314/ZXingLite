@@ -8,5 +8,5 @@ publish {
     publishVersion = app_version.versionName//版本号
     desc = 'ZXingLite for Android'//描述
     website = 'https://github.com/jenly1314/ZXingLite'//网站
-    licences = ['MIT']//开源协议
+
 }
