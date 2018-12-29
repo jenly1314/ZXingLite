@@ -22,7 +22,6 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Rect;
@@ -35,6 +34,7 @@ import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.View;
 
@@ -56,7 +56,7 @@ public final class ViewfinderView extends View {
     private static final long ANIMATION_DELAY = 20L;
     private static final int CURRENT_POINT_OPACITY = 0xA0;
     private static final int MAX_RESULT_POINTS = 20;
-    private static final int POINT_SIZE = 6;
+    private static final int POINT_SIZE = 8;
 
     private static final int    CORNER_RECT_WIDTH             =   8;  //扫描区边角的宽
     private static final int    CORNER_RECT_HEIGHT            =   40; //扫描区边角的高
@@ -76,7 +76,7 @@ public final class ViewfinderView extends View {
     //四角颜色
     private final int cornerColor;
     private final int resultPointColor;
-    private int scannerAlpha;
+//    private int scannerAlpha;
     private final float labelTextPadding;
     private TextLocation labelTextLocation;
     //扫描区域提示文本
@@ -86,7 +86,15 @@ public final class ViewfinderView extends View {
     private float labelTextSize;
     public int scannerStart = 0;
     public int scannerEnd = 0;
-    private boolean isShowResultPoint = false;
+    private boolean isShowResultPoint;
+
+    private int screenWidth;
+    private int screenHeight;
+    //扫码框宽
+    private int frameWidth;
+    //扫码框宽
+    private int frameHeight;
+
 
     private List<ResultPoint> possibleResultPoints;
     private List<ResultPoint> lastPossibleResultPoints;
@@ -132,13 +140,25 @@ public final class ViewfinderView extends View {
         labelTextPadding = array.getDimension(R.styleable.ViewfinderView_labelTextPadding,TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,24,getResources().getDisplayMetrics()));
         labelTextLocation = TextLocation.getFromInt(array.getInt(R.styleable.ViewfinderView_labelTextLocation,0));
 
+        isShowResultPoint = array.getBoolean(R.styleable.ViewfinderView_showResultPoint,false);
+
+        frameWidth = array.getDimensionPixelSize(R.styleable.ViewfinderView_frameWidth,0);
+        frameHeight = array.getDimensionPixelSize(R.styleable.ViewfinderView_frameHeight,0);
+
         array.recycle();
 
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         textPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
-        scannerAlpha = 0;
+//        scannerAlpha = 0;
         possibleResultPoints = new ArrayList<>(5);
         lastPossibleResultPoints = null;
+
+        screenWidth = getDisplayMetrics().widthPixels;
+        screenHeight = getDisplayMetrics().heightPixels;
+    }
+
+    private DisplayMetrics getDisplayMetrics(){
+        return getResources().getDisplayMetrics();
     }
 
     public void setCameraManager(CameraManager cameraManager) {
@@ -164,12 +184,22 @@ public final class ViewfinderView extends View {
     @SuppressLint("DrawAllocation")
     @Override
     public void onDraw(Canvas canvas) {
-        if (cameraManager == null) {
-            return; // not ready yet, early draw before done configuring
+
+        Rect frame;
+        if(frameWidth > 0 && frameWidth < screenWidth && frameHeight > 0 && frameHeight < screenHeight){
+            //扫码框默认居中，当自定义扫码框宽高时，支持利用内距偏移
+            int leftOffset = (screenWidth - frameWidth) / 2 + getPaddingLeft() - getPaddingRight();
+            int topOffset = (screenHeight - frameHeight) / 2 + getPaddingTop() - getPaddingBottom();
+            frame = new Rect(leftOffset, topOffset, leftOffset + frameWidth, topOffset + frameHeight);
+        }else{
+            if (cameraManager == null) {
+                return; // not ready yet, early draw before done configuring
+            }
+            frame = cameraManager.getFramingRect();
         }
-        Rect frame = cameraManager.getFramingRect();
-        Rect previewFrame = cameraManager.getFramingRectInPreview();
-        if (frame == null || previewFrame == null) {
+
+
+        if (frame == null) {
             return;
         }
 
@@ -202,46 +232,8 @@ public final class ViewfinderView extends View {
             drawLaserScanner(canvas,frame);
             //绘制提示信息
             drawTextInfo(canvas, frame);
-
-            float scaleX = frame.width() / (float) previewFrame.width();
-            float scaleY = frame.height() / (float) previewFrame.height();
-
-            List<ResultPoint> currentPossible = possibleResultPoints;
-            List<ResultPoint> currentLast = lastPossibleResultPoints;
-            int frameLeft = frame.left;
-            int frameTop = frame.top;
-            if (currentPossible.isEmpty()) {
-                lastPossibleResultPoints = null;
-            } else {
-                possibleResultPoints = new ArrayList<>(5);
-                lastPossibleResultPoints = currentPossible;
-                paint.setAlpha(CURRENT_POINT_OPACITY);
-                paint.setColor(resultPointColor);
-                synchronized (currentPossible) {
-                    for (ResultPoint point : currentPossible) {
-                        if(point.getX()<frame.left || point.getX()>frame.right ||
-                                point.getY()<frame.top || point.getY()>frame.bottom){
-                                continue;
-                        }
-                        canvas.drawCircle(frameLeft + (int) (point.getX() * scaleX),
-                                frameTop + (int) (point.getY() * scaleY),
-                                POINT_SIZE, paint);
-                    }
-                }
-            }
-            if (currentLast != null) {
-                paint.setAlpha(CURRENT_POINT_OPACITY / 2);
-                paint.setColor(resultPointColor);
-                synchronized (currentLast) {
-                    float radius = POINT_SIZE / 2.0f;
-                    for (ResultPoint point : currentLast) {
-                        canvas.drawCircle(frameLeft + (int) (point.getX() * scaleX),
-                                frameTop + (int) (point.getY() * scaleY),
-                                radius, paint);
-                    }
-                }
-            }
-
+            //绘制扫码结果点
+            drawResultPoint(canvas,frame);
             // Request another update at the animation interval, but only repaint the laser line,
             // not the entire viewfinder mask.
             postInvalidateDelayed(ANIMATION_DELAY,
@@ -335,6 +327,49 @@ public final class ViewfinderView extends View {
         canvas.drawRect(0, frame.bottom + 1, width, height, paint);
     }
 
+    //绘制扫码结果点
+    private void drawResultPoint(Canvas canvas,Rect frame){
+
+        if(!isShowResultPoint){
+            return;
+        }
+
+        List<ResultPoint> currentPossible = possibleResultPoints;
+        List<ResultPoint> currentLast = lastPossibleResultPoints;
+
+        if (currentPossible.isEmpty()) {
+            lastPossibleResultPoints = null;
+        } else {
+            possibleResultPoints = new ArrayList<>(5);
+            lastPossibleResultPoints = currentPossible;
+            paint.setAlpha(CURRENT_POINT_OPACITY);
+            paint.setColor(resultPointColor);
+            synchronized (currentPossible) {
+                for (ResultPoint point : currentPossible) {
+                    if(point.getX()<frame.left || point.getX()>frame.right ||
+                            point.getY()<frame.top || point.getY()>frame.bottom){
+                        continue;
+                    }
+                    canvas.drawCircle( point.getX(),point.getY(), POINT_SIZE, paint);
+                }
+            }
+        }
+        if (currentLast != null) {
+            paint.setAlpha(CURRENT_POINT_OPACITY / 2);
+            paint.setColor(resultPointColor);
+            synchronized (currentLast) {
+                float radius = POINT_SIZE / 2.0f;
+                for (ResultPoint point : currentLast) {
+                    if(point.getX()<frame.left || point.getX()>frame.right ||
+                            point.getY()<frame.top || point.getY()>frame.bottom){
+                        continue;
+                    }
+                    canvas.drawCircle( point.getX(),point.getY(), radius, paint);
+                }
+            }
+        }
+    }
+
     public void drawViewfinder() {
         Bitmap resultBitmap = this.resultBitmap;
         this.resultBitmap = null;
@@ -348,6 +383,10 @@ public final class ViewfinderView extends View {
         return isShowResultPoint;
     }
 
+    /**
+     * 设置显示结果点
+     * @param showResultPoint 是否显示结果点
+     */
     public void setShowResultPoint(boolean showResultPoint) {
         isShowResultPoint = showResultPoint;
     }

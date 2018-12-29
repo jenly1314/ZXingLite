@@ -13,6 +13,9 @@
             <enum name="top" value="0"/>
             <enum name="bottom" value="1"/>
         </attr>
+        <attr name="showResultPoint" format="boolean"/>
+        <attr name="frameWidth" format="dimension"/>
+        <attr name="frameHeight" format="dimension"/>
     </declare-styleable>
 
 </resources>
