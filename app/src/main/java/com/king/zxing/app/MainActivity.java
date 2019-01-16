@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
 
     public static final String KEY_TITLE = "key_title";
     public static final String KEY_IS_QR_CODE = "key_code";
+    public static final String KEY_IS_CONTINUOUS = "key_continuous_scan";
 
     public static final int REQUEST_CODE_SCAN = 0X01;
     public static final int REQUEST_CODE_PHOTO = 0X02;
@@ -56,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
 
     private Class<?> cls;
     private String title;
+    private boolean isContinuousScan;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -156,6 +158,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeCustomAnimation(this,R.anim.in,R.anim.out);
         Intent intent = new Intent(this, cls);
         intent.putExtra(KEY_TITLE,title);
+        intent.putExtra(KEY_IS_CONTINUOUS,isContinuousScan);
         ActivityCompat.startActivityForResult(this,intent,REQUEST_CODE_SCAN,optionsCompat.toBundle());
     }
 
@@ -189,7 +192,14 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
     }
 
     public void OnClick(View v){
+        isContinuousScan = false;
         switch (v.getId()){
+            case R.id.btn0:
+                this.cls = CustomCaptureActivity.class;
+                this.title = ((Button)v).getText().toString();
+                isContinuousScan = true;
+                checkCameraPermissions();
+                break;
             case R.id.btn1:
                 this.cls = CaptureActivity.class;
                 this.title = ((Button)v).getText().toString();

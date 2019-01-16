@@ -20,6 +20,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.zxing.Result;
 import com.king.zxing.CaptureActivity;
@@ -30,6 +31,7 @@ import com.king.zxing.app.util.StatusBarUtils;
  */
 public class CustomCaptureActivity extends CaptureActivity {
 
+    private boolean isContinuousScan;
     @Override
     public int getLayoutId() {
         return R.layout.custom_capture_activity;
@@ -42,6 +44,8 @@ public class CustomCaptureActivity extends CaptureActivity {
         StatusBarUtils.immersiveStatusBar(this,toolbar,0.2f);
         TextView tvTitle = findViewById(R.id.tvTitle);
         tvTitle.setText(getIntent().getStringExtra(MainActivity.KEY_TITLE));
+
+        isContinuousScan = getIntent().getBooleanExtra(MainActivity.KEY_IS_CONTINUOUS,false);
 
         getBeepManager().setPlayBeep(true);
         getBeepManager().setVibrate(true);
@@ -76,6 +80,9 @@ public class CustomCaptureActivity extends CaptureActivity {
     @Override
     public void onResult(Result result) {
         super.onResult(result);
+        if(isContinuousScan){//连续扫码时，直接弹出结果
+            Toast.makeText(this,result.getText(),Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**
@@ -84,7 +91,7 @@ public class CustomCaptureActivity extends CaptureActivity {
      */
     @Override
     public boolean isContinuousScan() {
-        return super.isContinuousScan();
+        return isContinuousScan;
     }
 
     /**
