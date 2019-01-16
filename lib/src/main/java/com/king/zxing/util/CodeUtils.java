@@ -31,10 +31,12 @@ import com.google.zxing.DecodeHintType;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatReader;
 import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.NotFoundException;
 import com.google.zxing.RGBLuminanceSource;
 import com.google.zxing.Result;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
+import com.google.zxing.common.GlobalHistogramBinarizer;
 import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.qrcode.QRCodeReader;
 import com.google.zxing.qrcode.QRCodeWriter;
@@ -188,7 +190,25 @@ public class CodeUtils {
      */
     public static String parseQRCode(String bitmapPath, Map<DecodeHintType,?> hints){
         try {
-            Result result = new QRCodeReader().decode(getBinaryBitmap(compressBitmap(bitmapPath)), hints);
+            QRCodeReader reader = new QRCodeReader();
+
+            Result result = null;
+            RGBLuminanceSource source = getRGBLuminanceSource(compressBitmap(bitmapPath));
+            if (source != null) {
+                BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
+                try {
+                    result = reader.decode(bitmap,hints);
+                } catch (Exception e) {//解析失败则通过GlobalHistogramBinarizer 再试一次
+                    BinaryBitmap bitmap1 = new BinaryBitmap(new GlobalHistogramBinarizer(source));
+                    try {
+                        result = reader.decode(bitmap1);
+                    } catch (NotFoundException ne) {
+
+                    }
+                } finally {
+                    reader.reset();
+                }
+            }
             return result.getText();
         } catch (Exception e) {
             e.printStackTrace();
@@ -223,16 +243,35 @@ public class CodeUtils {
      * @return
      */
     public static String parseCode(String bitmapPath, Map<DecodeHintType,Object> hints){
+
         try {
             MultiFormatReader reader = new MultiFormatReader();
             reader.setHints(hints);
-            Result result = reader.decodeWithState(getBinaryBitmap(compressBitmap(bitmapPath)));
+            Result result = null;
+            RGBLuminanceSource source = getRGBLuminanceSource(compressBitmap(bitmapPath));
+            if (source != null) {
+                BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
+                try {
+                    result = reader.decodeWithState(bitmap);
+                } catch (Exception e) {//解析失败则通过GlobalHistogramBinarizer 再试一次
+                    BinaryBitmap bitmap1 = new BinaryBitmap(new GlobalHistogramBinarizer(source));
+                    try {
+                        result = reader.decodeWithState(bitmap1);
+                    } catch (NotFoundException ne) {
+
+                    }
+                } finally {
+                    reader.reset();
+                }
+            }
             return result.getText();
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
+
+
 
     /**
      * 压缩图片
@@ -265,19 +304,18 @@ public class CodeUtils {
     }
 
     /**
-     * 获取二进制图片
+     * 获取RGBLuminanceSource
      * @param bitmap
      * @return
      */
-    private static BinaryBitmap getBinaryBitmap(@NonNull Bitmap bitmap){
+    private static RGBLuminanceSource getRGBLuminanceSource(@NonNull Bitmap bitmap){
         int width = bitmap.getWidth();
         int height = bitmap.getHeight();
 
         int[] pixels = new int[width * height];
         bitmap.getPixels(pixels, 0, bitmap.getWidth(), 0, 0, bitmap.getWidth(), bitmap.getHeight());
-        RGBLuminanceSource source = new RGBLuminanceSource(width, height, pixels);
-        //得到二进制图片
-        return new BinaryBitmap(new HybridBinarizer(source));
+        return new RGBLuminanceSource(width, height, pixels);
+
     }
 
     /**

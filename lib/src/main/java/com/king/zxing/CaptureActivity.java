@@ -38,6 +38,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.DecodeHintType;
@@ -177,12 +178,6 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 
         handler = null;
         lastResult = null;
-
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        } else {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        }
 
         resetStatusView();
 
@@ -444,6 +439,50 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
     }
 
     /**
+     * 重新启动扫码和解码器
+     */
+    public void restartPreviewAndDecode(){
+        if(handler!=null){
+            handler.restartPreviewAndDecode();
+        }
+    }
+
+    /**
+     * 接收扫码结果，想支持连扫时，可将{@link #isContinuousScan()}返回为{@code true}并重写此方法
+     * 如果{@link #isContinuousScan()}支持连扫，则默认重启扫码和解码器；当连扫逻辑太复杂时，
+     * 请将{@link #isAutoRestartPreviewAndDecode()}返回为{@code false}，并手动调用{@link #restartPreviewAndDecode()}
+     * @param result 扫码结果
+     */
+    public void onResult(Result result){
+        if(isContinuousScan()){
+            if(isAutoRestartPreviewAndDecode()){
+                restartPreviewAndDecode();
+            }
+        }else{
+            Intent intent = new Intent();
+            intent.putExtra(KEY_RESULT,result.getText());
+            setResult(RESULT_OK,intent);
+            finish();
+        }
+    }
+
+    /**
+     * 是否连续扫码，如果想支持连续扫码，则将此方法返回{@code true}并重写{@link #onResult(Result)}
+     * @return 默认返回 false
+     */
+    public boolean isContinuousScan(){
+        return false;
+    }
+
+    /**
+     * 是否自动重启扫码和解码器，当支持连扫时才起作用。
+     * @return 默认返回 true
+     */
+    public boolean isAutoRestartPreviewAndDecode(){
+        return true;
+    }
+
+    /**
      * A valid barcode has been found, so give an indication of success and show the results.
      *
      * @param rawResult The contents of the barcode.
@@ -456,11 +495,9 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
         if(isBeepSoundAndVibrate()){
             beepManager.playBeepSoundAndVibrate();
         }
-        String resultString = rawResult.getText();
-        Intent intent = new Intent();
-        intent.putExtra(KEY_RESULT,resultString);
-        setResult(RESULT_OK,intent);
-        finish();
+
+        onResult(rawResult);
+
 
 
 //        ResultHandler resultHandler = ResultHandlerFactory.makeResultHandler(this, rawResult);

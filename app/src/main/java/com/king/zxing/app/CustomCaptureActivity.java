@@ -21,6 +21,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.zxing.Result;
 import com.king.zxing.CaptureActivity;
 import com.king.zxing.app.util.StatusBarUtils;
 
@@ -46,6 +47,9 @@ public class CustomCaptureActivity extends CaptureActivity {
         getBeepManager().setVibrate(true);
     }
 
+    /**
+     * 关闭闪光灯（手电筒）
+     */
     private void offFlash(){
         Camera camera = getCameraManager().getOpenCamera().getCamera();
         Camera.Parameters parameters = camera.getParameters();
@@ -53,6 +57,9 @@ public class CustomCaptureActivity extends CaptureActivity {
         camera.setParameters(parameters);
     }
 
+    /**
+     * 开启闪光灯（手电筒）
+     */
     public void openFlash(){
         Camera camera = getCameraManager().getOpenCamera().getCamera();
         Camera.Parameters parameters = camera.getParameters();
@@ -60,6 +67,34 @@ public class CustomCaptureActivity extends CaptureActivity {
         camera.setParameters(parameters);
     }
 
+    /**
+     * 接收扫码结果，想支持连扫时，可将{@link #isContinuousScan()}返回为{@code true}并重写此方法
+     * 如果{@link #isContinuousScan()}支持连扫，则默认重启扫码和解码器；当连扫逻辑太复杂时，
+     * 请将{@link #isAutoRestartPreviewAndDecode()}返回为{@code false}，并手动调用{@link #restartPreviewAndDecode()}
+     * @param result 扫码结果
+     */
+    @Override
+    public void onResult(Result result) {
+        super.onResult(result);
+    }
+
+    /**
+     * 是否连续扫码，如果想支持连续扫码，则将此方法返回{@code true}并重写{@link #onResult(Result)}
+     * @return 默认返回 false
+     */
+    @Override
+    public boolean isContinuousScan() {
+        return super.isContinuousScan();
+    }
+
+    /**
+     * 是否自动重启扫码和解码器，当支持连扫时才起作用。
+     * @return 默认返回 true
+     */
+    @Override
+    public boolean isAutoRestartPreviewAndDecode() {
+        return super.isAutoRestartPreviewAndDecode();
+    }
 
     private void clickFlash(View v){
         if(v.isSelected()){

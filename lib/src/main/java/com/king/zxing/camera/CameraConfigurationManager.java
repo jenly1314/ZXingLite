@@ -108,8 +108,7 @@ final class CameraConfigurationManager {
     }
      */
 
-        cwRotationFromDisplayToCamera =
-                (360 + cwRotationFromNaturalToCamera - cwRotationFromNaturalToDisplay) % 360;
+        cwRotationFromDisplayToCamera = (360 + cwRotationFromNaturalToCamera - cwRotationFromNaturalToDisplay) % 360;
         Log.i(TAG, "Final display orientation: " + cwRotationFromDisplayToCamera);
         if (camera.getFacing() == CameraFacing.FRONT) {
             Log.i(TAG, "Compensating rotation for front camera");
@@ -162,7 +161,6 @@ final class CameraConfigurationManager {
             parameters.setZoom(parameters.getMaxZoom() / 10);
         }
 
-        theCamera.setDisplayOrientation(90);
         theCamera.setParameters(parameters);
 
         initializeTorch(parameters, prefs, safeMode);
