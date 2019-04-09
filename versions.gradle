@@ -1,15 +1,15 @@
 //App 
 def app_version = [:]
-app_version.versionCode = 7
-app_version.versionName = "1.0.6"
+app_version.versionCode = 8
+app_version.versionName = "1.0.7"
 ext.app_version = app_version
 
 //build version
 def build_versions = [:]
 build_versions.minSdk = 16
-build_versions.targetSdk = 27
-build_versions.compileSdk = 27
-build_versions.buildTools = "27.0.3"
+build_versions.targetSdk = 28
+build_versions.compileSdk = 28
+build_versions.buildTools = "28.0.3"
 ext.build_versions = build_versions
 
 ext.deps = [:]
@@ -17,8 +17,8 @@ ext.deps = [:]
 // App dependencies
 def versions = [:]
 //support
-versions.supportLibrary = "27.1.1"
-versions.constraintLayout = "1.1.2"
+versions.supportLibrary = "28.0.0"
+versions.constraintLayout = "1.1.3"
 
 //test
 versions.junit = "4.12"

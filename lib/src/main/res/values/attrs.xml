@@ -16,6 +16,13 @@
         <attr name="showResultPoint" format="boolean"/>
         <attr name="frameWidth" format="dimension"/>
         <attr name="frameHeight" format="dimension"/>
+        <attr name="gridColumn" format="integer"/>
+        <attr name="gridHeight" format="dimension"/>
+        <attr name="laserStyle" format="enum">
+            <enum name="none" value="0"/>
+            <enum name="line" value="1"/>
+            <enum name="grid" value="2"/>
+        </attr>
     </declare-styleable>
 
 </resources>

@@ -19,7 +19,8 @@
         app:frameColor="@color/colorPrimary"
         app:cornerColor="@color/colorPrimary"
         app:resultPointColor="@color/colorAccent"
-        app:labelTextLocation="bottom"/>
+        app:labelTextLocation="bottom"
+        app:laserStyle="grid"/>
     <ImageView
         android:id="@+id/ivFlash"
         android:layout_width="wrap_content"

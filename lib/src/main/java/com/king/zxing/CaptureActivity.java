@@ -82,6 +82,8 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
     private CaptureActivityHandler handler;
     private Result savedResultToShow;
     private ViewfinderView viewfinderView;
+    private SurfaceView surfaceView;
+    private SurfaceHolder surfaceHolder;
 //    private TextView statusView;
 //    private View resultView;
     private Result lastResult;
@@ -133,6 +135,14 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
         beepManager = new BeepManager(this);
         ambientLightManager = new AmbientLightManager(this);
 
+        viewfinderView = findViewById(getViewFinderViewId());
+
+        surfaceView = findViewById(getPreviewViewId());
+        surfaceHolder = surfaceView.getHolder();
+
+
+        cameraManager = new CameraManager(getApplication());
+
 //        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
     }
 
@@ -160,22 +170,6 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
     protected void onResume() {
         super.onResume();
 
-        // historyManager must be initialized here to update the history preference
-//        historyManager = new HistoryManager(this);
-//        historyManager.trimHistory();
-
-        // CameraManager must be initialized here, not in onCreate(). This is necessary because we don't
-        // want to open the camera driver and measure the screen size if we're going to show the help on
-        // first launch. That led to bugs where the scanning rectangle was the wrong size and partially
-        // off screen.
-
-        cameraManager = new CameraManager(getApplication());
-        viewfinderView = findViewById(getViewFinderViewId());
-        viewfinderView.setCameraManager(cameraManager);
-
-//        resultView = findViewById(R.id.result_view);
-//        statusView =  findViewById(R.id.status_view);
-
         handler = null;
         lastResult = null;
 
@@ -189,12 +183,6 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 
         Intent intent = getIntent();
 
-//        copyToClipboard = prefs.getBoolean(Preferences.KEY_COPY_TO_CLIPBOARD, true)
-//                && (intent == null || intent.getBooleanExtra(Intents.Scan.SAVE_HISTORY, true));
-//
-//        source = IntentSource.NONE;
-//        sourceUrl = null;
-//        scanFromWebPageManager = null;
         decodeFormats = null;
         characterSet = null;
 
@@ -257,8 +245,6 @@ public class CaptureActivity extends Activity implements SurfaceHolder.Callback 
 
         }
 
-        SurfaceView surfaceView = findViewById(getPreviewViewId());
-        SurfaceHolder surfaceHolder = surfaceView.getHolder();
         if (hasSurface) {
             // The activity was paused but not stopped, so the surface still exists. Therefore
             // surfaceCreated() won't be called, so init the camera here.

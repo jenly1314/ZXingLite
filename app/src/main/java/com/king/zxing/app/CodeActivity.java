@@ -57,7 +57,7 @@ public class CodeActivity extends AppCompatActivity {
      */
     private void createQRCode(String content){
         //生成二维码最好放子线程生成防止阻塞UI，这里只是演示
-        Bitmap logo = BitmapFactory.decodeResource(getResources(),R.mipmap.ic_launcher);
+        Bitmap logo = BitmapFactory.decodeResource(getResources(),R.drawable.logo);
         Bitmap bitmap =  CodeUtils.createQRCode(content,600,logo);
         //显示二维码
         ivCode.setImageBitmap(bitmap);
