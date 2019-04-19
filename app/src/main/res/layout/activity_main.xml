@@ -26,13 +26,6 @@
             android:layout_gravity="center_horizontal"
             android:text="@string/app_name"/>
     </android.support.v7.widget.Toolbar>
-    <android.support.constraint.Guideline
-        android:id="@+id/line"
-        android:orientation="horizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"
-        app:layout_constraintGuide_percent="0.2"/>
     <Button
         android:id="@+id/btn0"
         android:layout_width="match_parent"
@@ -41,10 +34,10 @@
         android:layout_marginRight="20dp"
         android:layout_marginTop="6dp"
         android:layout_marginBottom="6dp"
-        android:text="连续扫码"
+        android:text="默认扫码"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/line"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
         style="@style/OnClick"/>
     <Button
         android:id="@+id/btn1"
@@ -54,7 +47,7 @@
         android:layout_marginRight="20dp"
         android:layout_marginTop="6dp"
         android:layout_marginBottom="6dp"
-        android:text="默认扫码"
+        android:text="连续扫码"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn0"
@@ -67,7 +60,8 @@
         android:layout_marginRight="20dp"
         android:layout_marginTop="6dp"
         android:layout_marginBottom="6dp"
-        android:text="简单自定义布局扫码"
+        android:text="Fragment扫码"
+        android:textAllCaps="false"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn1"
@@ -93,7 +87,7 @@
         android:layout_marginRight="20dp"
         android:layout_marginTop="6dp"
         android:layout_marginBottom="6dp"
-        android:text="生成条形码"
+        android:text="自定义扫码"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn3"
@@ -106,7 +100,7 @@
         android:layout_marginRight="20dp"
         android:layout_marginTop="6dp"
         android:layout_marginBottom="6dp"
-        android:text="生成二维码"
+        android:text="生成条形码"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn4"
@@ -119,9 +113,22 @@
         android:layout_marginRight="20dp"
         android:layout_marginTop="6dp"
         android:layout_marginBottom="6dp"
-        android:text="识别一维码/二维码图片"
+        android:text="生成二维码"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn5"
+        style="@style/OnClick"/>
+    <Button
+        android:id="@+id/btn7"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="6dp"
+        android:text="识别一维码/二维码图片"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn6"
         style="@style/OnClick"/>
 </android.support.constraint.ConstraintLayout>

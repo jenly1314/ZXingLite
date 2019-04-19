@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <SurfaceView
+        android:id="@+id/surfaceView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+    <com.king.zxing.ViewfinderView
+        android:id="@+id/viewfinderView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:labelText="@string/tips_scan_code"
+        app:labelTextSize="@dimen/size_14sp"
+        app:laserColor="@color/colorAccent"
+        app:frameColor="@color/colorPrimary"
+        app:cornerColor="@color/colorPrimary"
+        app:resultPointColor="@color/colorAccent"
+        app:labelTextLocation="bottom"
+        app:laserStyle="grid"
+        app:gridHeight="0dp"/>
+    <ImageView
+        android:id="@+id/ivFlash"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/flash_selected_selector"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="160dp"
+        style="@style/OnClick"/>
+    <include layout="@layout/toolbar_capture"/>
+</android.support.constraint.ConstraintLayout>

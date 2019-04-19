@@ -45,17 +45,17 @@ ZXingLite for Android 是ZXing的精简版，基于ZXing库优化扫码和生成
 <dependency>
   <groupId>com.king.zxing</groupId>
   <artifactId>zxing-lite</artifactId>
-  <version>1.0.7</version>
+  <version>1.1.0</version>
   <type>pom</type>
 </dependency>
 ```
 ### Gradle:
 ```gradle
-implementation 'com.king.zxing:zxing-lite:1.0.7'
+implementation 'com.king.zxing:zxing-lite:1.1.0'
 ```
 ### Lvy:
 ```lvy
-<dependency org='com.king.zxing' name='zxing-lite' rev='1.0.7'>
+<dependency org='com.king.zxing' name='zxing-lite' rev='1.1.0'>
   <artifact name='$AID' ext='pom'></artifact>
 </dependency>
 ```
@@ -79,16 +79,20 @@ api 'com.google.zxing:core:3.3.3'
 
 布局示例 （可自定义布局，布局内至少要保证有SurfaceView和ViewfinderView，控件id可根据重写CaptureActivity 的 getPreviewViewId 和 getViewFinderViewId方法自定义）
 ```Xml
-    <merge xmlns:android="http://schemas.android.com/apk/res/android">
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
         <SurfaceView
-            android:id="@+id/preview_view"
+            android:id="@+id/surfaceView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
         <com.king.zxing.ViewfinderView
-            android:id="@+id/viewfinder_view"
+            android:id="@+id/viewfinderView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
-    </merge>
+
+    </FrameLayout>
 ```
 
 代码示例 （二维码/条形码）
@@ -102,9 +106,25 @@ api 'com.google.zxing:core:3.3.3'
     CodeUtils.createBarCode(content, BarcodeFormat.CODE_128,800,200);
 ```
 
+### 快速实现扫码有以下几种方式：
+
+> 1、直接使用CaptureActivity或者CaptureFragment。(纯洁的扫码，无任何添加剂)
+
+> 2、通过继承CaptureActivity或者CaptureFragment并自定义布局。（适用于大多场景，并无需关心扫码相关逻辑）
+
+> 3、在你项目的Activity或者Fragment中创建创建一个CaptureHelper并在相应的生命周期中调用CaptureHelper的周期。（适用于想在扫码界面写交互逻辑，又因为项目架构或其它原因，无法直接或间接继承CaptureActivity或CaptureFragment时使用）
+
+> 4、参照CaptureHelper写一个自定义的扫码帮助类，其它步骤同方式3。（扩展高级用法，谨慎使用）
+
+
 更多使用详情，请查看[app](app)中的源码使用示例
 
 ## 版本记录
+
+#### v1.1.0：2019-4-19
+*  将扫码相关逻辑与界面分离，ZXingLite使用更容易扩展。
+*  新增CaptureFragment
+
 #### v1.0.7：2019-4-9
 *  新增网格样式的扫描激光（类似支付宝扫码样式）
 *  升级Gradle至v4.6

@@ -18,7 +18,6 @@ package com.king.zxing.app;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
@@ -30,8 +29,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.google.zxing.DecodeHintType;
-import com.google.zxing.common.StringUtils;
 import com.king.zxing.CaptureActivity;
 import com.king.zxing.Intents;
 import com.king.zxing.app.util.UriUtils;
@@ -42,6 +39,20 @@ import java.util.List;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
+/**
+ * 扫码Demo示例说明
+ *
+ * 快速实现扫码有以下几种方式：
+ *
+ * 1、直接使用CaptureActivity或者CaptureFragment。(纯洁的扫码，无任何添加剂)
+ *
+ * 2、通过继承CaptureActivity或者CaptureFragment并自定义布局。（适用于大多场景，并无需关心扫码相关逻辑）
+ *
+ * 3、在你项目的Activity或者Fragment中创建创建一个CaptureHelper并在相应的生命周期中调用CaptureHelper的周期。（适用于想在扫码界面写交互逻辑，又因为项目架构或其它原因，无法直接或间接继承CaptureActivity或CaptureFragment时使用）
+ *
+ * 4、参照CaptureHelper写一个自定义的扫码帮助类，其它步骤同方式3。（扩展高级用法，谨慎使用）
+ *
+ */
 public class MainActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks{
 
     public static final String KEY_TITLE = "key_title";
@@ -195,18 +206,18 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         isContinuousScan = false;
         switch (v.getId()){
             case R.id.btn0:
+                this.cls = CaptureActivity.class;
+                this.title = ((Button)v).getText().toString();
+                checkCameraPermissions();
+                break;
+            case R.id.btn1:
                 this.cls = CustomCaptureActivity.class;
                 this.title = ((Button)v).getText().toString();
                 isContinuousScan = true;
                 checkCameraPermissions();
                 break;
-            case R.id.btn1:
-                this.cls = CaptureActivity.class;
-                this.title = ((Button)v).getText().toString();
-                checkCameraPermissions();
-                break;
             case R.id.btn2:
-                this.cls = EasyCaptureActivity.class;
+                this.cls = CaptureFragmentActivity.class;
                 this.title = ((Button)v).getText().toString();
                 checkCameraPermissions();
                 break;
@@ -216,12 +227,17 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                 checkCameraPermissions();
                 break;
             case R.id.btn4:
-                startCode(false);
+                this.cls = CustomActivity.class;
+                this.title = ((Button)v).getText().toString();
+                checkCameraPermissions();
                 break;
             case R.id.btn5:
-                startCode(true);
+                startCode(false);
                 break;
             case R.id.btn6:
+                startCode(true);
+                break;
+            case R.id.btn7:
                 checkExternalStoragePermissions();
                 break;
         }

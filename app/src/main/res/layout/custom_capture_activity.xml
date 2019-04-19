@@ -6,11 +6,11 @@
     android:layout_height="match_parent">
 
     <SurfaceView
-        android:id="@+id/preview_view"
+        android:id="@+id/surfaceView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
     <com.king.zxing.ViewfinderView
-        android:id="@+id/viewfinder_view"
+        android:id="@+id/viewfinderView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:labelText="@string/tips_scan_code"

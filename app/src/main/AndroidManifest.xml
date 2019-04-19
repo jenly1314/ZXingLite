@@ -22,11 +22,24 @@
             </intent-filter>
         </activity>
         <activity
+            android:name="com.king.zxing.CaptureActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity
             android:name=".EasyCaptureActivity"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".CustomCaptureActivity"
             android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".CaptureFragmentActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".CustomActivity"
+            android:screenOrientation="portrait"/>
+
         <activity
             android:name=".CodeActivity"
             android:screenOrientation="portrait"/>

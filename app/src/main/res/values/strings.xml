@@ -2,7 +2,7 @@
     <string name="app_name">ZXingLite</string>
     <string name="permission_camera">App扫码需要用到拍摄权限</string>
     <string name="permission_external_storage">App需要用到读写权限</string>
-    <string name="tips_scan_code">将二维码/条形码放入框内，即可自动扫码</string>
+    <string name="tips_scan_code">将二维码/条形码放入框内，即可自动扫描</string>
     <string name="qr_code">二维码</string>
     <string name="bar_code">条形码</string>
 </resources>

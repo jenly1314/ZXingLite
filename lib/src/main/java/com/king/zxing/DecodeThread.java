@@ -20,7 +20,9 @@ package com.king.zxing;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.ResultPointCallback;
+import com.king.zxing.camera.CameraManager;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Looper;
@@ -43,18 +45,23 @@ final class DecodeThread extends Thread {
     public static final String BARCODE_BITMAP = "barcode_bitmap";
     public static final String BARCODE_SCALED_FACTOR = "barcode_scaled_factor";
 
-    private final CaptureActivity activity;
+    private final Context context;
+    private final CameraManager cameraManager;
     private final Map<DecodeHintType,Object> hints;
     private Handler handler;
+    private CaptureHandler captureHandler;
     private final CountDownLatch handlerInitLatch;
 
-    DecodeThread(CaptureActivity activity,
+    DecodeThread(Context context,CameraManager cameraManager,
+                 CaptureHandler captureHandler,
                  Collection<BarcodeFormat> decodeFormats,
                  Map<DecodeHintType,?> baseHints,
                  String characterSet,
                  ResultPointCallback resultPointCallback) {
 
-        this.activity = activity;
+        this.context = context;
+        this.cameraManager = cameraManager;
+        this.captureHandler = captureHandler;
         handlerInitLatch = new CountDownLatch(1);
 
         hints = new EnumMap<>(DecodeHintType.class);
@@ -64,7 +71,7 @@ final class DecodeThread extends Thread {
 
         // The prefs can't change while the thread is running, so pick them up once here.
         if (decodeFormats == null || decodeFormats.isEmpty()) {
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
             decodeFormats = EnumSet.noneOf(BarcodeFormat.class);
             if (prefs.getBoolean(Preferences.KEY_DECODE_1D_PRODUCT, true)) {
                 decodeFormats.addAll(DecodeFormatManager.PRODUCT_FORMATS);
@@ -106,7 +113,7 @@ final class DecodeThread extends Thread {
     @Override
     public void run() {
         Looper.prepare();
-        handler = new DecodeHandler(activity, hints);
+        handler = new DecodeHandler(context,cameraManager,captureHandler, hints);
         handlerInitLatch.countDown();
         Looper.loop();
     }
