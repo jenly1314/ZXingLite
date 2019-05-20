@@ -50,7 +50,9 @@ public class CustomCaptureActivity extends CaptureActivity {
         //获取CaptureHelper，里面有扫码相关的配置设置
         getCaptureHelper().playBeep(true)//播放音效
                 .vibrate(true)//震动
+                .supportVerticalCode(true)//支持扫垂直条码，建议有此需求时才使用。
                 .continuousScan(isContinuousScan);//是否连扫
+
     }
 
     /**

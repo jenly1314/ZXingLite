@@ -27,9 +27,11 @@ import android.graphics.LinearGradient;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Shader;
+import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -39,6 +41,7 @@ import android.text.TextPaint;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 
@@ -58,7 +61,7 @@ public final class ViewfinderView extends View {
     private static final long ANIMATION_DELAY = 15L;
     private static final int CURRENT_POINT_OPACITY = 0xA0;
     private static final int MAX_RESULT_POINTS = 20;
-    private static final int POINT_SIZE = 8;
+    private static final int POINT_SIZE = 20;
 
     private static final int CORNER_RECT_WIDTH             =   8;  //扫描区边角的宽
     private static final int CORNER_RECT_HEIGHT            =   40; //扫描区边角的高
@@ -67,7 +70,6 @@ public final class ViewfinderView extends View {
 
     private Paint paint;
     private TextPaint textPaint;
-    private Bitmap resultBitmap;
     private int maskColor;
     //扫描区域边框颜色
     private int frameColor;
@@ -217,7 +219,7 @@ public final class ViewfinderView extends View {
         this.labelText = labelText;
     }
 
-    public void setLabelTextColor(int color) {
+    public void setLabelTextColor(@ColorInt int color) {
         this.labelTextColor = color;
     }
 
@@ -256,31 +258,23 @@ public final class ViewfinderView extends View {
 
         // Draw the exterior (i.e. outside the framing rect) darkened
         drawExterior(canvas,frame,width,height);
-
-        if (resultBitmap != null) {
-            // Draw the opaque result bitmap over the scanning rectangle
-            paint.setAlpha(CURRENT_POINT_OPACITY);
-            canvas.drawBitmap(resultBitmap, null, frame, paint);
-        } else {
-
-            // Draw a red "laser scanner" line through the middle to show decoding is active
-            drawLaserScanner(canvas,frame);
-            // Draw a two pixel solid black border inside the framing rect
-            drawFrame(canvas, frame);
-            // 绘制边角
-            drawCorner(canvas, frame);
-            //绘制提示信息
-            drawTextInfo(canvas, frame);
-            //绘制扫码结果点
-            drawResultPoint(canvas,frame);
-            // Request another update at the animation interval, but only repaint the laser line,
-            // not the entire viewfinder mask.
-            postInvalidateDelayed(ANIMATION_DELAY,
-                    frame.left - POINT_SIZE,
-                    frame.top - POINT_SIZE,
-                    frame.right + POINT_SIZE,
-                    frame.bottom + POINT_SIZE);
-        }
+        // Draw a red "laser scanner" line through the middle to show decoding is active
+        drawLaserScanner(canvas,frame);
+        // Draw a two pixel solid black border inside the framing rect
+        drawFrame(canvas, frame);
+        // 绘制边角
+        drawCorner(canvas, frame);
+        //绘制提示信息
+        drawTextInfo(canvas, frame);
+        //绘制扫码结果点
+        drawResultPoint(canvas,frame);
+        // Request another update at the animation interval, but only repaint the laser line,
+        // not the entire viewfinder mask.
+        postInvalidateDelayed(ANIMATION_DELAY,
+                frame.left - POINT_SIZE,
+                frame.top - POINT_SIZE,
+                frame.right + POINT_SIZE,
+                frame.bottom + POINT_SIZE);
     }
 
     /**
@@ -469,12 +463,9 @@ public final class ViewfinderView extends View {
             paint.setAlpha(CURRENT_POINT_OPACITY);
             paint.setColor(resultPointColor);
             synchronized (currentPossible) {
+                float radius = POINT_SIZE / 2.0f;
                 for (ResultPoint point : currentPossible) {
-                    if(point.getX()<frame.left || point.getX()>frame.right ||
-                            point.getY()<frame.top || point.getY()>frame.bottom){
-                        continue;
-                    }
-                    canvas.drawCircle( point.getX(),point.getY(), POINT_SIZE, paint);
+                    canvas.drawCircle( point.getX(),point.getY(), radius, paint);
                 }
             }
         }
@@ -484,10 +475,6 @@ public final class ViewfinderView extends View {
             synchronized (currentLast) {
                 float radius = POINT_SIZE / 2.0f;
                 for (ResultPoint point : currentLast) {
-                    if(point.getX()<frame.left || point.getX()>frame.right ||
-                            point.getY()<frame.top || point.getY()>frame.bottom){
-                        continue;
-                    }
                     canvas.drawCircle( point.getX(),point.getY(), radius, paint);
                 }
             }
@@ -495,11 +482,6 @@ public final class ViewfinderView extends View {
     }
 
     public void drawViewfinder() {
-        Bitmap resultBitmap = this.resultBitmap;
-        this.resultBitmap = null;
-        if (resultBitmap != null) {
-            resultBitmap.recycle();
-        }
         invalidate();
     }
 
@@ -519,15 +501,6 @@ public final class ViewfinderView extends View {
         isShowResultPoint = showResultPoint;
     }
 
-//    /**
-//     * Draw a bitmap with the result points highlighted instead of the live scanning display.
-//     *
-//     * @param barcode An image of the decoded barcode.
-//     */
-//    public void drawResultBitmap(Bitmap barcode) {
-//        resultBitmap = barcode;
-//        invalidate();
-//    }
 
     public void addPossibleResultPoint(ResultPoint point) {
         if(isShowResultPoint){
@@ -543,5 +516,7 @@ public final class ViewfinderView extends View {
         }
 
     }
+
+
 
 }

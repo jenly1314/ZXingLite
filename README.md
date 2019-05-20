@@ -45,17 +45,17 @@ ZXingLite for Android 是ZXing的精简版，基于ZXing库优化扫码和生成
 <dependency>
   <groupId>com.king.zxing</groupId>
   <artifactId>zxing-lite</artifactId>
-  <version>1.1.0</version>
+  <version>1.1.1</version>
   <type>pom</type>
 </dependency>
 ```
 ### Gradle:
 ```gradle
-implementation 'com.king.zxing:zxing-lite:1.1.0'
+implementation 'com.king.zxing:zxing-lite:1.1.1'
 ```
 ### Lvy:
 ```lvy
-<dependency org='com.king.zxing' name='zxing-lite' rev='1.1.0'>
+<dependency org='com.king.zxing' name='zxing-lite' rev='1.1.1'>
   <artifact name='$AID' ext='pom'></artifact>
 </dependency>
 ```
@@ -106,6 +106,13 @@ api 'com.google.zxing:core:3.3.3'
     CodeUtils.createBarCode(content, BarcodeFormat.CODE_128,800,200);
 ```
 
+如果直接使用CaptureActivity需在您项目的AndroidManifest中添加如下配置
+```Xml
+    <activity
+        android:name="com.king.zxing.CaptureActivity"
+        android:screenOrientation="portrait"/>
+```
+
 ### 快速实现扫码有以下几种方式：
 
 > 1、直接使用CaptureActivity或者CaptureFragment。(纯洁的扫码，无任何添加剂)
@@ -121,8 +128,12 @@ api 'com.google.zxing:core:3.3.3'
 
 ## 版本记录
 
+#### v1.1.1：2019-5-20
+*  支持扫二维码过小时，自动缩放
+*  支持垂直条形码识别（增强条形码识别，默认不支持，需CaptureHelper.supportVerticalCode(true)开启）
+
 #### v1.1.0：2019-4-19
-*  将扫码相关逻辑与界面分离，ZXingLite使用更容易扩展。
+*  将扫码相关逻辑与界面分离，ZXingLite使用更容易扩展
 *  新增CaptureFragment
 
 #### v1.0.7：2019-4-9

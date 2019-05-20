@@ -222,7 +222,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                 checkCameraPermissions();
                 break;
             case R.id.btn3:
-                this.cls = CustomCaptureActivity.class;
+                this.cls = EasyCaptureActivity.class;
                 this.title = ((Button)v).getText().toString();
                 checkCameraPermissions();
                 break;

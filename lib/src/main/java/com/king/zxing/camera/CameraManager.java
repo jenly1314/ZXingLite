@@ -21,6 +21,7 @@ import android.content.Context;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.hardware.Camera;
+import android.media.FaceDetector;
 import android.os.Handler;
 import android.util.Log;
 import android.view.SurfaceHolder;
@@ -58,6 +59,7 @@ public final class CameraManager {
     private int requestedCameraId = OpenCameraInterface.NO_REQUESTED_CAMERA;
     private int requestedFramingRectWidth;
     private int requestedFramingRectHeight;
+    private boolean isFullScreenScan;
 
     /**
      * Preview frames are delivered here, which we pass on to the registered handler. Make sure to
@@ -221,35 +223,29 @@ public final class CameraManager {
             if (camera == null) {
                 return null;
             }
-            Point screenResolution = configManager.getScreenResolution();
-            if (screenResolution == null) {
+            Point point = configManager.getCameraResolution();
+            if (point == null) {
                 // Called early, before init even finished
                 return null;
             }
 
-            int width = findDesiredDimensionInRange(screenResolution.x, MIN_FRAME_WIDTH, MAX_FRAME_WIDTH);
-            int height = findDesiredDimensionInRange(screenResolution.y, MIN_FRAME_HEIGHT, MAX_FRAME_HEIGHT);
+            int width = point.x;
+            int height = point.y;
 
-            int size = Math.min(width,height);
+            if(isFullScreenScan){
+                framingRect = new Rect(0,0,width,height);
+            }else{
+                int size = Math.min(width,height);
 
-            int leftOffset = (screenResolution.x - size) / 2;
-            int topOffset = (screenResolution.y - size) / 2;
-            framingRect = new Rect(leftOffset, topOffset, leftOffset + size, topOffset + size);
-            Log.d(TAG, "Calculated framing rect: " + framingRect);
+                int leftOffset = (width - size) / 2;
+                int topOffset = (height - size) / 2;
+                framingRect = new Rect(leftOffset, topOffset, leftOffset + size, topOffset + size);
+            }
+
         }
         return framingRect;
     }
 
-    private static int findDesiredDimensionInRange(int resolution, int hardMin, int hardMax) {
-        int dim = 5 * resolution / 8; // Target 5/8 of each dimension
-        if (dim < hardMin) {
-            return hardMin;
-        }
-        if (dim > hardMax) {
-            return hardMax;
-        }
-        return dim;
-    }
 
     /**
      * Like {@link #getFramingRect} but coordinates are in terms of the preview frame,
@@ -270,6 +266,7 @@ public final class CameraManager {
                 // Called early, before init even finished
                 return null;
             }
+
 //            rect.left = rect.left * cameraResolution.x / screenResolution.x;
 //            rect.right = rect.right * cameraResolution.x / screenResolution.x;
 //            rect.top = rect.top * cameraResolution.y / screenResolution.y;
@@ -280,11 +277,28 @@ public final class CameraManager {
             rect.top = rect.top * cameraResolution.x / screenResolution.y;
             rect.bottom = rect.bottom * cameraResolution.x / screenResolution.y;
 
+
             framingRectInPreview = rect;
         }
+
         return framingRectInPreview;
     }
 
+    public boolean isFullScreenScan() {
+        return isFullScreenScan;
+    }
+
+    public void setFullScreenScan(boolean fullScreenScan) {
+        isFullScreenScan = fullScreenScan;
+    }
+
+    public Point getCameraResolution() {
+        return configManager.getCameraResolution();
+    }
+
+    public Point getScreenResolution() {
+        return configManager.getScreenResolution();
+    }
 
     /**
      * Allows third party apps to specify the camera ID, rather than determine
@@ -337,12 +351,16 @@ public final class CameraManager {
         if (rect == null) {
             return null;
         }
+
+        if(isFullScreenScan){
+            return new PlanarYUVLuminanceSource(data,width,height,0,0,width,height,false);
+        }
         int size = Math.min(width,height);
         int left = (width-size)/2;
         int top = (height-size)/2;
         // Go ahead and assume it's YUV rather than die.
         return new PlanarYUVLuminanceSource(data, width, height, left, top,
-                left + size, top + size, false);
+                size, size, false);
     }
 
 }

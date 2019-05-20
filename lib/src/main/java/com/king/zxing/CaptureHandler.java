@@ -1,22 +1,21 @@
 package com.king.zxing;
 
 import android.app.Activity;
-import android.content.ActivityNotFoundException;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.provider.Browser;
-import android.util.Log;
+import android.view.Display;
+import android.view.WindowManager;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.Result;
+import com.google.zxing.ResultPoint;
+import com.google.zxing.ResultPointCallback;
 import com.king.zxing.camera.CameraManager;
 
 import java.util.Collection;
@@ -25,7 +24,7 @@ import java.util.Map;
 /**
  * @author <a href="mailto:jenly1314@gmail.com">Jenly</a>
  */
-public class CaptureHandler extends Handler {
+public class CaptureHandler extends Handler implements ResultPointCallback {
 
     private static final String TAG = CaptureHandler.class.getSimpleName();
 
@@ -35,6 +34,20 @@ public class CaptureHandler extends Handler {
     private final CameraManager cameraManager;
     private final Activity activity;
     private final ViewfinderView viewfinderView;
+    /**
+     * 是否支持垂直的条形码
+     */
+    private boolean isSupportVerticalCode;
+
+    /**
+     * 是否返回扫码原图
+     */
+    private boolean isReturnBitmap;
+
+    /**
+     * 是否支持自动缩放
+     */
+    private boolean isSupportAutoZoom;
 
 
     private enum State {
@@ -51,8 +64,7 @@ public class CaptureHandler extends Handler {
         this.activity = activity;
         this.viewfinderView = viewfinderView;
         this.onCaptureListener = onCaptureListener;
-        decodeThread = new DecodeThread(activity,cameraManager,this, decodeFormats, baseHints, characterSet,
-                new ViewfinderResultPointCallback(viewfinderView));
+        decodeThread = new DecodeThread(activity,cameraManager,this, decodeFormats, baseHints, characterSet, this);
         decodeThread.start();
         state = State.SUCCESS;
 
@@ -83,46 +95,10 @@ public class CaptureHandler extends Handler {
             }
             onCaptureListener.onHandleDecode((Result) message.obj, barcode, scaleFactor);
 
+
         } else if (message.what == R.id.decode_failed) {// We're decoding as fast as possible, so when one decode fails, start another.
             state = State.PREVIEW;
             cameraManager.requestPreviewFrame(decodeThread.getHandler(), R.id.decode);
-
-        } else if (message.what == R.id.return_scan_result) {
-            activity.setResult(Activity.RESULT_OK, (Intent) message.obj);
-            activity.finish();
-
-        } else if (message.what == R.id.launch_product_query) {
-            String url = (String) message.obj;
-
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.addFlags(Intents.FLAG_NEW_DOC);
-            intent.setData(Uri.parse(url));
-
-            ResolveInfo resolveInfo =
-                    activity.getPackageManager().resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
-            String browserPackageName = null;
-            if (resolveInfo != null && resolveInfo.activityInfo != null) {
-                browserPackageName = resolveInfo.activityInfo.packageName;
-                Log.d(TAG, "Using browser in package " + browserPackageName);
-            }
-
-            // Needed for default Android browser / Chrome only apparently
-            if (browserPackageName != null) {
-                switch (browserPackageName) {
-                    case "com.android.browser":
-                    case "com.android.chrome":
-                        intent.setPackage(browserPackageName);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        intent.putExtra(Browser.EXTRA_APPLICATION_ID, browserPackageName);
-                        break;
-                }
-            }
-
-            try {
-                activity.startActivity(intent);
-            } catch (ActivityNotFoundException ignored) {
-                Log.w(TAG, "Can't find anything to handle VIEW of URI " + url);
-            }
 
         }
     }
@@ -150,5 +126,76 @@ public class CaptureHandler extends Handler {
             cameraManager.requestPreviewFrame(decodeThread.getHandler(), R.id.decode);
             viewfinderView.drawViewfinder();
         }
+    }
+
+    @Override
+    public void foundPossibleResultPoint(ResultPoint point) {
+        if(viewfinderView!=null){
+            ResultPoint resultPoint = transform(point);
+            viewfinderView.addPossibleResultPoint(resultPoint);
+        }
+    }
+
+    private boolean isScreenPortrait(Context context){
+        WindowManager manager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Display display = manager.getDefaultDisplay();
+        Point screenResolution = new Point();
+        display.getSize(screenResolution);
+        return screenResolution.x < screenResolution.y;
+    }
+
+    /**
+     *
+     * @return
+     */
+    private ResultPoint transform(ResultPoint originPoint) {
+        Point screenPoint = cameraManager.getScreenResolution();
+        Point cameraPoint = cameraManager.getCameraResolution();
+
+        float scaleX;
+        float scaleY;
+        float x;
+        float y;
+
+        if(screenPoint.x < screenPoint.y){
+            scaleX = 1.0f * screenPoint.x / cameraPoint.y;
+            scaleY = 1.0f * screenPoint.y / cameraPoint.x;
+
+            x = originPoint.getX() * scaleX - Math.max(screenPoint.x,cameraPoint.y)/2;
+            y = originPoint.getY() * scaleY - Math.min(screenPoint.y,cameraPoint.x)/2;
+        }else{
+            scaleX = 1.0f * screenPoint.x / cameraPoint.x;
+            scaleY = 1.0f * screenPoint.y / cameraPoint.y;
+
+            x = originPoint.getX() * scaleX - Math.min(screenPoint.y,cameraPoint.y)/2;
+            y = originPoint.getY() * scaleY - Math.max(screenPoint.x,cameraPoint.x)/2;
+        }
+
+
+        return new ResultPoint(x,y);
+    }
+
+    public boolean isSupportVerticalCode() {
+        return isSupportVerticalCode;
+    }
+
+    public void setSupportVerticalCode(boolean supportVerticalCode) {
+        isSupportVerticalCode = supportVerticalCode;
+    }
+
+    public boolean isReturnBitmap() {
+        return isReturnBitmap;
+    }
+
+    public void setReturnBitmap(boolean returnBitmap) {
+        isReturnBitmap = returnBitmap;
+    }
+
+    public boolean isSupportAutoZoom() {
+        return isSupportAutoZoom;
+    }
+
+    public void setSupportAutoZoom(boolean supportAutoZoom) {
+        isSupportAutoZoom = supportAutoZoom;
     }
 }

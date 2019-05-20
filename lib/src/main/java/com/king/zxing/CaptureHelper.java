@@ -75,6 +75,12 @@ public class CaptureHelper implements CaptureLifecycle,CaptureTouchEvent,Capture
      */
     private boolean isSupportZoom = true;
     private float oldDistance;
+
+    /**
+     * 是否支持自动缩放（变焦），默认支持
+     */
+    private boolean isSupportAutoZoom = true;
+
     /**
      * 是否支持连扫，默认不支持
      */
@@ -91,6 +97,21 @@ public class CaptureHelper implements CaptureLifecycle,CaptureTouchEvent,Capture
      * 是否震动
      */
     private boolean isVibrate;
+
+    /**
+     * 是否支持垂直的条形码
+     */
+    private boolean isSupportVerticalCode;
+
+    /**
+     * 是否返回扫码原图
+     */
+    private boolean isReturnBitmap;
+
+    /**
+     * 是否支持全屏扫码识别
+     */
+    private boolean isFullScreenScan;
 
     private OnCaptureCallback onCaptureCallback;
 
@@ -115,7 +136,7 @@ public class CaptureHelper implements CaptureLifecycle,CaptureTouchEvent,Capture
         ambientLightManager = new AmbientLightManager(activity);
 
         cameraManager = new CameraManager(activity);
-
+        cameraManager.setFullScreenScan(isFullScreenScan);
         callback = new SurfaceHolder.Callback() {
             @Override
             public void surfaceCreated(SurfaceHolder holder) {
@@ -236,6 +257,10 @@ public class CaptureHelper implements CaptureLifecycle,CaptureTouchEvent,Capture
         return false;
     }
 
+    /**
+     * 初始化Camera
+     * @param surfaceHolder
+     */
     private void initCamera(SurfaceHolder surfaceHolder) {
         if (surfaceHolder == null) {
             throw new IllegalStateException("No SurfaceHolder provided");
@@ -249,6 +274,9 @@ public class CaptureHelper implements CaptureLifecycle,CaptureTouchEvent,Capture
             // Creating the handler starts the preview, which can also throw a RuntimeException.
             if (captureHandler == null) {
                 captureHandler = new CaptureHandler(activity,viewfinderView,onCaptureListener, decodeFormats, decodeHints, characterSet, cameraManager);
+                captureHandler.setSupportVerticalCode(isSupportVerticalCode);
+                captureHandler.setReturnBitmap(isReturnBitmap);
+                captureHandler.setSupportAutoZoom(isSupportAutoZoom);
             }
         } catch (IOException ioe) {
             Log.w(TAG, ioe);
@@ -388,10 +416,10 @@ public class CaptureHelper implements CaptureLifecycle,CaptureTouchEvent,Capture
     public void onResult(Result result){
         String text = result.getText();
         if(isContinuousScan){
+            if(onCaptureCallback!=null){
+                onCaptureCallback.onResultCallback(text);
+            }
             if(isAutoRestartPreviewAndDecode){
-                if(onCaptureCallback!=null){
-                    onCaptureCallback.onResultCallback(text);
-                }
                 restartPreviewAndDecode();
             }
         }else{
@@ -461,7 +489,7 @@ public class CaptureHelper implements CaptureLifecycle,CaptureTouchEvent,Capture
     }
 
     /**
-     *
+     * 设置支持的解码一/二维码格式，默认常规的码都支持
      * @param decodeFormats
      * @return
      */
@@ -471,7 +499,7 @@ public class CaptureHelper implements CaptureLifecycle,CaptureTouchEvent,Capture
     }
 
     /**
-     *
+     * {@link DecodeHintType}
      * @param decodeHints
      * @return
      */
@@ -481,7 +509,7 @@ public class CaptureHelper implements CaptureLifecycle,CaptureTouchEvent,Capture
     }
 
     /**
-     *
+     *  设置解码时编码字符集
      * @param characterSet
      * @return
      */
@@ -489,6 +517,60 @@ public class CaptureHelper implements CaptureLifecycle,CaptureTouchEvent,Capture
         this.characterSet = characterSet;
         return this;
     }
+
+    /**
+     * 设置是否支持扫垂直的条码
+     * @param supportVerticalCode 默认为false，想要增强扫条码识别度时可使用，相应的会增加性能消耗。
+     * @return
+     */
+    public CaptureHelper supportVerticalCode(boolean supportVerticalCode) {
+        this.isSupportVerticalCode = supportVerticalCode;
+        if(captureHandler!=null){
+            captureHandler.setSupportVerticalCode(isSupportVerticalCode);
+        }
+        return this;
+    }
+
+    /**
+     * 设置返回扫码原图
+     * @param returnBitmap 默认为false，当返回true表示扫码就结果会返回扫码原图，相应的会增加性能消耗。
+     * @return
+     */
+    public CaptureHelper returnBitmap(boolean returnBitmap) {
+        isReturnBitmap = returnBitmap;
+        if(captureHandler!=null){
+            captureHandler.setReturnBitmap(isReturnBitmap);
+        }
+        return this;
+    }
+
+
+    /**
+     * 设置是否支持自动缩放
+     * @param supportAutoZoom
+     * @return
+     */
+    public CaptureHelper supportAutoZoom(boolean supportAutoZoom) {
+        isSupportAutoZoom = supportAutoZoom;
+        if(captureHandler!=null){
+            captureHandler.setSupportAutoZoom(isSupportAutoZoom);
+        }
+        return this;
+    }
+
+    /**
+     * 设置是否支持全屏扫码识别
+     * @param fullScreenScan
+     * @return
+     */
+    public CaptureHelper fullScreenScan(boolean fullScreenScan) {
+        isFullScreenScan = fullScreenScan;
+        if(cameraManager!=null){
+            cameraManager.setFullScreenScan(isFullScreenScan);
+        }
+        return this;
+    }
+
 
     /**
      * 设置扫码回调

@@ -18,17 +18,9 @@ package com.king.zxing;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import com.google.zxing.BinaryBitmap;
-import com.google.zxing.DecodeHintType;
-import com.google.zxing.MultiFormatReader;
-import com.google.zxing.NotFoundException;
-import com.google.zxing.PlanarYUVLuminanceSource;
-import com.google.zxing.Result;
-import com.google.zxing.common.GlobalHistogramBinarizer;
-import com.google.zxing.common.HybridBinarizer;
-import com.king.zxing.camera.CameraManager;
-
 import android.graphics.Point;
+import android.graphics.PointF;
+import android.hardware.Camera;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -36,6 +28,16 @@ import android.os.Message;
 import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
+
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.BinaryBitmap;
+import com.google.zxing.DecodeHintType;
+import com.google.zxing.MultiFormatReader;
+import com.google.zxing.PlanarYUVLuminanceSource;
+import com.google.zxing.Result;
+import com.google.zxing.ResultPoint;
+import com.google.zxing.common.HybridBinarizer;
+import com.king.zxing.camera.CameraManager;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Map;
@@ -46,11 +48,13 @@ final class DecodeHandler extends Handler {
 
     private final Context context;
     private final CameraManager cameraManager;
-    private final Handler handler;
+    private final CaptureHandler handler;
     private final MultiFormatReader multiFormatReader;
     private boolean running = true;
 
-    DecodeHandler(Context context, CameraManager cameraManager,Handler handler, Map<DecodeHintType,Object> hints) {
+    private long lastZoomTime;
+
+    DecodeHandler(Context context, CameraManager cameraManager,CaptureHandler handler, Map<DecodeHintType,Object> hints) {
         multiFormatReader = new MultiFormatReader();
         multiFormatReader.setHints(hints);
         this.context = context;
@@ -64,7 +68,7 @@ final class DecodeHandler extends Handler {
             return;
         }
         if (message.what == R.id.decode) {
-            decode((byte[]) message.obj, message.arg1, message.arg2,isScreenPortrait());
+            decode((byte[]) message.obj, message.arg1, message.arg2,isScreenPortrait(),handler.isSupportVerticalCode());
 
         } else if (message.what == R.id.quit) {
             running = false;
@@ -89,11 +93,85 @@ final class DecodeHandler extends Handler {
      * @param width  The width of the preview frame.
      * @param height The height of the preview frame.
      */
-    private void decode(byte[] data, int width, int height,boolean isScreenPortrait) {
+    private void decode(byte[] data, int width, int height,boolean isScreenPortrait,boolean isSupportVerticalCode) {
         long start = System.currentTimeMillis();
         Result rawResult = null;
+        PlanarYUVLuminanceSource source = buildPlanarYUVLuminanceSource(data,width,height,isScreenPortrait);
+
+        if (source != null) {
+            BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
+            try {
+                rawResult = multiFormatReader.decodeWithState(bitmap);
+            } catch (Exception e) {
+                if(isSupportVerticalCode){
+                    source = buildPlanarYUVLuminanceSource(data,width,height,!isScreenPortrait);
+                    if(source!=null){
+                        BinaryBitmap bitmap1 = new BinaryBitmap(new HybridBinarizer(source));
+                        try{
+                            rawResult = multiFormatReader.decodeWithState(bitmap1);
+                        }catch (Exception e1){
+
+                        }
+                    }
+
+                }
+
+            } finally {
+                multiFormatReader.reset();
+            }
+        }
+
+        if (rawResult != null) {
+            // Don't log the barcode contents for security.
+            long end = System.currentTimeMillis();
+            Log.d(TAG, "Found barcode in " + (end - start) + " ms");
+
+            BarcodeFormat barcodeFormat = rawResult.getBarcodeFormat();
+            if(handler!=null && handler.isSupportAutoZoom() && barcodeFormat == BarcodeFormat.QR_CODE){
+
+                ResultPoint[] resultPoints = rawResult.getResultPoints();
+                if(resultPoints.length >= 3){
+                    float distance1 = ResultPoint.distance(resultPoints[0],resultPoints[1]);
+                    float distance2 = ResultPoint.distance(resultPoints[1],resultPoints[2]);
+                    float distance3 = ResultPoint.distance(resultPoints[0],resultPoints[2]);
+                    int maxDistance = (int)Math.max(Math.max(distance1,distance2),distance3);
+                    if(handleAutoZoom(maxDistance,width)){
+                        Message message = Message.obtain();
+                        message.what = R.id.decode_succeeded;
+                        message.obj = rawResult;
+                        if(handler.isReturnBitmap()){
+                            Bundle bundle = new Bundle();
+                            bundleThumbnail(source, bundle);
+                            message.setData(bundle);
+                        }
+                        handler.sendMessageDelayed(message,300);
+                        return;
+                    }
+                }
+
+
+            }
+
+            if (handler != null) {
+                Message message = Message.obtain(handler, R.id.decode_succeeded, rawResult);
+                if(handler.isReturnBitmap()){
+                    Bundle bundle = new Bundle();
+                    bundleThumbnail(source, bundle);
+                    message.setData(bundle);
+                }
+                message.sendToTarget();
+            }
+        } else {
+            if (handler != null) {
+                Message message = Message.obtain(handler, R.id.decode_failed);
+                message.sendToTarget();
+            }
+        }
+    }
+
+    private PlanarYUVLuminanceSource buildPlanarYUVLuminanceSource(byte[] data, int width, int height,boolean isRotate){
         PlanarYUVLuminanceSource source;
-        if(isScreenPortrait){
+        if(isRotate){
             byte[] rotatedData = new byte[data.length];
             for (int y = 0; y < height; y++) {
                 for (int x = 0; x < width; x++)
@@ -106,39 +184,7 @@ final class DecodeHandler extends Handler {
         }else{
             source = cameraManager.buildLuminanceSource(data, width, height);
         }
-        if (source != null) {
-            BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
-            try {
-                rawResult = multiFormatReader.decodeWithState(bitmap);
-            } catch (Exception e) {
-                BinaryBitmap bitmap1 = new BinaryBitmap(new GlobalHistogramBinarizer(source));
-                try {
-                    rawResult = multiFormatReader.decode(bitmap1);
-                } catch (NotFoundException ne) {
-
-                }
-            } finally {
-                multiFormatReader.reset();
-            }
-        }
-
-        if (rawResult != null) {
-            // Don't log the barcode contents for security.
-            long end = System.currentTimeMillis();
-            Log.d(TAG, "Found barcode in " + (end - start) + " ms");
-            if (handler != null) {
-                Message message = Message.obtain(handler, R.id.decode_succeeded, rawResult);
-                Bundle bundle = new Bundle();
-                bundleThumbnail(source, bundle);
-                message.setData(bundle);
-                message.sendToTarget();
-            }
-        } else {
-            if (handler != null) {
-                Message message = Message.obtain(handler, R.id.decode_failed);
-                message.sendToTarget();
-            }
-        }
+        return source;
     }
 
     private static void bundleThumbnail(PlanarYUVLuminanceSource source, Bundle bundle) {
@@ -150,6 +196,33 @@ final class DecodeHandler extends Handler {
         bitmap.compress(Bitmap.CompressFormat.JPEG, 50, out);
         bundle.putByteArray(DecodeThread.BARCODE_BITMAP, out.toByteArray());
         bundle.putFloat(DecodeThread.BARCODE_SCALED_FACTOR, (float) width / source.getWidth());
+    }
+
+    private boolean handleAutoZoom(int length,int width){
+        if(lastZoomTime > System.currentTimeMillis() - 1000){
+            return true;
+        }
+
+        if(length<width/5){
+
+            Camera camera = cameraManager.getOpenCamera().getCamera();
+            if(camera!=null){
+                Camera.Parameters params = camera.getParameters();
+                if (params.isZoomSupported()) {
+                    int maxZoom = params.getMaxZoom();
+                    int zoom = params.getZoom();
+                    params.setZoom(Math.min(zoom + maxZoom/5,maxZoom));
+                    camera.setParameters(params);
+                    lastZoomTime = System.currentTimeMillis();
+                    return true;
+                } else {
+                    Log.i(TAG, "zoom not supported");
+                }
+            }
+
+        }
+
+        return false;
     }
 
 }

@@ -29,8 +29,7 @@
             android:name=".EasyCaptureActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".CustomCaptureActivity"
-            android:screenOrientation="portrait"/>
+            android:name=".CustomCaptureActivity"/>
 
         <activity
             android:name=".CaptureFragmentActivity"
