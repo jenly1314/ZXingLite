@@ -202,7 +202,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         }
     }
 
-    public void OnClick(View v){
+    public void onClick(View v){
         isContinuousScan = false;
         switch (v.getId()){
             case R.id.btn0:

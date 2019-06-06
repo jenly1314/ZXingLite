@@ -216,7 +216,7 @@ final class DecodeHandler extends Handler {
                     lastZoomTime = System.currentTimeMillis();
                     return true;
                 } else {
-                    Log.i(TAG, "zoom not supported");
+                    Log.i(TAG, "Zoom not supported");
                 }
             }
 

@@ -21,6 +21,7 @@ import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.hardware.Camera;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -129,6 +130,7 @@ public class CaptureHelper implements CaptureLifecycle,CaptureTouchEvent,Capture
 
     }
 
+
     @Override
     public void onCreate(){
         inactivityTimer = new InactivityTimer(activity);
@@ -166,7 +168,6 @@ public class CaptureHelper implements CaptureLifecycle,CaptureTouchEvent,Capture
             public void onHandleDecode(Result result, Bitmap barcode, float scaleFactor) {
                 inactivityTimer.onActivity();
                 beepManager.playBeepSoundAndVibrate();
-
                 onResult(result);
             }
 
@@ -177,9 +178,7 @@ public class CaptureHelper implements CaptureLifecycle,CaptureTouchEvent,Capture
     }
 
 
-    /**
-     * {@link Activity#onResume()}
-     */
+
     @Override
     public void onResume(){
         beepManager.updatePrefs();
@@ -196,9 +195,7 @@ public class CaptureHelper implements CaptureLifecycle,CaptureTouchEvent,Capture
         }
     }
 
-    /**
-     * {@link Activity#onPause()}
-     */
+
     @Override
     public void onPause(){
         if (captureHandler != null) {
@@ -214,9 +211,7 @@ public class CaptureHelper implements CaptureLifecycle,CaptureTouchEvent,Capture
         }
     }
 
-    /**
-     * {@link Activity#onDestroy()}
-     */
+
     @Override
     public void onDestroy(){
         inactivityTimer.shutdown();
@@ -414,7 +409,7 @@ public class CaptureHelper implements CaptureLifecycle,CaptureTouchEvent,Capture
      * @param result 扫码结果
      */
     public void onResult(Result result){
-        String text = result.getText();
+        final String text = result.getText();
         if(isContinuousScan){
             if(onCaptureCallback!=null){
                 onCaptureCallback.onResultCallback(text);
@@ -422,17 +417,36 @@ public class CaptureHelper implements CaptureLifecycle,CaptureTouchEvent,Capture
             if(isAutoRestartPreviewAndDecode){
                 restartPreviewAndDecode();
             }
-        }else{
-            //如果设置了回调，并且onCallback返回为true，则表示拦截
-            if(onCaptureCallback!=null && onCaptureCallback.onResultCallback(text)){
-                return;
-            }
-            Intent intent = new Intent();
-            intent.putExtra(Intents.Scan.RESULT,text);
-            activity.setResult(Activity.RESULT_OK,intent);
-            activity.finish();
+            return;
         }
+
+        if(isPlayBeep){//如果播放音效，则稍微延迟一点，给予播放音效时间
+            captureHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    //如果设置了回调，并且onCallback返回为true，则表示拦截
+                    if(onCaptureCallback!=null && onCaptureCallback.onResultCallback(text)){
+                        return;
+                    }
+                    Intent intent = new Intent();
+                    intent.putExtra(Intents.Scan.RESULT,text);
+                    activity.setResult(Activity.RESULT_OK,intent);
+                    activity.finish();
+                }
+            },100);
+            return;
+        }
+
+        //如果设置了回调，并且onCallback返回为true，则表示拦截
+        if(onCaptureCallback!=null && onCaptureCallback.onResultCallback(text)){
+            return;
+        }
+        Intent intent = new Intent();
+        intent.putExtra(Intents.Scan.RESULT,text);
+        activity.setResult(Activity.RESULT_OK,intent);
+        activity.finish();
     }
+
 
     /**
      * 设置是否连续扫码，如果想支持连续扫码，则将此方法返回{@code true}并重写{@link #onResult(Result)}

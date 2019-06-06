@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.TextView;
 
 import com.king.zxing.CaptureFragment;
@@ -35,5 +36,13 @@ public class CaptureFragmentActivity extends AppCompatActivity {
 
     public void replaceFragment(@IdRes int id, Fragment fragment) {
         getSupportFragmentManager().beginTransaction().replace(id, fragment).commit();
+    }
+
+    public void onClick(View v){
+        switch (v.getId()){
+            case R.id.ivLeft:
+                onBackPressed();
+                break;
+        }
     }
 }

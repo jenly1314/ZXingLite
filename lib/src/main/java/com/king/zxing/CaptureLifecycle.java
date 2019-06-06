@@ -24,7 +24,7 @@ import android.os.Bundle;
 public interface CaptureLifecycle {
 
     /**
-     * {@link android.app.Activity#onCreate(Bundle)}
+     * {@link Activity#onCreate(Bundle)}
      */
     void onCreate();
     /**

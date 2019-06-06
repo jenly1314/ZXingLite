@@ -12,6 +12,6 @@
 
     <style name="OnClick">
         <item name="android:clickable">true</item>
-        <item name="android:onClick">OnClick</item>
+        <item name="android:onClick">onClick</item>
     </style>
 </resources>

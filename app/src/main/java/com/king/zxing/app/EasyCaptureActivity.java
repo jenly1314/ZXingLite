@@ -41,10 +41,10 @@ public class EasyCaptureActivity extends CaptureActivity {
         StatusBarUtils.immersiveStatusBar(this,toolbar,0.2f);
         TextView tvTitle = findViewById(R.id.tvTitle);
         tvTitle.setText(getIntent().getStringExtra(MainActivity.KEY_TITLE));
-
+        getCaptureHelper().playBeep(true).vibrate(true);
     }
 
-    public void OnClick(View v){
+    public void onClick(View v){
         switch (v.getId()){
             case R.id.ivLeft:
                 onBackPressed();
