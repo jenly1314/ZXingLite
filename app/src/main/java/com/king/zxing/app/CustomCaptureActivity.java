@@ -15,22 +15,27 @@
  */
 package com.king.zxing.app;
 
+import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.zxing.Result;
+import com.google.zxing.DecodeHintType;
 import com.king.zxing.CaptureActivity;
 import com.king.zxing.app.util.StatusBarUtils;
+import com.king.zxing.camera.CameraConfigurationUtils;
 
 /**
  * 自定义继承CaptureActivity
  * @author Jenly <a href="mailto:jenly1314@gmail.com">Jenly</a>
  */
 public class CustomCaptureActivity extends CaptureActivity {
+
+    private ImageView ivFlash;
 
     private boolean isContinuousScan;
     @Override
@@ -40,39 +45,46 @@ public class CustomCaptureActivity extends CaptureActivity {
 
     @Override
     public void onCreate(Bundle icicle) {
+
         super.onCreate(icicle);
         Toolbar toolbar = findViewById(R.id.toolbar);
         StatusBarUtils.immersiveStatusBar(this,toolbar,0.2f);
         TextView tvTitle = findViewById(R.id.tvTitle);
         tvTitle.setText(getIntent().getStringExtra(MainActivity.KEY_TITLE));
 
+        ivFlash = findViewById(R.id.ivFlash);
+
+        if(!hasTorch()){
+            ivFlash.setVisibility(View.GONE);
+        }
+
         isContinuousScan = getIntent().getBooleanExtra(MainActivity.KEY_IS_CONTINUOUS,false);
         //获取CaptureHelper，里面有扫码相关的配置设置
         getCaptureHelper().playBeep(false)//播放音效
                 .vibrate(true)//震动
+//                .decodeFormats(DecodeFormatManager.QR_CODE_FORMATS)//设置只识别二维码会提升速度
                 .supportVerticalCode(true)//支持扫垂直条码，建议有此需求时才使用。
                 .continuousScan(isContinuousScan);//是否连扫
+    }
+
+    /**
+     * 开启或关闭闪光灯（手电筒）
+     * @param on {@code true}表示开启，{@code false}表示关闭
+     */
+    public void setTorch(boolean on){
+        Camera camera = getCameraManager().getOpenCamera().getCamera();
+        Camera.Parameters parameters = camera.getParameters();
+        CameraConfigurationUtils.setTorch(parameters,on);
+        camera.setParameters(parameters);
 
     }
 
     /**
-     * 关闭闪光灯（手电筒）
+     * 检测是否支持闪光灯（手电筒）
+     * @return
      */
-    private void offFlash(){
-        Camera camera = getCameraManager().getOpenCamera().getCamera();
-        Camera.Parameters parameters = camera.getParameters();
-        parameters.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
-        camera.setParameters(parameters);
-    }
-
-    /**
-     * 开启闪光灯（手电筒）
-     */
-    public void openFlash(){
-        Camera camera = getCameraManager().getOpenCamera().getCamera();
-        Camera.Parameters parameters = camera.getParameters();
-        parameters.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
-        camera.setParameters(parameters);
+    public boolean hasTorch(){
+        return getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
     }
 
 
@@ -92,14 +104,9 @@ public class CustomCaptureActivity extends CaptureActivity {
 
 
     private void clickFlash(View v){
-        if(v.isSelected()){
-            offFlash();
-            v.setSelected(false);
-        }else{
-            openFlash();
-            v.setSelected(true);
-        }
-
+        boolean isSelected = v.isSelected();
+        setTorch(!isSelected);
+        v.setSelected(!isSelected);
     }
 
     public void onClick(View v){

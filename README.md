@@ -124,7 +124,7 @@ api 'com.google.zxing:core:3.3.3'
 > 4、参照CaptureHelper写一个自定义的扫码帮助类，其它步骤同方式3。（扩展高级用法，谨慎使用）
 
 
-更多使用详情，请查看[app](app)中的源码使用示例
+更多使用详情，请查看[app](app)中的源码使用示例或直接查看[API帮助文档](https://jenly1314.github.io/projects/ZXingLite/doc/)
 
 ## 版本记录
 

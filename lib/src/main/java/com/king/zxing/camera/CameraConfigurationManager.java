@@ -161,8 +161,6 @@ final class CameraConfigurationManager {
             parameters.setZoom(parameters.getMaxZoom() / 10);
         }
 
-        theCamera.setParameters(parameters);
-
         initializeTorch(parameters, prefs, safeMode);
 
         CameraConfigurationUtils.setFocus(

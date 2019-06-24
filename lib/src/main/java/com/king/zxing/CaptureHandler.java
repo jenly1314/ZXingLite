@@ -58,7 +58,7 @@ public class CaptureHandler extends Handler implements ResultPointCallback {
 
     CaptureHandler(Activity activity,ViewfinderView viewfinderView,OnCaptureListener onCaptureListener,
                    Collection<BarcodeFormat> decodeFormats,
-                   Map<DecodeHintType,?> baseHints,
+                   Map<DecodeHintType,Object> baseHints,
                    String characterSet,
                    CameraManager cameraManager) {
         this.activity = activity;

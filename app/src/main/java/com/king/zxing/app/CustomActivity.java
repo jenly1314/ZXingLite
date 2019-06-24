@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.king.zxing.CaptureHelper;
+import com.king.zxing.DecodeFormatManager;
 import com.king.zxing.OnCaptureCallback;
 import com.king.zxing.ViewfinderView;
 import com.king.zxing.app.util.StatusBarUtils;

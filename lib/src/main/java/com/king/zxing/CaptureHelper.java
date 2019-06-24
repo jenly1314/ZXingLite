@@ -21,7 +21,6 @@ import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.hardware.Camera;
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -36,6 +35,7 @@ import com.king.zxing.camera.CameraManager;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
@@ -63,7 +63,7 @@ public class CaptureHelper implements CaptureLifecycle,CaptureTouchEvent,Capture
     private SurfaceHolder.Callback callback;
 
     private Collection<BarcodeFormat> decodeFormats;
-    private Map<DecodeHintType,?> decodeHints;
+    private Map<DecodeHintType,Object> decodeHints;
     private String characterSet;
 
     private boolean hasSurface;
@@ -376,10 +376,10 @@ public class CaptureHelper implements CaptureLifecycle,CaptureTouchEvent,Capture
     }
 
     /**
-     *
+     * 根据范围限定值
      * @param x
-     * @param min
-     * @param max
+     * @param min 范围最小值
+     * @param max 范围最大值
      * @return
      */
     private int clamp(int x, int min, int max) {
@@ -504,7 +504,7 @@ public class CaptureHelper implements CaptureLifecycle,CaptureTouchEvent,Capture
 
     /**
      * 设置支持的解码一/二维码格式，默认常规的码都支持
-     * @param decodeFormats
+     * @param decodeFormats  可参见{@link DecodeFormatManager}
      * @return
      */
     public CaptureHelper decodeFormats(Collection<BarcodeFormat> decodeFormats) {
@@ -517,8 +517,22 @@ public class CaptureHelper implements CaptureLifecycle,CaptureTouchEvent,Capture
      * @param decodeHints
      * @return
      */
-    public CaptureHelper decodeHints(Map<DecodeHintType,?> decodeHints) {
+    public CaptureHelper decodeHints(Map<DecodeHintType,Object> decodeHints) {
         this.decodeHints = decodeHints;
+        return this;
+    }
+
+    /**
+     * {@link DecodeHintType}
+     * @param key {@link DecodeHintType}
+     * @param value {@link }
+     * @return
+     */
+    public CaptureHelper decodeHint(DecodeHintType key,Object value){
+        if(decodeHints == null){
+            decodeHints = new EnumMap<>(DecodeHintType.class);
+        }
+        decodeHints.put(key,value);
         return this;
     }
 
@@ -596,21 +610,37 @@ public class CaptureHelper implements CaptureLifecycle,CaptureTouchEvent,Capture
         return this;
     }
 
+    /**
+     * {@link CameraManager}
+     * @return {@link #cameraManager}
+     */
     @Override
     public CameraManager getCameraManager() {
         return cameraManager;
     }
 
+    /**
+     * {@link BeepManager}
+     * @return {@link #beepManager}
+     */
     @Override
     public BeepManager getBeepManager() {
         return beepManager;
     }
 
+    /**
+     * {@link AmbientLightManager}
+     * @return {@link #ambientLightManager}
+     */
     @Override
     public AmbientLightManager getAmbientLightManager() {
         return ambientLightManager;
     }
 
+    /**
+     * {@link InactivityTimer}
+     * @return {@link #inactivityTimer}
+     */
     @Override
     public InactivityTimer getInactivityTimer() {
         return inactivityTimer;

@@ -198,7 +198,8 @@ public class CodeUtils {
                 BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
                 try {
                     result = reader.decode(bitmap,hints);
-                } catch (Exception e) {//解析失败则通过GlobalHistogramBinarizer 再试一次
+                } catch (Exception e) {
+                    //解析失败则通过GlobalHistogramBinarizer 再试一次
                     BinaryBitmap bitmap1 = new BinaryBitmap(new GlobalHistogramBinarizer(source));
                     try {
                         result = reader.decode(bitmap1);
@@ -232,6 +233,7 @@ public class CodeUtils {
         decodeFormats.addAll(DecodeFormatManager.AZTEC_FORMATS);
         decodeFormats.addAll(DecodeFormatManager.PDF417_FORMATS);
 
+        hints.put(DecodeHintType.TRY_HARDER,Boolean.TRUE);
         hints.put(DecodeHintType.POSSIBLE_FORMATS, decodeFormats);
         return parseCode(bitmapPath,hints);
     }
@@ -257,7 +259,7 @@ public class CodeUtils {
                     BinaryBitmap bitmap1 = new BinaryBitmap(new GlobalHistogramBinarizer(source));
                     try {
                         result = reader.decodeWithState(bitmap1);
-                    } catch (NotFoundException ne) {
+                    } catch (Exception ne) {
 
                     }
                 } finally {

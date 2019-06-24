@@ -33,9 +33,12 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.MultiFormatReader;
+import com.google.zxing.NotFoundException;
 import com.google.zxing.PlanarYUVLuminanceSource;
+import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
+import com.google.zxing.common.GlobalHistogramBinarizer;
 import com.google.zxing.common.HybridBinarizer;
 import com.king.zxing.camera.CameraManager;
 
@@ -103,17 +106,22 @@ final class DecodeHandler extends Handler {
             try {
                 rawResult = multiFormatReader.decodeWithState(bitmap);
             } catch (Exception e) {
-                if(isSupportVerticalCode){
-                    source = buildPlanarYUVLuminanceSource(data,width,height,!isScreenPortrait);
-                    if(source!=null){
-                        BinaryBitmap bitmap1 = new BinaryBitmap(new HybridBinarizer(source));
-                        try{
-                            rawResult = multiFormatReader.decodeWithState(bitmap1);
-                        }catch (Exception e1){
+                BinaryBitmap bitmap1 = new BinaryBitmap(new GlobalHistogramBinarizer(source));
+                try{
+                    rawResult = multiFormatReader.decodeWithState(bitmap1);
+                }catch (Exception e1){
+                    if(isSupportVerticalCode){
+                        source = buildPlanarYUVLuminanceSource(data,width,height,!isScreenPortrait);
+                        if(source!=null){
+                            BinaryBitmap bitmap2 = new BinaryBitmap(new HybridBinarizer(source));
+                            try{
+                                rawResult = multiFormatReader.decodeWithState(bitmap2);
+                            }catch (Exception e2){
 
+                            }
                         }
-                    }
 
+                    }
                 }
 
             } finally {

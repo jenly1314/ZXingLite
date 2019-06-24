@@ -55,7 +55,7 @@ final class DecodeThread extends Thread {
     DecodeThread(Context context,CameraManager cameraManager,
                  CaptureHandler captureHandler,
                  Collection<BarcodeFormat> decodeFormats,
-                 Map<DecodeHintType,?> baseHints,
+                 Map<DecodeHintType,Object> baseHints,
                  String characterSet,
                  ResultPointCallback resultPointCallback) {
 
