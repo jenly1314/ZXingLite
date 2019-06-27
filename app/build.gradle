@@ -9,7 +9,7 @@ android {
         targetSdkVersion build_versions.targetSdk
         versionCode app_version.versionCode
         versionName app_version.versionName
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {

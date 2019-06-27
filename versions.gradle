@@ -21,17 +21,17 @@ versions.supportLibrary = "1.0.0+"
 versions.constraintLayout = "1.1.3"
 
 //test
-versions.junit = "4.12"
-versions.runner = "1.0.2"
-versions.rules = "1.0.2"
-versions.espresso = "3.0.2"
+versions.junit = "1.1.0"
+versions.test = "1.2.0"
+versions.runner = "1.2.0"
+versions.espresso = "3.2.0"
 
 //zxing
 versions.zxing = "3.3.3"
 
 versions.easypermissions = "3.0.0"
 
-
+ext.versions = versions
 
 //support
 def support = [:]
@@ -42,9 +42,10 @@ deps.support = support
 
 //test
 def test = [:]
-test.junit = "junit:junit:$versions.junit"
-test.runner = "com.android.support.test:runner:$versions.runner"
-test.espresso = "com.android.support.test.espresso:espresso-core:$versions.espresso"
+test.junit = "androidx.test.ext:junit:$versions.junit"
+test.test = "androidx.test:core:$versions.test"
+test.runner = "androidx.test:runner:$versions.runner"
+test.espresso = "androidx.test.espresso:espresso-core:$versions.espresso"
 deps.test = test
 
 //zxing
