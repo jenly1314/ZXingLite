@@ -3,9 +3,6 @@ package com.king.zxing.app;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.app.Activity;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.Toolbar;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
@@ -13,10 +10,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.king.zxing.CaptureHelper;
-import com.king.zxing.DecodeFormatManager;
 import com.king.zxing.OnCaptureCallback;
 import com.king.zxing.ViewfinderView;
 import com.king.zxing.app.util.StatusBarUtils;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 
 /**
  * 自定义扫码：当直接使用CaptureActivity

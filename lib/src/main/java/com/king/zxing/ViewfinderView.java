@@ -1,5 +1,4 @@
 package com.king.zxing;
-
 /*
  * Copyright (C) 2008 ZXing authors
  *
@@ -16,32 +15,21 @@ package com.king.zxing;
  * limitations under the License.
  */
 
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.LinearGradient;
-import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.Path;
-import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Shader;
-import android.support.annotation.ColorInt;
-import android.support.annotation.ColorRes;
-import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 
@@ -49,6 +37,11 @@ import com.google.zxing.ResultPoint;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.annotation.ColorInt;
+import androidx.annotation.ColorRes;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 
 /**
  * This view is overlaid on top of the camera preview. It adds the viewfinder rectangle and partial

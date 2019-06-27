@@ -19,9 +19,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
-import android.support.annotation.ColorInt;
-import android.support.annotation.FloatRange;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -30,13 +27,16 @@ import android.widget.LinearLayout;
 
 import com.king.zxing.app.R;
 
+import androidx.annotation.FloatRange;
+import androidx.appcompat.widget.Toolbar;
+
 /**
  * @author Jenly <a href="mailto:jenly1314@gmail.com">Jenly</a>
  */
 public enum StatusBarUtils {
     INSTANCE;
 
-    public static void immersiveStatusBar(Activity activity,Toolbar toolbar) {
+    public static void immersiveStatusBar(Activity activity, Toolbar toolbar) {
         immersiveStatusBar(activity,toolbar,0.0f);
     }
 

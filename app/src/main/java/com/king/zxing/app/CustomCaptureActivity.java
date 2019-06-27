@@ -18,16 +18,16 @@ package com.king.zxing.app;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.zxing.DecodeHintType;
 import com.king.zxing.CaptureActivity;
 import com.king.zxing.app.util.StatusBarUtils;
 import com.king.zxing.camera.CameraConfigurationUtils;
+
+import androidx.appcompat.widget.Toolbar;
 
 /**
  * 自定义继承CaptureActivity

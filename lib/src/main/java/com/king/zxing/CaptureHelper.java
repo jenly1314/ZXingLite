@@ -21,7 +21,6 @@ import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.hardware.Camera;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -38,6 +37,8 @@ import java.util.Collection;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
+
+import androidx.fragment.app.Fragment;
 
 /**
  * @author <a href="mailto:jenly1314@gmail.com">Jenly</a>

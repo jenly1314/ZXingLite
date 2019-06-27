@@ -1,16 +1,17 @@
 package com.king.zxing.app;
 
 import android.os.Bundle;
-import android.support.annotation.IdRes;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
 import com.king.zxing.CaptureFragment;
 import com.king.zxing.app.util.StatusBarUtils;
+
+import androidx.annotation.IdRes;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 
 /**
  * Fragment扫码

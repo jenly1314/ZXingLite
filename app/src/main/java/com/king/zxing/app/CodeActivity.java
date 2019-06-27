@@ -18,14 +18,15 @@ package com.king.zxing.app;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.zxing.BarcodeFormat;
 import com.king.zxing.util.CodeUtils;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * @author Jenly <a href="mailto:jenly1314@gmail.com">Jenly</a>

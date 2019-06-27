@@ -3,10 +3,8 @@
 buildscript {
     apply from: 'versions.gradle'
 
-    repositories {
-        google()
-        jcenter()
-    }
+    addRepos(repositories)
+
     dependencies {
         classpath 'com.android.tools.build:gradle:3.2.1'
         classpath 'com.novoda:bintray-release:0.9'
@@ -17,9 +15,7 @@ buildscript {
 }
 
 allprojects {
-    repositories {
-        addRepos(repositories)
-    }
+    addRepos(repositories)
 }
 
 task clean(type: Delete) {

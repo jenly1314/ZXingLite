@@ -16,13 +16,13 @@
 package com.king.zxing.app;
 
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
 import com.king.zxing.CaptureActivity;
-import com.king.zxing.DecodeFormatManager;
 import com.king.zxing.app.util.StatusBarUtils;
+
+import androidx.appcompat.widget.Toolbar;
 
 /**
  * @author Jenly <a href="mailto:jenly1314@gmail.com">Jenly</a>
