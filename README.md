@@ -51,6 +51,9 @@ ZXingLite for Android 是ZXing的精简版，基于ZXing库优化扫码和生成
 ```
 ### Gradle:
 ```gradle
+//AndroidX 版本
+implementation 'com.king.zxing:zxing-lite:1.1.2-androidx'
+//Android 版本
 implementation 'com.king.zxing:zxing-lite:1.1.2'
 ```
 ### Lvy:
@@ -71,6 +74,11 @@ allprojects {
 
 ## 引入的库：
 ```gradle
+//AndroidX
+compileOnly 'androidx.appcompat:appcompat:1.0.0+'
+api 'com.google.zxing:core:3.3.3'
+
+//Android
 compileOnly 'com.android.support:appcompat-v7:28.0.0'
 api 'com.google.zxing:core:3.3.3'
 ```
@@ -130,6 +138,7 @@ api 'com.google.zxing:core:3.3.3'
 
 #### v1.1.2：2019-6-27
 *  优化部分细节，为迁移至AndroidX做准备
+*  支持AndroidX对应版本
 
 #### v1.1.1：2019-5-20
 *  支持扫二维码过小时，自动缩放
