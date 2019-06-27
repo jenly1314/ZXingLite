@@ -24,6 +24,11 @@ android {
         abortOnError false
         warning 'InvalidPackage'
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 //task javadoc(type: Javadoc) {
