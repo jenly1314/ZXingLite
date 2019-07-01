@@ -56,6 +56,7 @@ ZXingLite for Android 是ZXing的精简版，基于ZXing库优化扫码和生成
 ```gradle
 //AndroidX 版本
 implementation 'com.king.zxing:zxing-lite:1.1.2-androidx'
+
 //Android 版本
 implementation 'com.king.zxing:zxing-lite:1.1.2'
 ```
