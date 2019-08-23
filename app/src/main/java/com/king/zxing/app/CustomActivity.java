@@ -56,6 +56,7 @@ public class CustomActivity extends AppCompatActivity implements OnCaptureCallba
         isContinuousScan = getIntent().getBooleanExtra(MainActivity.KEY_IS_CONTINUOUS,false);
 
         mCaptureHelper = new CaptureHelper(this,surfaceView,viewfinderView);
+        mCaptureHelper.setOnCaptureCallback(this);
         mCaptureHelper.onCreate();
         mCaptureHelper.vibrate(true)
                 .fullScreenScan(true)//全屏扫码
