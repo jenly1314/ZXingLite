@@ -19,7 +19,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
-import android.support.annotation.ColorInt;
 import android.support.annotation.FloatRange;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -33,8 +32,7 @@ import com.king.zxing.app.R;
 /**
  * @author Jenly <a href="mailto:jenly1314@gmail.com">Jenly</a>
  */
-public enum StatusBarUtils {
-    INSTANCE;
+public class StatusBarUtils {
 
     public static void immersiveStatusBar(Activity activity,Toolbar toolbar) {
         immersiveStatusBar(activity,toolbar,0.0f);
@@ -80,7 +78,7 @@ public enum StatusBarUtils {
     }
 
     /** 获取状态栏高度 */
-    public static int getStatusBarHeight(Context context) {
+    private static int getStatusBarHeight(Context context) {
         return context.getResources().getDimensionPixelSize(R.dimen.status_bar_height);
     }
 }

@@ -1,10 +1,10 @@
 package com.king.zxing.app;
 
+import android.app.Activity;
 import android.hardware.Camera;
 import android.os.Bundle;
-import android.app.Activity;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
@@ -13,7 +13,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.king.zxing.CaptureHelper;
-import com.king.zxing.DecodeFormatManager;
 import com.king.zxing.OnCaptureCallback;
 import com.king.zxing.ViewfinderView;
 import com.king.zxing.app.util.StatusBarUtils;
@@ -56,6 +55,7 @@ public class CustomActivity extends AppCompatActivity implements OnCaptureCallba
         isContinuousScan = getIntent().getBooleanExtra(MainActivity.KEY_IS_CONTINUOUS,false);
 
         mCaptureHelper = new CaptureHelper(this,surfaceView,viewfinderView);
+        mCaptureHelper.setOnCaptureCallback(this);
         mCaptureHelper.onCreate();
         mCaptureHelper.vibrate(true)
                 .fullScreenScan(true)//全屏扫码

@@ -24,7 +24,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.zxing.DecodeHintType;
 import com.king.zxing.CaptureActivity;
 import com.king.zxing.app.util.StatusBarUtils;
 import com.king.zxing.camera.CameraConfigurationUtils;
@@ -86,7 +85,6 @@ public class CustomCaptureActivity extends CaptureActivity {
     public boolean hasTorch(){
         return getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
     }
-
 
     /**
      * 扫码结果回调
