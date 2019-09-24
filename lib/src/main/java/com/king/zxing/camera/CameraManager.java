@@ -21,10 +21,11 @@ import android.content.Context;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.hardware.Camera;
-import android.media.FaceDetector;
 import android.os.Handler;
+import android.support.annotation.FloatRange;
 import android.util.Log;
 import android.view.SurfaceHolder;
+
 import com.google.zxing.PlanarYUVLuminanceSource;
 import com.king.zxing.camera.open.OpenCamera;
 import com.king.zxing.camera.open.OpenCameraInterface;
@@ -60,6 +61,10 @@ public final class CameraManager {
     private int requestedFramingRectWidth;
     private int requestedFramingRectHeight;
     private boolean isFullScreenScan;
+
+    private float framingRectRatio;
+    private int framingRectVerticalOffset;
+    private int framingRectHorizontalOffset;
 
     /**
      * Preview frames are delivered here, which we pass on to the registered handler. Make sure to
@@ -235,10 +240,10 @@ public final class CameraManager {
             if(isFullScreenScan){
                 framingRect = new Rect(0,0,width,height);
             }else{
-                int size = Math.min(width,height);
+                int size = (int)(Math.min(width,height) * framingRectRatio);
 
-                int leftOffset = (width - size) / 2;
-                int topOffset = (height - size) / 2;
+                int leftOffset = (width - size) / 2 + framingRectHorizontalOffset;
+                int topOffset = (height - size) / 2 + framingRectVerticalOffset;
                 framingRect = new Rect(leftOffset, topOffset, leftOffset + size, topOffset + size);
             }
 
@@ -284,12 +289,20 @@ public final class CameraManager {
         return framingRectInPreview;
     }
 
-    public boolean isFullScreenScan() {
-        return isFullScreenScan;
-    }
-
     public void setFullScreenScan(boolean fullScreenScan) {
         isFullScreenScan = fullScreenScan;
+    }
+
+    public void setFramingRectRatio(@FloatRange(from = 0.0f ,to = 1.0f) float framingRectRatio) {
+        this.framingRectRatio = framingRectRatio;
+    }
+
+    public void setFramingRectVerticalOffset(int framingRectVerticalOffset) {
+        this.framingRectVerticalOffset = framingRectVerticalOffset;
+    }
+
+    public void setFramingRectHorizontalOffset(int framingRectHorizontalOffset) {
+        this.framingRectHorizontalOffset = framingRectHorizontalOffset;
     }
 
     public Point getCameraResolution() {
@@ -355,9 +368,9 @@ public final class CameraManager {
         if(isFullScreenScan){
             return new PlanarYUVLuminanceSource(data,width,height,0,0,width,height,false);
         }
-        int size = Math.min(width,height);
-        int left = (width-size)/2;
-        int top = (height-size)/2;
+        int size = (int)(Math.min(width,height) * framingRectRatio);
+        int left = (width-size)/2 + framingRectHorizontalOffset;
+        int top = (height-size)/2 + framingRectVerticalOffset;
         // Go ahead and assume it's YUV rather than die.
         return new PlanarYUVLuminanceSource(data, width, height, left, top,
                 size, size, false);

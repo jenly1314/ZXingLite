@@ -23,6 +23,14 @@
             <enum name="line" value="1"/>
             <enum name="grid" value="2"/>
         </attr>
+        <attr name="cornerRectWidth" format="dimension"/>
+        <attr name="cornerRectHeight" format="dimension"/>
+        <attr name="scannerLineMoveDistance" format="dimension"/>
+        <attr name="scannerLineHeight" format="dimension"/>
+        <attr name="frameLineWidth" format="dimension"/>
+        <attr name="scannerAnimationDelay" format="integer"/>
+        <attr name="frameRatio" format="float"/>
     </declare-styleable>
+
 
 </resources>
