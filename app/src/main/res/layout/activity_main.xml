@@ -13,7 +13,8 @@
         android:layout_height="wrap_content"
         app:contentInsetLeft="0dp"
         app:contentInsetStart="0dp"
-        tools:ignore="MissingConstraints">
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
         <TextView
             android:id="@+id/tvTitle"
             android:layout_width="match_parent"
@@ -31,7 +32,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="16dp"
         android:layout_marginBottom="6dp"
         android:text="默认扫码"
         app:layout_constraintLeft_toLeftOf="parent"

@@ -8,11 +8,12 @@
 [![CircleCI](https://circleci.com/gh/jenly1314/ZXingLite.svg?style=svg)](https://circleci.com/gh/jenly1314/ZXingLite)
 [![API](https://img.shields.io/badge/API-16%2B-blue.svg?style=flat)](https://android-arsenal.com/api?level=16)
 [![License](https://img.shields.io/badge/license-Apche%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
-[![Blog](https://img.shields.io/badge/blog-Jenly-9933CC.svg)](https://jenly1314.github.io)
+[![Blog](https://img.shields.io/badge/blog-Jenly-9933CC.svg)](https://jenly1314.github.io/)
 [![QQGroup](https://img.shields.io/badge/QQGroup-20867961-blue.svg)](http://shang.qq.com/wpa/qunwpa?idkey=8fcc6a2f88552ea44b1411582c94fd124f7bb3ec227e2a400dbbfaad3dc2f5ad)
 
 ZXingLite for Android 是ZXing的精简版，基于ZXing库优化扫码和生成二维码/条形码功能，扫码界面完全支持自定义，也可一行代码使用默认实现的扫码功能。总之你想要的都在这里。
 >简单如斯，你不试试？ Come on~
+
 
 ## Gif 展示
 ![Image](GIF.gif)
@@ -37,6 +38,13 @@ ZXingLite for Android 是ZXing的精简版，基于ZXing库优化扫码和生成
 | laserStyle | enum | line | 扫描激光的样式 |
 | gridColumn | integer | 20 | 网格扫描激光列数 |
 | gridHeight | integer | 40dp | 网格扫描激光高度，为0dp时，表示动态铺满 |
+| cornerRectWidth | dimension | 4dp | 扫描区边角的宽 |
+| cornerRectHeight | dimension | 16dp | 扫描区边角的高 |
+| scannerLineMoveDistance | dimension | 2dp | 扫描线每次移动距离 |
+| scannerLineHeight | dimension | 5dp | 扫描线高度 |
+| frameLineWidth | dimension | 1dp | 边框线宽度 |
+| scannerAnimationDelay | integer | 15 | 扫描动画延迟间隔时间，单位：毫秒 |
+| frameRatio | float | 0.625f | 扫码框与屏幕占比 |
 
 
 ## 引入
@@ -46,20 +54,21 @@ ZXingLite for Android 是ZXing的精简版，基于ZXing库优化扫码和生成
 <dependency>
   <groupId>com.king.zxing</groupId>
   <artifactId>zxing-lite</artifactId>
-  <version>1.1.2</version>
+  <version>1.1.3</version>
   <type>pom</type>
 </dependency>
 ```
 ### Gradle:
 ```gradle
 //AndroidX 版本
-implementation 'com.king.zxing:zxing-lite:1.1.2-androidx'
+implementation 'com.king.zxing:zxing-lite:1.1.3-androidx'
+
 //Android 版本
-implementation 'com.king.zxing:zxing-lite:1.1.2'
+implementation 'com.king.zxing:zxing-lite:1.1.3'
 ```
 ### Lvy:
 ```lvy
-<dependency org='com.king.zxing' name='zxing-lite' rev='1.1.2'>
+<dependency org='com.king.zxing' name='zxing-lite' rev='1.1.3'>
   <artifact name='$AID' ext='pom'></artifact>
 </dependency>
 ```
@@ -137,6 +146,10 @@ api 'com.google.zxing:core:3.3.3'
 
 ## 版本记录
 
+#### v1.1.3：2019-9-24
+*  支持真实识别区域比例和识别区域偏移量可配置
+*  对外暴露更多可配置参数
+
 #### v1.1.2：2019-6-27
 *  优化部分细节，为迁移至AndroidX做准备
 *  支持AndroidX对应版本
@@ -204,4 +217,3 @@ api 'com.google.zxing:core:3.3.3'
    </div>
 
 
-   

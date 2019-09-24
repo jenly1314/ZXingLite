@@ -51,51 +51,140 @@ import androidx.core.content.ContextCompat;
  */
 public final class ViewfinderView extends View {
 
-    private static final long ANIMATION_DELAY = 15L;
     private static final int CURRENT_POINT_OPACITY = 0xA0;
     private static final int MAX_RESULT_POINTS = 20;
     private static final int POINT_SIZE = 20;
 
-    private static final int CORNER_RECT_WIDTH             =   8;  //扫描区边角的宽
-    private static final int CORNER_RECT_HEIGHT            =   40; //扫描区边角的高
-    private static final int SCANNER_LINE_MOVE_DISTANCE    =   6;  //扫描线移动距离
-    private static final int SCANNER_LINE_HEIGHT           =   10;  //扫描线宽度
-
+    /**
+     * 画笔
+     */
     private Paint paint;
+
+    /**
+     * 文本画笔
+     */
     private TextPaint textPaint;
+    /**
+     * 扫码框外面遮罩颜色
+     */
     private int maskColor;
-    //扫描区域边框颜色
+    /**
+     * 扫描区域边框颜色
+     */
     private int frameColor;
-    //扫描线颜色
+    /**
+     * 扫描线颜色
+     */
     private int laserColor;
-    //四角颜色
+    /**
+     * 扫码框四角颜色
+     */
     private int cornerColor;
+    /**
+     * 结果点颜色
+     */
     private int resultPointColor;
 
+    /**
+     * 提示文本与扫码框的边距
+     */
     private float labelTextPadding;
+    /**
+     * 提示文本的位置
+     */
     private TextLocation labelTextLocation;
-    //扫描区域提示文本
+    /**
+     * 扫描区域提示文本
+     */
     private String labelText;
-    //扫描区域提示文本颜色
+    /**
+     * 扫描区域提示文本颜色
+     */
     private int labelTextColor;
+    /**
+     * 提示文本字体大小
+     */
     private float labelTextSize;
+
+    /**
+     * 扫描线开始位置
+     */
     public int scannerStart = 0;
+    /**
+     * 扫描线结束位置
+     */
     public int scannerEnd = 0;
+    /**
+     * 是否显示结果点
+     */
     private boolean isShowResultPoint;
 
+    /**
+     * 屏幕宽
+     */
     private int screenWidth;
+    /**
+     * 屏幕高
+     */
     private int screenHeight;
-    //扫码框宽
+    /**
+     * 扫码框宽
+     */
     private int frameWidth;
-    //扫码框宽
+    /**
+     * 扫码框高
+     */
     private int frameHeight;
-    //扫描激光线风格
+    /**
+     * 扫描激光线风格
+     */
     private LaserStyle laserStyle;
 
+    /**
+     * 网格列数
+     */
     private int gridColumn;
+    /**
+     * 网格高度
+     */
     private int gridHeight;
 
+    /**
+     * 扫码框
+     */
     private Rect frame;
+
+    /**
+     * 扫描区边角的宽
+     */
+    private int cornerRectWidth;
+    /**
+     * 扫描区边角的高
+     */
+    private int cornerRectHeight;
+    /**
+     * 扫描线每次移动距离
+     */
+    private int scannerLineMoveDistance;
+    /**
+     * 扫描线高度
+     */
+    private int scannerLineHeight;
+
+    /**
+     * 边框线宽度
+     */
+    private int frameLineWidth;
+
+    /**
+     * 扫描动画延迟间隔时间 默认15毫秒
+     */
+    private int scannerAnimationDelay;
+
+    /**
+     * 扫码框占比
+     */
+    private float frameRatio;
 
 
     private List<ResultPoint> possibleResultPoints;
@@ -181,6 +270,13 @@ public final class ViewfinderView extends View {
         gridColumn = array.getInt(R.styleable.ViewfinderView_gridColumn,20);
         gridHeight = (int)array.getDimension(R.styleable.ViewfinderView_gridHeight,TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,40,getResources().getDisplayMetrics()));
 
+        cornerRectWidth = (int)array.getDimension(R.styleable.ViewfinderView_cornerRectWidth,TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,4,getResources().getDisplayMetrics()));
+        cornerRectHeight = (int)array.getDimension(R.styleable.ViewfinderView_cornerRectHeight,TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,16,getResources().getDisplayMetrics()));
+        scannerLineMoveDistance = (int)array.getDimension(R.styleable.ViewfinderView_scannerLineMoveDistance,TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,2,getResources().getDisplayMetrics()));
+        scannerLineHeight = (int)array.getDimension(R.styleable.ViewfinderView_scannerLineHeight,TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,5,getResources().getDisplayMetrics()));
+        frameLineWidth = (int)array.getDimension(R.styleable.ViewfinderView_frameLineWidth,TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,1,getResources().getDisplayMetrics()));
+        scannerAnimationDelay = array.getInteger(R.styleable.ViewfinderView_scannerAnimationDelay,15);
+        frameRatio = array.getFloat(R.styleable.ViewfinderView_frameRatio,0.625f);
         array.recycle();
 
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -192,7 +288,7 @@ public final class ViewfinderView extends View {
         screenWidth = getDisplayMetrics().widthPixels;
         screenHeight = getDisplayMetrics().heightPixels;
 
-        int size = (int)(Math.min(screenWidth,screenHeight) * 0.625f);
+        int size = (int)(Math.min(screenWidth,screenHeight) * frameRatio);
 
         if(frameWidth<=0 || frameWidth > screenWidth){
             frameWidth = size;
@@ -233,7 +329,6 @@ public final class ViewfinderView extends View {
         frame = new Rect(leftOffset, topOffset, leftOffset + frameWidth, topOffset + frameHeight);
     }
 
-    @SuppressLint("DrawAllocation")
     @Override
     public void onDraw(Canvas canvas) {
 
@@ -243,7 +338,7 @@ public final class ViewfinderView extends View {
 
         if(scannerStart == 0 || scannerEnd == 0) {
             scannerStart = frame.top;
-            scannerEnd = frame.bottom - SCANNER_LINE_HEIGHT;
+            scannerEnd = frame.bottom - scannerLineHeight;
         }
 
         int width = canvas.getWidth();
@@ -263,7 +358,7 @@ public final class ViewfinderView extends View {
         drawResultPoint(canvas,frame);
         // Request another update at the animation interval, but only repaint the laser line,
         // not the entire viewfinder mask.
-        postInvalidateDelayed(ANIMATION_DELAY,
+        postInvalidateDelayed(scannerAnimationDelay,
                 frame.left - POINT_SIZE,
                 frame.top - POINT_SIZE,
                 frame.right + POINT_SIZE,
@@ -300,17 +395,17 @@ public final class ViewfinderView extends View {
     private void drawCorner(Canvas canvas, Rect frame) {
         paint.setColor(cornerColor);
         //左上
-        canvas.drawRect(frame.left, frame.top, frame.left + CORNER_RECT_WIDTH, frame.top + CORNER_RECT_HEIGHT, paint);
-        canvas.drawRect(frame.left, frame.top, frame.left + CORNER_RECT_HEIGHT, frame.top + CORNER_RECT_WIDTH, paint);
+        canvas.drawRect(frame.left, frame.top, frame.left + cornerRectWidth, frame.top + cornerRectHeight, paint);
+        canvas.drawRect(frame.left, frame.top, frame.left + cornerRectHeight, frame.top + cornerRectWidth, paint);
         //右上
-        canvas.drawRect(frame.right - CORNER_RECT_WIDTH, frame.top, frame.right, frame.top + CORNER_RECT_HEIGHT, paint);
-        canvas.drawRect(frame.right - CORNER_RECT_HEIGHT, frame.top, frame.right, frame.top + CORNER_RECT_WIDTH, paint);
+        canvas.drawRect(frame.right - cornerRectWidth, frame.top, frame.right, frame.top + cornerRectHeight, paint);
+        canvas.drawRect(frame.right - cornerRectHeight, frame.top, frame.right, frame.top + cornerRectWidth, paint);
         //左下
-        canvas.drawRect(frame.left, frame.bottom - CORNER_RECT_WIDTH, frame.left + CORNER_RECT_HEIGHT, frame.bottom, paint);
-        canvas.drawRect(frame.left, frame.bottom - CORNER_RECT_HEIGHT, frame.left + CORNER_RECT_WIDTH, frame.bottom, paint);
+        canvas.drawRect(frame.left, frame.bottom - cornerRectWidth, frame.left + cornerRectHeight, frame.bottom, paint);
+        canvas.drawRect(frame.left, frame.bottom - cornerRectHeight, frame.left + cornerRectWidth, frame.bottom, paint);
         //右下
-        canvas.drawRect(frame.right - CORNER_RECT_WIDTH, frame.bottom - CORNER_RECT_HEIGHT, frame.right, frame.bottom, paint);
-        canvas.drawRect(frame.right - CORNER_RECT_HEIGHT, frame.bottom - CORNER_RECT_WIDTH, frame.right, frame.bottom, paint);
+        canvas.drawRect(frame.right - cornerRectWidth, frame.bottom - cornerRectHeight, frame.right, frame.bottom, paint);
+        canvas.drawRect(frame.right - cornerRectHeight, frame.bottom - cornerRectWidth, frame.right, frame.bottom, paint);
     }
 
     /**
@@ -342,7 +437,7 @@ public final class ViewfinderView extends View {
         //线性渐变
         LinearGradient linearGradient = new LinearGradient(
                 frame.left, scannerStart,
-                frame.left, scannerStart + SCANNER_LINE_HEIGHT,
+                frame.left, scannerStart + scannerLineHeight,
                 shadeColor(laserColor),
                 laserColor,
                 Shader.TileMode.MIRROR);
@@ -350,9 +445,9 @@ public final class ViewfinderView extends View {
         paint.setShader(linearGradient);
         if(scannerStart <= scannerEnd) {
             //椭圆
-            RectF rectF = new RectF(frame.left + 2 * SCANNER_LINE_HEIGHT, scannerStart, frame.right - 2 * SCANNER_LINE_HEIGHT, scannerStart + SCANNER_LINE_HEIGHT);
+            RectF rectF = new RectF(frame.left + 2 * scannerLineHeight, scannerStart, frame.right - 2 * scannerLineHeight, scannerStart + scannerLineHeight);
             canvas.drawOval(rectF, paint);
-            scannerStart += SCANNER_LINE_MOVE_DISTANCE;
+            scannerStart += scannerLineMoveDistance;
         } else {
             scannerStart = frame.top;
         }
@@ -388,7 +483,7 @@ public final class ViewfinderView extends View {
         }
 
         if(scannerStart<scannerEnd){
-            scannerStart += SCANNER_LINE_MOVE_DISTANCE;
+            scannerStart += scannerLineMoveDistance;
         } else {
             scannerStart = frame.top;
         }
@@ -413,10 +508,10 @@ public final class ViewfinderView extends View {
      */
     private void drawFrame(Canvas canvas, Rect frame) {
         paint.setColor(frameColor);
-        canvas.drawRect(frame.left, frame.top, frame.right + 1, frame.top + 2, paint);
-        canvas.drawRect(frame.left, frame.top + 2, frame.left + 2, frame.bottom - 1, paint);
-        canvas.drawRect(frame.right - 1, frame.top, frame.right + 1, frame.bottom - 1, paint);
-        canvas.drawRect(frame.left, frame.bottom - 1, frame.right + 1, frame.bottom + 1, paint);
+        canvas.drawRect(frame.left, frame.top, frame.right, frame.top + frameLineWidth, paint);
+        canvas.drawRect(frame.left, frame.top, frame.left + frameLineWidth, frame.bottom, paint);
+        canvas.drawRect(frame.right - frameLineWidth, frame.top, frame.right, frame.bottom, paint);
+        canvas.drawRect(frame.left, frame.bottom - frameLineWidth, frame.right, frame.bottom, paint);
     }
 
     /**
@@ -429,9 +524,9 @@ public final class ViewfinderView extends View {
     private void drawExterior(Canvas canvas, Rect frame, int width, int height) {
         paint.setColor(maskColor);
         canvas.drawRect(0, 0, width, frame.top, paint);
-        canvas.drawRect(0, frame.top, frame.left, frame.bottom + 1, paint);
-        canvas.drawRect(frame.right + 1, frame.top, width, frame.bottom + 1, paint);
-        canvas.drawRect(0, frame.bottom + 1, width, height, paint);
+        canvas.drawRect(0, frame.top, frame.left, frame.bottom, paint);
+        canvas.drawRect(frame.right, frame.top, width, frame.bottom, paint);
+        canvas.drawRect(0, frame.bottom, width, height, paint);
     }
 
     /**

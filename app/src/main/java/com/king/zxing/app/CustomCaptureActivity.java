@@ -62,8 +62,11 @@ public class CustomCaptureActivity extends CaptureActivity {
         //获取CaptureHelper，里面有扫码相关的配置设置
         getCaptureHelper().playBeep(false)//播放音效
                 .vibrate(true)//震动
-//                .decodeFormats(DecodeFormatManager.QR_CODE_FORMATS)//设置只识别二维码会提升速度
                 .supportVerticalCode(true)//支持扫垂直条码，建议有此需求时才使用。
+//                .decodeFormats(DecodeFormatManager.QR_CODE_FORMATS)//设置只识别二维码会提升速度
+//                .framingRectRatio(0.9f)//设置识别区域比例，范围建议在0.625 ~ 1.0之间。非全屏识别时才有效
+//                .framingRectVerticalOffset(0)//设置识别区域垂直方向偏移量，非全屏识别时才有效
+//                .framingRectHorizontalOffset(0)//设置识别区域水平方向偏移量，非全屏识别时才有效
                 .continuousScan(isContinuousScan);//是否连扫
     }
 
@@ -86,7 +89,6 @@ public class CustomCaptureActivity extends CaptureActivity {
     public boolean hasTorch(){
         return getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
     }
-
 
     /**
      * 扫码结果回调

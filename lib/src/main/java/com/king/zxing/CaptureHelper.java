@@ -17,7 +17,6 @@ package com.king.zxing;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.hardware.Camera;
@@ -38,6 +37,7 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
+import androidx.annotation.FloatRange;
 import androidx.fragment.app.Fragment;
 
 /**
@@ -115,6 +115,19 @@ public class CaptureHelper implements CaptureLifecycle,CaptureTouchEvent,Capture
      */
     private boolean isFullScreenScan;
 
+    /**
+     * 识别区域比例，范围建议在0.625 ~ 1.0之间，默认0.9
+     */
+    private float framingRectRatio = 0.9f;
+    /**
+     * 识别区域垂直方向偏移量
+     */
+    private int framingRectVerticalOffset;
+    /**
+     * 识别区域水平方向偏移量
+     */
+    private int framingRectHorizontalOffset;
+
     private OnCaptureCallback onCaptureCallback;
 
 
@@ -140,6 +153,9 @@ public class CaptureHelper implements CaptureLifecycle,CaptureTouchEvent,Capture
 
         cameraManager = new CameraManager(activity);
         cameraManager.setFullScreenScan(isFullScreenScan);
+        cameraManager.setFramingRectRatio(framingRectRatio);
+        cameraManager.setFramingRectVerticalOffset(framingRectVerticalOffset);
+        cameraManager.setFramingRectHorizontalOffset(framingRectHorizontalOffset);
         callback = new SurfaceHolder.Callback() {
             @Override
             public void surfaceCreated(SurfaceHolder holder) {
@@ -163,15 +179,10 @@ public class CaptureHelper implements CaptureLifecycle,CaptureTouchEvent,Capture
             }
         };
 
-        onCaptureListener =  new OnCaptureListener() {
-
-            @Override
-            public void onHandleDecode(Result result, Bitmap barcode, float scaleFactor) {
-                inactivityTimer.onActivity();
-                beepManager.playBeepSoundAndVibrate();
-                onResult(result);
-            }
-
+        onCaptureListener = (result, barcode, scaleFactor) -> {
+            inactivityTimer.onActivity();
+            beepManager.playBeepSoundAndVibrate();
+            onResult(result);
         };
         //设置是否播放音效和震动
         beepManager.setPlayBeep(isPlayBeep);
@@ -310,6 +321,7 @@ public class CaptureHelper implements CaptureLifecycle,CaptureTouchEvent,Capture
      * @param event
      * @param camera
      */
+    @Deprecated
     private void focusOnTouch(MotionEvent event,Camera camera) {
 
         Camera.Parameters params = camera.getParameters();
@@ -333,13 +345,10 @@ public class CaptureHelper implements CaptureLifecycle,CaptureTouchEvent,Capture
         params.setFocusMode(Camera.Parameters.FOCUS_MODE_MACRO);
         camera.setParameters(params);
 
-        camera.autoFocus(new Camera.AutoFocusCallback() {
-            @Override
-            public void onAutoFocus(boolean success, Camera camera) {
-                Camera.Parameters params = camera.getParameters();
-                params.setFocusMode(currentFocusMode);
-                camera.setParameters(params);
-            }
+        camera.autoFocus((success, camera1) -> {
+            Camera.Parameters params1 = camera1.getParameters();
+            params1.setFocusMode(currentFocusMode);
+            camera1.setParameters(params1);
         });
 
     }
@@ -422,18 +431,15 @@ public class CaptureHelper implements CaptureLifecycle,CaptureTouchEvent,Capture
         }
 
         if(isPlayBeep){//如果播放音效，则稍微延迟一点，给予播放音效时间
-            captureHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    //如果设置了回调，并且onCallback返回为true，则表示拦截
-                    if(onCaptureCallback!=null && onCaptureCallback.onResultCallback(text)){
-                        return;
-                    }
-                    Intent intent = new Intent();
-                    intent.putExtra(Intents.Scan.RESULT,text);
-                    activity.setResult(Activity.RESULT_OK,intent);
-                    activity.finish();
+            captureHandler.postDelayed(() -> {
+                //如果设置了回调，并且onCallback返回为true，则表示拦截
+                if(onCaptureCallback!=null && onCaptureCallback.onResultCallback(text)){
+                    return;
                 }
+                Intent intent = new Intent();
+                intent.putExtra(Intents.Scan.RESULT,text);
+                activity.setResult(Activity.RESULT_OK,intent);
+                activity.finish();
             },100);
             return;
         }
@@ -596,6 +602,46 @@ public class CaptureHelper implements CaptureLifecycle,CaptureTouchEvent,Capture
         isFullScreenScan = fullScreenScan;
         if(cameraManager!=null){
             cameraManager.setFullScreenScan(isFullScreenScan);
+        }
+        return this;
+    }
+
+    /**
+     * 设置识别区域比例，范围建议在0.625 ~ 1.0之间。非全屏识别时才有效
+     * 0.625 即与默认推荐显示区域一致，1.0表示与宽度一致
+     * @param framingRectRatio 默认0.9
+     * @return
+     */
+    public CaptureHelper framingRectRatio(@FloatRange(from = 0.0f ,to = 1.0f) float framingRectRatio) {
+        this.framingRectRatio = framingRectRatio;
+        if(cameraManager!=null){
+            cameraManager.setFramingRectRatio(framingRectRatio);
+        }
+        return this;
+    }
+
+    /**
+     * 设置识别区域垂直方向偏移量，非全屏识别时才有效
+     * @param framingRectVerticalOffset 默认0，表示不偏移
+     * @return
+     */
+    public CaptureHelper framingRectVerticalOffset(int framingRectVerticalOffset) {
+        this.framingRectVerticalOffset = framingRectVerticalOffset;
+        if(cameraManager!=null){
+            cameraManager.setFramingRectVerticalOffset(framingRectVerticalOffset);
+        }
+        return this;
+    }
+
+    /**
+     * 设置识别区域水平方向偏移量，非全屏识别时才有效
+     * @param framingRectHorizontalOffset 默认0，表示不偏移
+     * @return
+     */
+    public CaptureHelper framingRectHorizontalOffset(int framingRectHorizontalOffset) {
+        this.framingRectHorizontalOffset = framingRectHorizontalOffset;
+        if(cameraManager!=null){
+            cameraManager.setFramingRectHorizontalOffset(framingRectHorizontalOffset);
         }
         return this;
     }
