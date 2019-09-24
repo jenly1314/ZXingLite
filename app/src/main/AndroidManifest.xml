@@ -23,6 +23,7 @@
         </activity>
         <activity
             android:name="com.king.zxing.CaptureActivity"
+            android:exported="true"
             android:screenOrientation="portrait"/>
 
         <activity
