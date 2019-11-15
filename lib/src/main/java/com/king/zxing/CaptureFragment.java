@@ -37,13 +37,14 @@ public class CaptureFragment extends Fragment implements OnCaptureCallback {
 
     private SurfaceView surfaceView;
     private ViewfinderView viewfinderView;
+    private View ivTorch;
 
     private CaptureHelper mCaptureHelper;
 
     public static CaptureFragment newInstance() {
 
         Bundle args = new Bundle();
-        
+
         CaptureFragment fragment = new CaptureFragment();
         fragment.setArguments(args);
         return fragment;
@@ -66,7 +67,12 @@ public class CaptureFragment extends Fragment implements OnCaptureCallback {
     public void initUI(){
         surfaceView = mRootView.findViewById(getSurfaceViewId());
         viewfinderView = mRootView.findViewById(getViewfinderViewId());
-        mCaptureHelper = new CaptureHelper(this,surfaceView,viewfinderView);
+        int ivTorchId = getIvTorchId();
+        if(ivTorchId != 0){
+            ivTorch = mRootView.findViewById(ivTorchId);
+            ivTorch.setVisibility(View.INVISIBLE);
+        }
+        mCaptureHelper = new CaptureHelper(this,surfaceView,viewfinderView,ivTorch);
         mCaptureHelper.setOnCaptureCallback(this);
     }
 
@@ -95,13 +101,20 @@ public class CaptureFragment extends Fragment implements OnCaptureCallback {
         return R.id.viewfinderView;
     }
 
-
     /**
      * 预览界面{@link #surfaceView} 的id
      * @return
      */
     public int getSurfaceViewId(){
         return R.id.surfaceView;
+    }
+
+    /**
+     * 获取 {@link #ivTorch} 的ID
+     * @return  默认返回{@code R.id.ivTorch}, 如果不需要手电筒按钮可以返回0
+     */
+    public int getIvTorchId(){
+        return R.id.ivTorch;
     }
 
     /**

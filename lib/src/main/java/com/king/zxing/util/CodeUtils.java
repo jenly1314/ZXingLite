@@ -21,6 +21,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.support.annotation.ColorInt;
+import android.support.annotation.FloatRange;
 import android.support.annotation.NonNull;
 import android.text.TextPaint;
 import android.text.TextUtils;
@@ -51,7 +52,7 @@ import java.util.Vector;
 /**
  * @author Jenly <a href="mailto:jenly1314@gmail.com">Jenly</a>
  */
-public class CodeUtils {
+public final class CodeUtils {
 
     private CodeUtils(){
         throw new AssertionError();
@@ -59,8 +60,8 @@ public class CodeUtils {
 
     /**
      * 生成二维码
-     * @param content
-     * @param heightPix
+     * @param content 二维码的内容
+     * @param heightPix 二维码的高
      * @return
      */
     public static Bitmap createQRCode(String content, int heightPix) {
@@ -68,13 +69,25 @@ public class CodeUtils {
     }
 
     /**
-     * 生成二维码
-     * @param content
-     * @param heightPix
-     * @param logo
+     * 生成我二维码
+     * @param content 二维码的内容
+     * @param heightPix 二维码的高
+     * @param logo logo大小默认占二维码的20%
      * @return
      */
     public static Bitmap createQRCode(String content, int heightPix, Bitmap logo) {
+        return createQRCode(content,heightPix,logo,0.2f);
+    }
+
+    /**
+     * 生成二维码
+     * @param content 二维码的内容
+     * @param heightPix 二维码的高
+     * @param logo 二维码中间的logo
+     * @param ratio  logo所占比例 因为二维码的最大容错率为30%，所以建议ratio的范围小于0.3
+     * @return
+     */
+    public static Bitmap createQRCode(String content, int heightPix, Bitmap logo,@FloatRange(from = 0.0f,to = 1.0f)float ratio) {
         //配置参数
         Map<EncodeHintType, Object> hints = new HashMap<>();
         hints.put( EncodeHintType.CHARACTER_SET, "utf-8");
@@ -82,18 +95,19 @@ public class CodeUtils {
         hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
         //设置空白边距的宽度
         hints.put(EncodeHintType.MARGIN, 1); //default is 4
-        return createQRCode(content,heightPix,logo,hints);
+        return createQRCode(content,heightPix,logo,ratio,hints);
     }
 
     /**
      * 生成二维码
-     * @param content
-     * @param heightPix
-     * @param logo
+     * @param content 二维码的内容
+     * @param heightPix 二维码的高
+     * @param logo 二维码中间的logo
+     * @param ratio  logo所占比例 因为二维码的最大容错率为30%，所以建议ratio的范围小于0.3
      * @param hints
      * @return
      */
-    public static Bitmap createQRCode(String content, int heightPix, Bitmap logo,Map<EncodeHintType,?> hints) {
+    public static Bitmap createQRCode(String content, int heightPix, Bitmap logo,@FloatRange(from = 0.0f,to = 1.0f)float ratio,Map<EncodeHintType,?> hints) {
         try {
 
             // 图像数据转换，使用了矩阵转换
@@ -116,7 +130,7 @@ public class CodeUtils {
             bitmap.setPixels(pixels, 0, heightPix, 0, 0, heightPix, heightPix);
 
             if (logo != null) {
-                bitmap = addLogo(bitmap, logo);
+                bitmap = addLogo(bitmap, logo,ratio);
             }
 
             return bitmap;
@@ -129,8 +143,12 @@ public class CodeUtils {
 
     /**
      * 在二维码中间添加Logo图案
+     * @param src
+     * @param logo
+     * @param ratio  logo所占比例 因为二维码的最大容错率为30%，所以建议ratio的范围小于0.3
+     * @return
      */
-    private static Bitmap addLogo(Bitmap src, Bitmap logo) {
+    private static Bitmap addLogo(Bitmap src, Bitmap logo,@FloatRange(from = 0.0f,to = 1.0f) float ratio) {
         if (src == null) {
             return null;
         }
@@ -153,8 +171,8 @@ public class CodeUtils {
             return src;
         }
 
-        //logo大小为二维码整体大小的1/6
-        float scaleFactor = srcWidth * 1.0f / 6 / logoWidth;
+        //logo大小为二维码整体大小
+        float scaleFactor = srcWidth * ratio / logoWidth;
         Bitmap bitmap = Bitmap.createBitmap(srcWidth, srcHeight, Bitmap.Config.ARGB_8888);
         try {
             Canvas canvas = new Canvas(bitmap);
@@ -255,7 +273,7 @@ public class CodeUtils {
                 BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
                 try {
                     result = reader.decodeWithState(bitmap);
-                } catch (Exception e) {//解析失败则通过GlobalHistogramBinarizer 再试一次
+                } catch (Exception e) {//解析失败时则通过GlobalHistogramBinarizer 再试一次
                     BinaryBitmap bitmap1 = new BinaryBitmap(new GlobalHistogramBinarizer(source));
                     try {
                         result = reader.decodeWithState(bitmap1);
@@ -290,7 +308,7 @@ public class CodeUtils {
         int h = newOpts.outHeight;
         float width = 800f;
         float height = 480f;
-        // 缩放比。由于是固定比例缩放，只用高或者宽其中一个数据进行计算即可
+        // 缩放比，由于是固定比例缩放，只用高或者宽其中一个数据进行计算即可
         int be = 1;// be=1表示不缩放
         if (w > h && w > width) {// 如果宽度大的话根据宽度固定大小缩放
             be = (int) (newOpts.outWidth / width);

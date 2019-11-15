@@ -27,14 +27,13 @@ import android.widget.Toast;
 import com.king.zxing.CaptureActivity;
 import com.king.zxing.app.util.StatusBarUtils;
 import com.king.zxing.camera.CameraConfigurationUtils;
+import com.king.zxing.camera.FrontLightMode;
 
 /**
  * 自定义继承CaptureActivity
  * @author Jenly <a href="mailto:jenly1314@gmail.com">Jenly</a>
  */
 public class CustomCaptureActivity extends CaptureActivity {
-
-    private ImageView ivFlash;
 
     private boolean isContinuousScan;
     @Override
@@ -51,12 +50,6 @@ public class CustomCaptureActivity extends CaptureActivity {
         TextView tvTitle = findViewById(R.id.tvTitle);
         tvTitle.setText(getIntent().getStringExtra(MainActivity.KEY_TITLE));
 
-        ivFlash = findViewById(R.id.ivFlash);
-
-        if(!hasTorch()){
-            ivFlash.setVisibility(View.GONE);
-        }
-
         isContinuousScan = getIntent().getBooleanExtra(MainActivity.KEY_IS_CONTINUOUS,false);
         //获取CaptureHelper，里面有扫码相关的配置设置
         getCaptureHelper().playBeep(false)//播放音效
@@ -66,28 +59,12 @@ public class CustomCaptureActivity extends CaptureActivity {
 //                .framingRectRatio(0.9f)//设置识别区域比例，范围建议在0.625 ~ 1.0之间。非全屏识别时才有效
 //                .framingRectVerticalOffset(0)//设置识别区域垂直方向偏移量，非全屏识别时才有效
 //                .framingRectHorizontalOffset(0)//设置识别区域水平方向偏移量，非全屏识别时才有效
+                .frontLightMode(FrontLightMode.AUTO)//设置闪光灯模式
+                .tooDarkLux(45f)//设置光线太暗时，自动触发开启闪光灯的照度值
+                .brightEnoughLux(450f)//设置光线足够明亮时，自动触发关闭闪光灯的照度值
                 .continuousScan(isContinuousScan);//是否连扫
     }
 
-    /**
-     * 开启或关闭闪光灯（手电筒）
-     * @param on {@code true}表示开启，{@code false}表示关闭
-     */
-    public void setTorch(boolean on){
-        Camera camera = getCameraManager().getOpenCamera().getCamera();
-        Camera.Parameters parameters = camera.getParameters();
-        CameraConfigurationUtils.setTorch(parameters,on);
-        camera.setParameters(parameters);
-
-    }
-
-    /**
-     * 检测是否支持闪光灯（手电筒）
-     * @return
-     */
-    public boolean hasTorch(){
-        return getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
-    }
 
     /**
      * 扫码结果回调
@@ -103,20 +80,10 @@ public class CustomCaptureActivity extends CaptureActivity {
         return super.onResultCallback(result);
     }
 
-
-    private void clickFlash(View v){
-        boolean isSelected = v.isSelected();
-        setTorch(!isSelected);
-        v.setSelected(!isSelected);
-    }
-
     public void onClick(View v){
         switch (v.getId()){
             case R.id.ivLeft:
                 onBackPressed();
-                break;
-            case R.id.ivFlash:
-                clickFlash(v);
                 break;
         }
     }

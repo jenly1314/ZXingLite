@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity"
-                  android:screenOrientation="portrait">
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -23,21 +23,26 @@
         </activity>
         <activity
             android:name="com.king.zxing.CaptureActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/CaptureTheme"/>
 
         <activity
             android:name=".EasyCaptureActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/CaptureTheme"/>
         <activity
-            android:name=".CustomCaptureActivity"/>
+            android:name=".CustomCaptureActivity"
+            android:theme="@style/CaptureTheme"/>
 
         <activity
             android:name=".CaptureFragmentActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/CaptureTheme"/>
 
         <activity
             android:name=".CustomActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/CaptureTheme"/>
 
         <activity
             android:name=".CodeActivity"
