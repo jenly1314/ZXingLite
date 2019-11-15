@@ -17,6 +17,7 @@ package com.king.zxing;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.hardware.Camera;
@@ -24,11 +25,13 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.Result;
 import com.king.zxing.camera.CameraManager;
+import com.king.zxing.camera.FrontLightMode;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -62,6 +65,7 @@ public class CaptureHelper implements CaptureLifecycle,CaptureTouchEvent,Capture
     private ViewfinderView viewfinderView;
     private SurfaceHolder surfaceHolder;
     private SurfaceHolder.Callback callback;
+    private View ivTorch;
 
     private Collection<BarcodeFormat> decodeFormats;
     private Map<DecodeHintType,Object> decodeHints;
@@ -127,21 +131,58 @@ public class CaptureHelper implements CaptureLifecycle,CaptureTouchEvent,Capture
      * 识别区域水平方向偏移量
      */
     private int framingRectHorizontalOffset;
-
+    /**
+     * 光线太暗，当光线亮度太暗，亮度低于此值时，显示手电筒按钮
+     */
+    private float tooDarkLux = AmbientLightManager.TOO_DARK_LUX;
+    /**
+     * 光线足够明亮，当光线亮度足够明亮，亮度高于此值时，隐藏手电筒按钮
+     */
+    private float brightEnoughLux = AmbientLightManager.BRIGHT_ENOUGH_LUX;
+    /**
+     * 扫码回调
+     */
     private OnCaptureCallback onCaptureCallback;
 
-
+    /**
+     * use {@link #CaptureHelper(Fragment, SurfaceView, ViewfinderView, View)}
+     * @param fragment
+     * @param surfaceView
+     * @param viewfinderView
+     */
+    @Deprecated
     public CaptureHelper(Fragment fragment, SurfaceView surfaceView, ViewfinderView viewfinderView){
-        this(fragment.getActivity(),surfaceView,viewfinderView);
-
+        this(fragment,surfaceView,viewfinderView,null);
     }
 
+    public CaptureHelper(Fragment fragment, SurfaceView surfaceView, ViewfinderView viewfinderView,View ivTorch){
+        this(fragment.getActivity(),surfaceView,viewfinderView,ivTorch);
+    }
+
+    /**
+     *  use {@link #CaptureHelper(Activity, SurfaceView, ViewfinderView, View)}
+     * @param activity
+     * @param surfaceView
+     * @param viewfinderView
+     */
+    @Deprecated
     public CaptureHelper(Activity activity,SurfaceView surfaceView,ViewfinderView viewfinderView){
+        this(activity,surfaceView,viewfinderView,null);
+    }
+
+    /**
+     *
+     * @param activity
+     * @param surfaceView
+     * @param viewfinderView
+     * @param ivTorch
+     */
+    public CaptureHelper(Activity activity,SurfaceView surfaceView,ViewfinderView viewfinderView,View ivTorch){
         this.activity = activity;
         this.viewfinderView = viewfinderView;
+        this.ivTorch = ivTorch;
         surfaceHolder = surfaceView.getHolder();
         hasSurface = false;
-
     }
 
 
@@ -156,6 +197,22 @@ public class CaptureHelper implements CaptureLifecycle,CaptureTouchEvent,Capture
         cameraManager.setFramingRectRatio(framingRectRatio);
         cameraManager.setFramingRectVerticalOffset(framingRectVerticalOffset);
         cameraManager.setFramingRectHorizontalOffset(framingRectHorizontalOffset);
+        if(ivTorch !=null && activity.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH)){
+            ivTorch.setOnClickListener(v -> cameraManager.setTorch(!ivTorch.isSelected()));
+            cameraManager.setOnSensorListener((torch, tooDark, ambientLightLux) -> {
+                if(tooDark){
+                    if(ivTorch.getVisibility() != View.VISIBLE){
+                        ivTorch.setVisibility(View.VISIBLE);
+                    }
+                }else if(!torch){
+                    if(ivTorch.getVisibility() == View.VISIBLE){
+                        ivTorch.setVisibility(View.INVISIBLE);
+                    }
+                }
+            });
+            cameraManager.setOnTorchListener(torch -> ivTorch.setSelected(torch));
+
+        }
         callback = new SurfaceHolder.Callback() {
             @Override
             public void surfaceCreated(SurfaceHolder holder) {
@@ -187,6 +244,11 @@ public class CaptureHelper implements CaptureLifecycle,CaptureTouchEvent,Capture
         //设置是否播放音效和震动
         beepManager.setPlayBeep(isPlayBeep);
         beepManager.setVibrate(isVibrate);
+
+        //设置闪光灯的太暗时和足够亮时的照度值
+        ambientLightManager.setTooDarkLux(tooDarkLux);
+        ambientLightManager.setBrightEnoughLux(brightEnoughLux);
+
     }
 
 
@@ -562,6 +624,49 @@ public class CaptureHelper implements CaptureLifecycle,CaptureTouchEvent,Capture
         this.isSupportVerticalCode = supportVerticalCode;
         if(captureHandler!=null){
             captureHandler.setSupportVerticalCode(isSupportVerticalCode);
+        }
+        return this;
+    }
+
+    /**
+     * 设置闪光灯模式。当设置模式为：{@link FrontLightMode#AUTO}时，如果满意默认的照度值范围，
+     * 可通过{@link #tooDarkLux(float)}和{@link #brightEnoughLux(float)}来自定义照度范围，
+     * 控制自动触发开启和关闭闪光灯。
+     * 当设置模式非{@link FrontLightMode#AUTO}时，传感器不会检测，则不使用手电筒
+     *
+     * @param mode 默认:{@link FrontLightMode#AUTO}
+     * @return
+     */
+    public CaptureHelper frontLightMode(FrontLightMode mode) {
+        FrontLightMode.put(activity,mode);
+        if(ivTorch!=null && mode != FrontLightMode.AUTO){
+            ivTorch.setVisibility(View.INVISIBLE);
+        }
+        return this;
+    }
+
+    /**
+     * 设置光线太暗时，自动显示手电筒按钮
+     * @param tooDarkLux  默认：{@link AmbientLightManager#TOO_DARK_LUX}
+     * @return
+     */
+    public CaptureHelper tooDarkLux(float tooDarkLux) {
+        this.tooDarkLux = tooDarkLux;
+        if(ambientLightManager != null){
+            ambientLightManager.setTooDarkLux(tooDarkLux);
+        }
+        return this;
+    }
+
+    /**
+     * 设置光线足够明亮时，自动隐藏手电筒按钮
+     * @param brightEnoughLux 默认：{@link AmbientLightManager#BRIGHT_ENOUGH_LUX}
+     * @return
+     */
+    public CaptureHelper brightEnoughLux(float brightEnoughLux) {
+        this.brightEnoughLux = brightEnoughLux;
+        if(ambientLightManager != null){
+            ambientLightManager.setTooDarkLux(tooDarkLux);
         }
         return this;
     }

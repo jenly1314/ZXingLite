@@ -1,6 +1,5 @@
 package com.king.zxing.app.util;
 
-import android.annotation.TargetApi;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
@@ -14,13 +13,16 @@ import android.util.Log;
 /**
  * @author Jenly <a href="mailto:jenly1314@gmail.com">Jenly</a>
  */
-public enum  UriUtils {
-    INSTANCE;
+public final class UriUtils {
+
+    private UriUtils(){
+        throw new AssertionError();
+    }
 
     /**
      * 获取图片
      */
-    public String getImagePath(Context context,Intent data) {
+    public static String getImagePath(Context context,Intent data) {
         String imagePath = null;
         Uri uri = data.getData();
         //获取系統版本
@@ -54,7 +56,7 @@ public enum  UriUtils {
     /**
      * 通过uri和selection来获取真实的图片路径,从相册获取图片时要用
      */
-    private String getImagePath(Context context,Uri uri, String selection) {
+    private static String getImagePath(Context context,Uri uri, String selection) {
         String path = null;
         Cursor cursor = context.getContentResolver().query(uri, null, selection, null, null);
         if (cursor != null) {

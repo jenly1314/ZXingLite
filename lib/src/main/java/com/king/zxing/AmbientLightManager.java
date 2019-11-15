@@ -36,8 +36,17 @@ import com.king.zxing.camera.FrontLightMode;
  */
 final class AmbientLightManager implements SensorEventListener {
 
-    private static final float TOO_DARK_LUX = 45.0f;
-    private static final float BRIGHT_ENOUGH_LUX = 450.0f;
+    protected static final float TOO_DARK_LUX = 45.0f;
+    protected static final float BRIGHT_ENOUGH_LUX = 100.0f;
+
+    /**
+     * 光线太暗时，默认：照度45 lux
+     */
+    private float tooDarkLux = TOO_DARK_LUX;
+    /**
+     * 光线足够亮时，默认：照度450 lux
+     */
+    private float brightEnoughLux = BRIGHT_ENOUGH_LUX;
 
     private final Context context;
     private CameraManager cameraManager;
@@ -72,12 +81,20 @@ final class AmbientLightManager implements SensorEventListener {
     public void onSensorChanged(SensorEvent sensorEvent) {
         float ambientLightLux = sensorEvent.values[0];
         if (cameraManager != null) {
-            if (ambientLightLux <= TOO_DARK_LUX) {
-                cameraManager.setTorch(true);
-            } else if (ambientLightLux >= BRIGHT_ENOUGH_LUX) {
-                cameraManager.setTorch(false);
+            if (ambientLightLux <= tooDarkLux) {
+                cameraManager.sensorChanged(true,ambientLightLux);
+            } else if (ambientLightLux >= brightEnoughLux) {
+                cameraManager.sensorChanged(false,ambientLightLux);
             }
         }
+    }
+
+    public void setTooDarkLux(float tooDarkLux){
+        this.tooDarkLux = tooDarkLux;
+    }
+
+    public void setBrightEnoughLux(float brightEnoughLux){
+        this.brightEnoughLux = brightEnoughLux;
     }
 
     @Override

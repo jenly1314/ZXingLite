@@ -57,11 +57,16 @@ public class CodeActivity extends AppCompatActivity {
      * @param content
      */
     private void createQRCode(String content){
-        //生成二维码最好放子线程生成防止阻塞UI，这里只是演示
-        Bitmap logo = BitmapFactory.decodeResource(getResources(),R.drawable.logo);
-        Bitmap bitmap =  CodeUtils.createQRCode(content,600,logo);
-        //显示二维码
-        ivCode.setImageBitmap(bitmap);
+        new Thread(() -> {
+            //生成二维码相关放在子线程里面
+            Bitmap logo = BitmapFactory.decodeResource(getResources(),R.drawable.logo);
+            Bitmap bitmap =  CodeUtils.createQRCode(content,600,logo);
+            runOnUiThread(()->{
+                //显示二维码
+                ivCode.setImageBitmap(bitmap);
+            });
+        }).start();
+
     }
 
     /**
@@ -69,11 +74,16 @@ public class CodeActivity extends AppCompatActivity {
      * @param content
      */
     private void createBarCode(String content){
-        //生成条形码最好放子线程生成防止阻塞UI，这里只是演示
-        Bitmap bitmap = CodeUtils.createBarCode(content, BarcodeFormat.CODE_128,800,200,null,true);
-        //显示条形码
-        ivCode.setImageBitmap(bitmap);
+        new Thread(() -> {
+            //生成条形码相关放在子线程里面
+            Bitmap bitmap = CodeUtils.createBarCode(content, BarcodeFormat.CODE_128,800,200,null,true);
+            runOnUiThread(()->{
+                //显示条形码
+                ivCode.setImageBitmap(bitmap);
+            });
+        }).start();
     }
+
 
 
     public void onClick(View v){

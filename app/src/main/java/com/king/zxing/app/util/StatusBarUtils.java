@@ -33,8 +33,11 @@ import androidx.appcompat.widget.Toolbar;
 /**
  * @author Jenly <a href="mailto:jenly1314@gmail.com">Jenly</a>
  */
-public enum StatusBarUtils {
-    INSTANCE;
+public final class StatusBarUtils {
+
+    private StatusBarUtils(){
+        throw new AssertionError();
+    }
 
     public static void immersiveStatusBar(Activity activity, Toolbar toolbar) {
         immersiveStatusBar(activity,toolbar,0.0f);

@@ -19,6 +19,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
+import android.view.View;
 
 import com.king.zxing.camera.CameraManager;
 
@@ -32,6 +33,7 @@ public class CaptureActivity extends Activity implements OnCaptureCallback{
 
     private SurfaceView surfaceView;
     private ViewfinderView viewfinderView;
+    private View ivTorch;
 
     private CaptureHelper mCaptureHelper;
 
@@ -51,7 +53,12 @@ public class CaptureActivity extends Activity implements OnCaptureCallback{
     public void initUI(){
         surfaceView = findViewById(getSurfaceViewId());
         viewfinderView = findViewById(getViewfinderViewId());
-        mCaptureHelper = new CaptureHelper(this,surfaceView,viewfinderView);
+        int ivTorchId = getIvTorchId();
+        if(ivTorchId != 0){
+            ivTorch = findViewById(ivTorchId);
+            ivTorch.setVisibility(View.INVISIBLE);
+        }
+        mCaptureHelper = new CaptureHelper(this,surfaceView,viewfinderView,ivTorch);
         mCaptureHelper.setOnCaptureCallback(this);
         mCaptureHelper.onCreate();
     }
@@ -74,7 +81,7 @@ public class CaptureActivity extends Activity implements OnCaptureCallback{
     }
 
     /**
-     * {@link ViewfinderView} 的 id
+     * {@link #viewfinderView} 的 ID
      * @return
      */
     public int getViewfinderViewId(){
@@ -83,11 +90,19 @@ public class CaptureActivity extends Activity implements OnCaptureCallback{
 
 
     /**
-     * 预览界面{@link #surfaceView} 的id
+     * 预览界面{@link #surfaceView} 的ID
      * @return
      */
     public int getSurfaceViewId(){
         return R.id.surfaceView;
+    }
+
+    /**
+     * 获取 {@link #ivTorch} 的ID
+     * @return  默认返回{@code R.id.ivTorch}, 如果不需要手电筒按钮可以返回0
+     */
+    public int getIvTorchId(){
+        return R.id.ivTorch;
     }
 
     /**

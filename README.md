@@ -54,21 +54,21 @@ ZXingLite for Android 是ZXing的精简版，基于ZXing库优化扫码和生成
 <dependency>
   <groupId>com.king.zxing</groupId>
   <artifactId>zxing-lite</artifactId>
-  <version>1.1.3</version>
+  <version>1.1.4</version>
   <type>pom</type>
 </dependency>
 ```
 ### Gradle:
 ```gradle
 //AndroidX 版本
-implementation 'com.king.zxing:zxing-lite:1.1.3-androidx'
+implementation 'com.king.zxing:zxing-lite:1.1.4-androidx'
 
 //Android 版本
-implementation 'com.king.zxing:zxing-lite:1.1.3'
+implementation 'com.king.zxing:zxing-lite:1.1.4'
 ```
 ### Lvy:
 ```lvy
-<dependency org='com.king.zxing' name='zxing-lite' rev='1.1.3'>
+<dependency org='com.king.zxing' name='zxing-lite' rev='1.1.4'>
   <artifact name='$AID' ext='pom'></artifact>
 </dependency>
 ```
@@ -95,7 +95,10 @@ api 'com.google.zxing:core:3.3.3'
 
 ## 示例
 
-布局示例 （可自定义布局，布局内至少要保证有SurfaceView和ViewfinderView，控件id可根据重写CaptureActivity 的 getPreviewViewId 和 getViewFinderViewId方法自定义）
+布局示例
+>  可自定义布局，布局内至少要保证有SurfaceView和ViewfinderView，控件id可根据重写CaptureActivity 的 getSurfaceViewId 和 getViewfinderViewId方法自定义
+>  ivTorch为 v1.1.4版本新增的手电筒按钮，如果想改ID可通过CaptureActivity中的getIvTorchId自定义ID
+
 ```Xml
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
@@ -109,8 +112,20 @@ api 'com.google.zxing:core:3.3.3'
             android:id="@+id/viewfinderView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
-
+        <ImageView
+            android:id="@+id/ivTorch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/zxl_torch_selector"
+            android:layout_marginTop="@dimen/torchMarginTop" />
     </FrameLayout>
+```
+
+或在你的布局中添加
+
+```Xml
+    <include layout="@layout/zxl_capture"/>
 ```
 
 代码示例 （二维码/条形码）
@@ -128,7 +143,8 @@ api 'com.google.zxing:core:3.3.3'
 ```Xml
     <activity
         android:name="com.king.zxing.CaptureActivity"
-        android:screenOrientation="portrait"/>
+        android:screenOrientation="portrait"
+        android:theme="@style/CaptureTheme"/>
 ```
 
 ### 快速实现扫码有以下几种方式：
@@ -145,6 +161,10 @@ api 'com.google.zxing:core:3.3.3'
 更多使用详情，请查看[app](app)中的源码使用示例或直接查看[API帮助文档](https://jenly1314.github.io/projects/ZXingLite/doc/)
 
 ## 版本记录
+
+#### v1.1.4：2019-11-15
+*  内置手电筒按钮,当光线太暗时，自动显示手电筒 fix(#58)
+*  生成二维码时Logo支持自定义大小 fix(#62)
 
 #### v1.1.3：2019-9-24
 *  支持真实识别区域比例和识别区域偏移量可配置

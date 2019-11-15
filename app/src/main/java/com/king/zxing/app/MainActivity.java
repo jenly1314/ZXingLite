@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
     }
 
     private void parsePhoto(Intent data){
-        final String path = UriUtils.INSTANCE.getImagePath(this,data);
+        final String path = UriUtils.getImagePath(this,data);
         Log.d("Jenly","path:" + path);
         if(TextUtils.isEmpty(path)){
             return;
