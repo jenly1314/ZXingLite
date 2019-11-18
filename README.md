@@ -99,7 +99,10 @@ api 'com.google.zxing:core:3.3.3'
 
 布局示例
 >  可自定义布局，布局内至少要保证有SurfaceView和ViewfinderView，控件id可根据重写CaptureActivity 的 getSurfaceViewId 和 getViewfinderViewId方法自定义
+
 >  ivTorch为 v1.1.4版本新增的手电筒按钮，如果想改ID可通过CaptureActivity中的getIvTorchId自定义ID
+
+>  如果是从v1.1.4以前版本升级至v1.1.4以上版本，请参考如下布局示例（新增ivTorch），也可忽略内置手电筒功能可直接将CaptureActivity中的getIvTorchId方法返回0
 
 ```Xml
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
