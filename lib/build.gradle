@@ -42,6 +42,6 @@ dependencies {
     androidTestImplementation deps.test.runner
     androidTestImplementation deps.test.espresso
 
-    compileOnly deps.support.appcompat
+    api deps.support.appcompat
     api deps.zxing
 }

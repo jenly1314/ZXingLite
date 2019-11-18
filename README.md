@@ -85,11 +85,11 @@ allprojects {
 ## 引入的库：
 ```gradle
 //AndroidX
-compileOnly 'androidx.appcompat:appcompat:1.0.0+'
+api 'androidx.appcompat:appcompat:1.1.0'
 api 'com.google.zxing:core:3.3.3'
 
 //Android
-compileOnly 'com.android.support:appcompat-v7:28.0.0'
+api 'com.android.support:appcompat-v7:28.0.0'
 api 'com.google.zxing:core:3.3.3'
 ```
 
@@ -162,9 +162,9 @@ api 'com.google.zxing:core:3.3.3'
 
 ## 版本记录
 
-#### v1.1.4：2019-11-15
-*  内置手电筒按钮,当光线太暗时，自动显示手电筒 fix(#58)
-*  生成二维码时Logo支持自定义大小 fix(#62)
+#### v1.1.4：2019-11-18
+*  内置手电筒按钮,当光线太暗时，自动显示手电筒 (fix#58)
+*  生成二维码时Logo支持自定义大小 (fix#62)
 
 #### v1.1.3：2019-9-24
 *  支持真实识别区域比例和识别区域偏移量可配置

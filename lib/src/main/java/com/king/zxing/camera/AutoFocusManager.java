@@ -29,7 +29,6 @@ import java.util.concurrent.RejectedExecutionException;
 
 import com.king.zxing.Preferences;
 
-@SuppressWarnings("deprecation") // camera APIs
 final class AutoFocusManager implements Camera.AutoFocusCallback {
 
     private static final String TAG = AutoFocusManager.class.getSimpleName();
