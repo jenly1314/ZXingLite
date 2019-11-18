@@ -87,7 +87,7 @@ allprojects {
 ## 引入的库：
 ```gradle
 //AndroidX
-api 'androidx.appcompat:appcompat:1.0.0+'
+api 'androidx.appcompat:appcompat:1.1.0'
 api 'com.google.zxing:core:3.3.3'
 
 //Android
