@@ -19,3 +19,16 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+#ZXingLite
+-dontwarn com.king.zxing.**
+-keep class com.king.zxing.**{ *;}
+-keepattributes InnerClasses
+-keepclassmembers enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}
+
+#ZXing
+-dontwarn com.google.zxing.**
+-keep class com.google.zxing.**{ *;}
