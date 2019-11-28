@@ -20,7 +20,6 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
-
 #ZXingLite
 -dontwarn com.king.zxing.**
 -keep class com.king.zxing.**{ *;}
