@@ -18,6 +18,7 @@ package com.king.zxing;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.hardware.Camera;
@@ -238,7 +239,7 @@ public class CaptureHelper implements CaptureLifecycle,CaptureTouchEvent,Capture
         onCaptureListener = (result, barcode, scaleFactor) -> {
             inactivityTimer.onActivity();
             beepManager.playBeepSoundAndVibrate();
-            onResult(result);
+            onResult(result,barcode,scaleFactor);
         };
         //设置是否播放音效和震动
         beepManager.setPlayBeep(isPlayBeep);
@@ -474,6 +475,17 @@ public class CaptureHelper implements CaptureLifecycle,CaptureTouchEvent,Capture
     }
 
     /**
+     * 接收扫码结果
+     * @param result
+     * @param barcode
+     * @param scaleFactor
+     */
+    public void onResult(Result result, Bitmap barcode, float scaleFactor){
+        onResult(result);
+    }
+
+    /**';, mnb
+     *
      * 接收扫码结果，想支持连扫时，可将{@link #continuousScan(boolean)}设置为{@code true}
      * 如果{@link #isContinuousScan}支持连扫，则默认重启扫码和解码器；当连扫逻辑太复杂时，
      * 请将{@link #autoRestartPreviewAndDecode(boolean)}设置为{@code false}，并手动调用{@link #restartPreviewAndDecode()}
