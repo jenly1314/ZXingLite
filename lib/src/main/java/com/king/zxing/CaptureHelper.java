@@ -18,6 +18,7 @@ package com.king.zxing;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.hardware.Camera;
@@ -239,7 +240,7 @@ public class CaptureHelper implements CaptureLifecycle,CaptureTouchEvent,Capture
         onCaptureListener = (result, barcode, scaleFactor) -> {
             inactivityTimer.onActivity();
             beepManager.playBeepSoundAndVibrate();
-            onResult(result);
+            onResult(result,barcode,scaleFactor);
         };
         //设置是否播放音效和震动
         beepManager.setPlayBeep(isPlayBeep);
@@ -472,6 +473,16 @@ public class CaptureHelper implements CaptureLifecycle,CaptureTouchEvent,Capture
         if(captureHandler!=null){
             captureHandler.restartPreviewAndDecode();
         }
+    }
+
+    /**
+     * 接收扫码结果
+     * @param result
+     * @param barcode
+     * @param scaleFactor
+     */
+    public void onResult(Result result, Bitmap barcode, float scaleFactor){
+        onResult(result);
     }
 
     /**
