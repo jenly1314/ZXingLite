@@ -50,7 +50,7 @@ final class InactivityTimer {
         onActivity();
     }
 
-    synchronized void onActivity() {
+    void onActivity() {
         cancel();
         inactivityTask = new InactivityAsyncTask(activity);
         try {
@@ -60,7 +60,7 @@ final class InactivityTimer {
         }
     }
 
-    synchronized void onPause() {
+    void onPause() {
         cancel();
         if (registered) {
             activity.unregisterReceiver(powerStatusReceiver);
@@ -70,7 +70,7 @@ final class InactivityTimer {
         }
     }
 
-    synchronized void onResume() {
+    void onResume() {
         if (registered) {
             Log.w(TAG, "PowerStatusReceiver was already registered?");
         } else {
@@ -80,7 +80,7 @@ final class InactivityTimer {
         onActivity();
     }
 
-    private synchronized void cancel() {
+    private void cancel() {
         AsyncTask<?,?,?> task = inactivityTask;
         if (task != null) {
             task.cancel(true);

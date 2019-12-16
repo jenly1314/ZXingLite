@@ -90,7 +90,7 @@ public final class CameraManager {
      * @param holder The surface object which the camera will draw preview frames into.
      * @throws IOException Indicates the camera driver failed to open.
      */
-    public synchronized void openDriver(SurfaceHolder holder) throws IOException {
+    public void openDriver(SurfaceHolder holder) throws IOException {
         OpenCamera theCamera = camera;
         if (theCamera == null) {
             theCamera = OpenCameraInterface.open(requestedCameraId);
@@ -147,7 +147,7 @@ public final class CameraManager {
     /**
      * Closes the camera driver if still in use.
      */
-    public synchronized void closeDriver() {
+    public void closeDriver() {
         if (camera != null) {
             camera.getCamera().release();
             camera = null;
@@ -161,7 +161,7 @@ public final class CameraManager {
     /**
      * Asks the camera hardware to begin drawing preview frames to the screen.
      */
-    public synchronized void startPreview() {
+    public void startPreview() {
         OpenCamera theCamera = camera;
         if (theCamera != null && !previewing) {
             theCamera.getCamera().startPreview();
@@ -173,7 +173,7 @@ public final class CameraManager {
     /**
      * Tells the camera to stop drawing preview frames.
      */
-    public synchronized void stopPreview() {
+    public void stopPreview() {
         if (autoFocusManager != null) {
             autoFocusManager.stop();
             autoFocusManager = null;

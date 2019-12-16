@@ -58,7 +58,7 @@ public class CustomCaptureActivity extends CaptureActivity {
 //                .framingRectHorizontalOffset(0)//设置识别区域水平方向偏移量，非全屏识别时才有效
                 .frontLightMode(FrontLightMode.AUTO)//设置闪光灯模式
                 .tooDarkLux(45f)//设置光线太暗时，自动触发开启闪光灯的照度值
-                .brightEnoughLux(450f)//设置光线足够明亮时，自动触发关闭闪光灯的照度值
+                .brightEnoughLux(100f)//设置光线足够明亮时，自动触发关闭闪光灯的照度值
                 .continuousScan(isContinuousScan);//是否连扫
     }
 
