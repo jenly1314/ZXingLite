@@ -56,21 +56,21 @@ ZXingLite for Android 是ZXing的精简版，基于ZXing库优化扫码和生成
 <dependency>
   <groupId>com.king.zxing</groupId>
   <artifactId>zxing-lite</artifactId>
-  <version>1.1.4</version>
+  <version>1.1.5</version>
   <type>pom</type>
 </dependency>
 ```
 ### Gradle:
 ```gradle
 //AndroidX 版本
-implementation 'com.king.zxing:zxing-lite:1.1.4-androidx'
+implementation 'com.king.zxing:zxing-lite:1.1.5-androidx'
 
 //Android 版本
-implementation 'com.king.zxing:zxing-lite:1.1.4'
+implementation 'com.king.zxing:zxing-lite:1.1.5'
 ```
 ### Lvy:
 ```lvy
-<dependency org='com.king.zxing' name='zxing-lite' rev='1.1.4'>
+<dependency org='com.king.zxing' name='zxing-lite' rev='1.1.5'>
   <artifact name='$AID' ext='pom'></artifact>
 </dependency>
 ```
@@ -100,9 +100,9 @@ api 'com.google.zxing:core:3.3.3'
 布局示例
 >  可自定义布局（覆写getLayoutId方法），布局内至少要保证有SurfaceView和ViewfinderView，控件id可根据覆写CaptureActivity 的 getSurfaceViewId 和 getViewfinderViewId方法自定义
 
->  ivTorch为 v1.1.4版本新增的手电筒按钮，如果想改ID可通过CaptureActivity中的getIvTorchId自定义ID
+>  ivTorch为 v1.1.5版本新增的手电筒按钮，如果想改ID可通过CaptureActivity中的getIvTorchId自定义ID
 
->  如果是从v1.1.4以前版本升级至v1.1.4以上版本，请参考如下布局示例（新增ivTorch），也可忽略内置手电筒功能可直接将CaptureActivity中的getIvTorchId方法返回0
+>  如果是从v1.1.5以前版本升级至v1.1.5以上版本，请参考如下布局示例（新增ivTorch），也可忽略内置手电筒功能可直接将CaptureActivity中的getIvTorchId方法返回0
 
 ```Xml
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -166,6 +166,9 @@ api 'com.google.zxing:core:3.3.3'
 更多使用详情，请查看[app](app)中的源码使用示例或直接查看[API帮助文档](https://jenly1314.github.io/projects/ZXingLite/doc/)
 
 ## 版本记录
+
+#### v1.1.5：2019-12-16
+*  优化Camera初始化相关策略，减少出现卡顿的可能性
 
 #### v1.1.4：2019-11-18
 *  内置手电筒按钮,当光线太暗时，自动显示手电筒 (fix#58)

@@ -46,7 +46,7 @@ import java.util.Map;
 /**
  * @author <a href="mailto:jenly1314@gmail.com">Jenly</a>
  */
-public class CaptureHelper implements CaptureLifecycle,CaptureTouchEvent,CaptureManager  {
+public class CaptureHelper implements CaptureLifecycle,CaptureTouchEvent,CaptureManager, SurfaceHolder.Callback  {
 
     public static final String TAG = CaptureHelper.class.getSimpleName();
 
@@ -64,7 +64,6 @@ public class CaptureHelper implements CaptureLifecycle,CaptureTouchEvent,Capture
 
     private ViewfinderView viewfinderView;
     private SurfaceHolder surfaceHolder;
-    private SurfaceHolder.Callback callback;
     private View ivTorch;
 
     private Collection<BarcodeFormat> decodeFormats;
@@ -144,6 +143,8 @@ public class CaptureHelper implements CaptureLifecycle,CaptureTouchEvent,Capture
      */
     private OnCaptureCallback onCaptureCallback;
 
+    private boolean hasCameraFlash;
+
     /**
      * use {@link #CaptureHelper(Fragment, SurfaceView, ViewfinderView, View)}
      * @param fragment
@@ -192,49 +193,8 @@ public class CaptureHelper implements CaptureLifecycle,CaptureTouchEvent,Capture
         beepManager = new BeepManager(activity);
         ambientLightManager = new AmbientLightManager(activity);
 
-        cameraManager = new CameraManager(activity);
-        cameraManager.setFullScreenScan(isFullScreenScan);
-        cameraManager.setFramingRectRatio(framingRectRatio);
-        cameraManager.setFramingRectVerticalOffset(framingRectVerticalOffset);
-        cameraManager.setFramingRectHorizontalOffset(framingRectHorizontalOffset);
-        if(ivTorch !=null && activity.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH)){
-            ivTorch.setOnClickListener(v -> cameraManager.setTorch(!ivTorch.isSelected()));
-            cameraManager.setOnSensorListener((torch, tooDark, ambientLightLux) -> {
-                if(tooDark){
-                    if(ivTorch.getVisibility() != View.VISIBLE){
-                        ivTorch.setVisibility(View.VISIBLE);
-                    }
-                }else if(!torch){
-                    if(ivTorch.getVisibility() == View.VISIBLE){
-                        ivTorch.setVisibility(View.INVISIBLE);
-                    }
-                }
-            });
-            cameraManager.setOnTorchListener(torch -> ivTorch.setSelected(torch));
-
-        }
-        callback = new SurfaceHolder.Callback() {
-            @Override
-            public void surfaceCreated(SurfaceHolder holder) {
-                if (holder == null) {
-                    Log.e(TAG, "*** WARNING *** surfaceCreated() gave us a null surface!");
-                }
-                if (!hasSurface) {
-                    hasSurface = true;
-                    initCamera(holder);
-                }
-            }
-
-            @Override
-            public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-
-            }
-
-            @Override
-            public void surfaceDestroyed(SurfaceHolder holder) {
-                hasSurface = false;
-            }
-        };
+        hasCameraFlash = activity.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
+        initCameraManager();
 
         onCaptureListener = (result, barcode, scaleFactor) -> {
             inactivityTimer.onActivity();
@@ -256,17 +216,15 @@ public class CaptureHelper implements CaptureLifecycle,CaptureTouchEvent,Capture
     @Override
     public void onResume(){
         beepManager.updatePrefs();
-        ambientLightManager.start(cameraManager);
 
         inactivityTimer.onResume();
-
-        surfaceHolder.addCallback(callback);
 
         if (hasSurface) {
             initCamera(surfaceHolder);
         } else {
-            surfaceHolder.addCallback(callback);
+            surfaceHolder.addCallback(this);
         }
+        ambientLightManager.start(cameraManager);
     }
 
 
@@ -281,7 +239,7 @@ public class CaptureHelper implements CaptureLifecycle,CaptureTouchEvent,Capture
         beepManager.close();
         cameraManager.closeDriver();
         if (!hasSurface) {
-            surfaceHolder.removeCallback(callback);
+            surfaceHolder.removeCallback(this);
         }
     }
 
@@ -326,6 +284,35 @@ public class CaptureHelper implements CaptureLifecycle,CaptureTouchEvent,Capture
         return false;
     }
 
+    private void initCameraManager(){
+        cameraManager = new CameraManager(activity);
+        cameraManager.setFullScreenScan(isFullScreenScan);
+        cameraManager.setFramingRectRatio(framingRectRatio);
+        cameraManager.setFramingRectVerticalOffset(framingRectVerticalOffset);
+        cameraManager.setFramingRectHorizontalOffset(framingRectHorizontalOffset);
+        if(ivTorch !=null && hasCameraFlash){
+            ivTorch.setOnClickListener(v -> {
+                if(cameraManager!=null){
+                    cameraManager.setTorch(!ivTorch.isSelected());
+                }
+            });
+            cameraManager.setOnSensorListener((torch, tooDark, ambientLightLux) -> {
+                if(tooDark){
+                    if(ivTorch.getVisibility() != View.VISIBLE){
+                        ivTorch.setVisibility(View.VISIBLE);
+                    }
+                }else if(!torch){
+                    if(ivTorch.getVisibility() == View.VISIBLE){
+                        ivTorch.setVisibility(View.INVISIBLE);
+                    }
+                }
+            });
+            cameraManager.setOnTorchListener(torch -> ivTorch.setSelected(torch));
+
+        }
+    }
+
+
     /**
      * 初始化Camera
      * @param surfaceHolder
@@ -354,6 +341,27 @@ public class CaptureHelper implements CaptureLifecycle,CaptureTouchEvent,Capture
             // java.?lang.?RuntimeException: Fail to connect to camera service
             Log.w(TAG, "Unexpected error initializing camera", e);
         }
+    }
+
+    @Override
+    public void surfaceCreated(SurfaceHolder holder) {
+        if (holder == null) {
+            Log.e(TAG, "*** WARNING *** surfaceCreated() gave us a null surface!");
+        }
+        if (!hasSurface) {
+            hasSurface = true;
+            initCamera(holder);
+        }
+    }
+
+    @Override
+    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+
+    }
+
+    @Override
+    public void surfaceDestroyed(SurfaceHolder holder) {
+        hasSurface = false;
     }
 
     /**
