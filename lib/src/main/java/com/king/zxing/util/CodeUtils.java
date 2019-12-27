@@ -70,6 +70,17 @@ public final class CodeUtils {
     }
 
     /**
+     * 生成二维码
+     * @param content 二维码的内容
+     * @param heightPix 二维码的高
+     * @param codeColor 二维码的颜色
+     * @return
+     */
+    public static Bitmap createQRCode(String content, int heightPix,int codeColor) {
+        return createQRCode(content,heightPix,null,codeColor);
+    }
+
+    /**
      * 生成我二维码
      * @param content 二维码的内容
      * @param heightPix 二维码的高
@@ -77,7 +88,19 @@ public final class CodeUtils {
      * @return
      */
     public static Bitmap createQRCode(String content, int heightPix, Bitmap logo) {
-        return createQRCode(content,heightPix,logo,0.2f);
+        return createQRCode(content,heightPix,logo,Color.BLACK);
+    }
+
+    /**
+     * 生成我二维码
+     * @param content 二维码的内容
+     * @param heightPix 二维码的高
+     * @param logo logo大小默认占二维码的20%
+     * @param codeColor 二维码的颜色
+     * @return
+     */
+    public static Bitmap createQRCode(String content, int heightPix, Bitmap logo,int codeColor) {
+        return createQRCode(content,heightPix,logo,0.2f,codeColor);
     }
 
     /**
@@ -104,11 +127,36 @@ public final class CodeUtils {
      * @param content 二维码的内容
      * @param heightPix 二维码的高
      * @param logo 二维码中间的logo
-     * @param ratio  logo所占比例 因为二维码的最大容错率为30%，所以建议ratio的范围小于0.3
-     * @param hints
+     * @param ratio logo所占比例 因为二维码的最大容错率为30%，所以建议ratio的范围小于0.3
+     * @param codeColor 二维码的颜色
      * @return
      */
+    public static Bitmap createQRCode(String content, int heightPix, Bitmap logo,@FloatRange(from = 0.0f,to = 1.0f)float ratio,int codeColor) {
+        //配置参数
+        Map<EncodeHintType, Object> hints = new HashMap<>();
+        hints.put( EncodeHintType.CHARACTER_SET, "utf-8");
+        //容错级别
+        hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
+        //设置空白边距的宽度
+        hints.put(EncodeHintType.MARGIN, 1); //default is 4
+        return createQRCode(content,heightPix,logo,ratio,hints,codeColor);
+    }
+
     public static Bitmap createQRCode(String content, int heightPix, Bitmap logo,@FloatRange(from = 0.0f,to = 1.0f)float ratio,Map<EncodeHintType,?> hints) {
+        return createQRCode(content,heightPix,logo,ratio,hints,Color.BLACK);
+    }
+
+    /**
+     * 生成二维码
+     * @param content 二维码的内容
+     * @param heightPix 二维码的高
+     * @param logo 二维码中间的logo
+     * @param ratio  logo所占比例 因为二维码的最大容错率为30%，所以建议ratio的范围小于0.3
+     * @param hints
+     * @param codeColor 二维码的颜色
+     * @return
+     */
+    public static Bitmap createQRCode(String content, int heightPix, Bitmap logo,@FloatRange(from = 0.0f,to = 1.0f)float ratio,Map<EncodeHintType,?> hints,int codeColor) {
         try {
 
             // 图像数据转换，使用了矩阵转换
@@ -119,9 +167,9 @@ public final class CodeUtils {
             for (int y = 0; y < heightPix; y++) {
                 for (int x = 0; x < heightPix; x++) {
                     if (bitMatrix.get(x, y)) {
-                        pixels[y * heightPix + x] = 0xff000000;
+                        pixels[y * heightPix + x] = codeColor;
                     } else {
-                        pixels[y * heightPix + x] = 0xffffffff;
+                        pixels[y * heightPix + x] = Color.WHITE;
                     }
                 }
             }
@@ -208,33 +256,73 @@ public final class CodeUtils {
      * @return
      */
     public static String parseQRCode(String bitmapPath, Map<DecodeHintType,?> hints){
-        try {
-            QRCodeReader reader = new QRCodeReader();
-
-            Result result = null;
-            RGBLuminanceSource source = getRGBLuminanceSource(compressBitmap(bitmapPath));
-            if (source != null) {
-                BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
-                try {
-                    result = reader.decode(bitmap,hints);
-                } catch (Exception e) {
-                    //解析失败则通过GlobalHistogramBinarizer 再试一次
-                    BinaryBitmap bitmap1 = new BinaryBitmap(new GlobalHistogramBinarizer(source));
-                    try {
-                        result = reader.decode(bitmap1);
-                    } catch (NotFoundException ne) {
-
-                    }
-                } finally {
-                    reader.reset();
-                }
-            }
+        Result result = parseQRCodeResult(bitmapPath,hints);
+        if(result != null){
             return result.getText();
-        } catch (Exception e) {
-            e.printStackTrace();
-
         }
         return null;
+    }
+
+    /**
+     * 解析二维码图片
+     * @param bitmapPath
+     * @param hints
+     * @return
+     */
+    public static Result parseQRCodeResult(String bitmapPath, Map<DecodeHintType,?> hints){
+        Result result = null;
+        try{
+            QRCodeReader reader = new QRCodeReader();
+
+            RGBLuminanceSource source = getRGBLuminanceSource(compressBitmap(bitmapPath));
+            if (source != null) {
+
+                boolean isReDecode;
+                try {
+                    BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
+                    result = reader.decode(bitmap,hints);
+                    isReDecode = false;
+                } catch (Exception e) {
+                    isReDecode = true;
+                }
+
+                if(isReDecode){
+                    try {
+                        BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source.invert()));
+                        result = reader.decode(bitmap,hints);
+                        isReDecode = false;
+                    } catch (Exception e) {
+                        isReDecode = true;
+                    }
+                }
+
+                if(isReDecode){
+                    try{
+                        BinaryBitmap bitmap = new BinaryBitmap(new GlobalHistogramBinarizer(source));
+                        result = reader.decode(bitmap,hints);
+                        isReDecode = false;
+                    }catch (Exception e){
+                        isReDecode = true;
+                    }
+                }
+
+                if(isReDecode && source.isRotateSupported()){
+                    try{
+                        BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source.rotateCounterClockwise()));
+                        result = reader.decode(bitmap,hints);
+                    }catch (Exception e){
+
+                    }
+                }
+
+                reader.reset();
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return result;
     }
 
     /**
@@ -264,32 +352,74 @@ public final class CodeUtils {
      * @return
      */
     public static String parseCode(String bitmapPath, Map<DecodeHintType,Object> hints){
-
-        try {
-            MultiFormatReader reader = new MultiFormatReader();
-            reader.setHints(hints);
-            Result result = null;
-            RGBLuminanceSource source = getRGBLuminanceSource(compressBitmap(bitmapPath));
-            if (source != null) {
-                BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
-                try {
-                    result = reader.decodeWithState(bitmap);
-                } catch (Exception e) {//解析失败时则通过GlobalHistogramBinarizer 再试一次
-                    BinaryBitmap bitmap1 = new BinaryBitmap(new GlobalHistogramBinarizer(source));
-                    try {
-                        result = reader.decodeWithState(bitmap1);
-                    } catch (Exception ne) {
-
-                    }
-                } finally {
-                    reader.reset();
-                }
-            }
+        Result result = parseCodeResult(bitmapPath,hints);
+        if(result != null){
             return result.getText();
-        } catch (Exception e) {
-            e.printStackTrace();
         }
         return null;
+    }
+
+    /**
+     * 解析一维码/二维码图片
+     * @param bitmapPath
+     * @param hints 解析编码类型
+     * @return
+     */
+    public static Result parseCodeResult(String bitmapPath, Map<DecodeHintType,Object> hints){
+        Result result = null;
+        try{
+            MultiFormatReader reader = new MultiFormatReader();
+            reader.setHints(hints);
+
+            RGBLuminanceSource source = getRGBLuminanceSource(compressBitmap(bitmapPath));
+            if (source != null) {
+
+                boolean isReDecode;
+                try {
+                    BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
+                    result = reader.decodeWithState(bitmap);
+                    isReDecode = false;
+                } catch (Exception e) {
+                    isReDecode = true;
+                }
+
+                if(isReDecode){
+                    try {
+                        BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source.invert()));
+                        result = reader.decodeWithState(bitmap);
+                        isReDecode = false;
+                    } catch (Exception e) {
+                        isReDecode = true;
+                    }
+                }
+
+                if(isReDecode){
+                    try{
+                        BinaryBitmap bitmap = new BinaryBitmap(new GlobalHistogramBinarizer(source));
+                        result = reader.decodeWithState(bitmap);
+                        isReDecode = false;
+                    }catch (Exception e){
+                        isReDecode = true;
+                    }
+                }
+
+                if(isReDecode && source.isRotateSupported()){
+                    try{
+                        BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source.rotateCounterClockwise()));
+                        result = reader.decodeWithState(bitmap);
+                    }catch (Exception e){
+
+                    }
+                }
+
+                reader.reset();
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return result;
     }
 
 
@@ -342,6 +472,17 @@ public final class CodeUtils {
     /**
      * 生成条形码
      * @param content
+     * @param desiredWidth
+     * @param desiredHeight
+     * @return
+     */
+    public static Bitmap createBarCode(String content, int desiredWidth, int desiredHeight) {
+        return createBarCode(content,BarcodeFormat.CODE_128,desiredWidth,desiredHeight,null);
+    }
+
+    /**
+     * 生成条形码
+     * @param content
      * @param format
      * @param desiredWidth
      * @param desiredHeight
@@ -349,7 +490,23 @@ public final class CodeUtils {
      */
     public static Bitmap createBarCode(String content,BarcodeFormat format, int desiredWidth, int desiredHeight) {
         return createBarCode(content,format,desiredWidth,desiredHeight,null);
+    }
 
+    public static Bitmap createBarCode(String content, int desiredWidth, int desiredHeight, boolean isShowText) {
+        return createBarCode(content,BarcodeFormat.CODE_128,desiredWidth,desiredHeight,null,isShowText,40,Color.BLACK);
+    }
+
+    /**
+     * 生成条形码
+     * @param content
+     * @param desiredWidth
+     * @param desiredHeight
+     * @param isShowText
+     * @param codeColor
+     * @return
+     */
+    public static Bitmap createBarCode(String content, int desiredWidth, int desiredHeight, boolean isShowText,@ColorInt int codeColor) {
+        return createBarCode(content,BarcodeFormat.CODE_128,desiredWidth,desiredHeight,null,isShowText,40,codeColor);
     }
 
     /**
@@ -385,18 +542,46 @@ public final class CodeUtils {
      * @param format
      * @param desiredWidth
      * @param desiredHeight
+     * @param isShowText
+     * @param codeColor
+     * @return
+     */
+    public static Bitmap createBarCode(String content, BarcodeFormat format, int desiredWidth, int desiredHeight,  boolean isShowText,@ColorInt int codeColor) {
+        return createBarCode(content,format,desiredWidth,desiredHeight,null,isShowText,40,codeColor);
+    }
+
+    /**
+     * 生成条形码
+     * @param content
+     * @param format
+     * @param desiredWidth
+     * @param desiredHeight
+     * @param hints
+     * @param isShowText
+     * @return
+     */
+    public static Bitmap createBarCode(String content, BarcodeFormat format, int desiredWidth, int desiredHeight, Map<EncodeHintType,?> hints, boolean isShowText,@ColorInt int codeColor) {
+        return createBarCode(content,format,desiredWidth,desiredHeight,hints,isShowText,40,codeColor);
+    }
+
+    /**
+     * 生成条形码
+     * @param content
+     * @param format
+     * @param desiredWidth
+     * @param desiredHeight
      * @param hints
      * @param isShowText
      * @param textSize
-     * @param textColor
+     * @param codeColor
      * @return
      */
-    public static Bitmap createBarCode(String content,BarcodeFormat format, int desiredWidth, int desiredHeight,Map<EncodeHintType,?> hints,boolean isShowText,int textSize,@ColorInt int textColor) {
+    public static Bitmap createBarCode(String content,BarcodeFormat format, int desiredWidth, int desiredHeight,Map<EncodeHintType,?> hints,boolean isShowText,int textSize,@ColorInt int codeColor) {
         if(TextUtils.isEmpty(content)){
             return null;
         }
-        final int WHITE = 0xFFFFFFFF;
-        final int BLACK = 0xFF000000;
+        final int WHITE = Color.WHITE;
+        final int BLACK = codeColor;
 
         MultiFormatWriter writer = new MultiFormatWriter();
         try {
@@ -417,7 +602,7 @@ public final class CodeUtils {
                     Bitmap.Config.ARGB_8888);
             bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
             if(isShowText){
-                return addCode(bitmap,content,textSize,textColor,textSize/2);
+                return addCode(bitmap,content,textSize,codeColor,textSize/2);
             }
             return bitmap;
         } catch (WriterException e) {
