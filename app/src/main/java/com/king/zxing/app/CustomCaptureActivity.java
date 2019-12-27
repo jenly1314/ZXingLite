@@ -59,7 +59,8 @@ public class CustomCaptureActivity extends CaptureActivity {
                 .frontLightMode(FrontLightMode.AUTO)//设置闪光灯模式
                 .tooDarkLux(45f)//设置光线太暗时，自动触发开启闪光灯的照度值
                 .brightEnoughLux(100f)//设置光线足够明亮时，自动触发关闭闪光灯的照度值
-                .continuousScan(isContinuousScan);//是否连扫
+                .continuousScan(isContinuousScan)//是否连扫
+                .supportLuminanceInvert(true);//是否支持识别反色码（黑白反色的码），增加识别率
     }
 
 
