@@ -45,7 +45,7 @@ public class CaptureFragment extends Fragment implements OnCaptureCallback {
     public static CaptureFragment newInstance() {
 
         Bundle args = new Bundle();
-        
+
         CaptureFragment fragment = new CaptureFragment();
         fragment.setArguments(args);
         return fragment;
@@ -127,9 +127,10 @@ public class CaptureFragment extends Fragment implements OnCaptureCallback {
     }
 
     /**
-     * Get {@link CameraManager}
+     * Get {@link CameraManager} use {@link #getCaptureHelper()#getCameraManager()}
      * @return {@link #mCaptureHelper#getCameraManager()}
      */
+    @Deprecated
     public CameraManager getCameraManager(){
         return mCaptureHelper.getCameraManager();
     }

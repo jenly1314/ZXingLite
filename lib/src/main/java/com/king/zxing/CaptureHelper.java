@@ -88,6 +88,11 @@ public class CaptureHelper implements CaptureLifecycle,CaptureTouchEvent,Capture
     private boolean isSupportAutoZoom = true;
 
     /**
+     * 是否支持识别颜色反转色的码，黑白颜色反转，默认不支持
+     */
+    private boolean isSupportLuminanceInvert = false;
+
+    /**
      * 是否支持连扫，默认不支持
      */
     private boolean isContinuousScan = false;
@@ -334,6 +339,7 @@ public class CaptureHelper implements CaptureLifecycle,CaptureTouchEvent,Capture
                 captureHandler.setSupportVerticalCode(isSupportVerticalCode);
                 captureHandler.setReturnBitmap(isReturnBitmap);
                 captureHandler.setSupportAutoZoom(isSupportAutoZoom);
+                captureHandler.setSupportLuminanceInvert(isSupportLuminanceInvert);
             }
         } catch (IOException ioe) {
             Log.w(TAG, ioe);
@@ -719,8 +725,21 @@ public class CaptureHelper implements CaptureLifecycle,CaptureTouchEvent,Capture
     }
 
     /**
+     * 是否支持识别反色码，黑白颜色反转
+     * @param supportLuminanceInvert 默认为false，当返回true时表示支持，会增加识别率，但相应的也会增加性能消耗。
+     * @return
+     */
+    public CaptureHelper supportLuminanceInvert(boolean supportLuminanceInvert) {
+        isSupportLuminanceInvert = supportLuminanceInvert;
+        if(captureHandler!=null){
+            captureHandler.setSupportLuminanceInvert(isSupportLuminanceInvert);
+        }
+        return this;
+    }
+
+    /**
      * 设置是否支持全屏扫码识别
-     * @param fullScreenScan
+     * @param fullScreenScan 默认为false
      * @return
      */
     public CaptureHelper fullScreenScan(boolean fullScreenScan) {

@@ -49,6 +49,11 @@ public class CaptureHandler extends Handler implements ResultPointCallback {
      */
     private boolean isSupportAutoZoom;
 
+    /**
+     *
+     */
+    private boolean isSupportLuminanceInvert;
+
 
     private enum State {
         PREVIEW,
@@ -197,5 +202,13 @@ public class CaptureHandler extends Handler implements ResultPointCallback {
 
     public void setSupportAutoZoom(boolean supportAutoZoom) {
         isSupportAutoZoom = supportAutoZoom;
+    }
+
+    public boolean isSupportLuminanceInvert() {
+        return isSupportLuminanceInvert;
+    }
+
+    public void setSupportLuminanceInvert(boolean supportLuminanceInvert) {
+        isSupportLuminanceInvert = supportLuminanceInvert;
     }
 }
