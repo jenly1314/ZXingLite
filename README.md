@@ -9,7 +9,7 @@
 [![API](https://img.shields.io/badge/API-16%2B-blue.svg?style=flat)](https://android-arsenal.com/api?level=16)
 [![License](https://img.shields.io/badge/license-Apche%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 [![Blog](https://img.shields.io/badge/blog-Jenly-9933CC.svg)](https://jenly1314.github.io/)
-[![QQGroup](https://img.shields.io/badge/QQGroup-20867961-blue.svg)](http://shang.qq.com/wpa/qunwpa?idkey=8fcc6a2f88552ea44b1411582c94fd124f7bb3ec227e2a400dbbfaad3dc2f5ad)
+[![QQGroup](https://img.shields.io/badge/QQGroup-20867961-blue.svg)](http://shang.qq.com/wpa/qunwpa?idkey=8fcc6a2f88552ea44b1.1.682c94fd124f7bb3ec227e2a400dbbfaad3dc2f5ad)
 
 ZXingLite for Android 是ZXing的精简版，基于ZXing库优化扫码和生成二维码/条形码功能，扫码界面完全支持自定义，也可一行代码使用默认实现的扫码功能。总之你想要的都在这里。
 >简单如斯，你不试试？ Come on~
@@ -56,21 +56,21 @@ ZXingLite for Android 是ZXing的精简版，基于ZXing库优化扫码和生成
 <dependency>
   <groupId>com.king.zxing</groupId>
   <artifactId>zxing-lite</artifactId>
-  <version>1.1.5</version>
+  <version>1.1.6</version>
   <type>pom</type>
 </dependency>
 ```
 ### Gradle:
 ```gradle
 //AndroidX 版本
-implementation 'com.king.zxing:zxing-lite:1.1.5-androidx'
+implementation 'com.king.zxing:zxing-lite:1.1.6-androidx'
 
 //Android 版本
-implementation 'com.king.zxing:zxing-lite:1.1.5'
+implementation 'com.king.zxing:zxing-lite:1.1.6'
 ```
 ### Lvy:
 ```lvy
-<dependency org='com.king.zxing' name='zxing-lite' rev='1.1.5'>
+<dependency org='com.king.zxing' name='zxing-lite' rev='1.1.6'>
   <artifact name='$AID' ext='pom'></artifact>
 </dependency>
 ```
@@ -167,6 +167,10 @@ api 'com.google.zxing:core:3.3.3'
 
 ## 版本记录
 
+#### v1.1.6：2019-12-27
+*  生成条形码/二维码时支持自定义配置颜色
+*  支持识别反色码（增强识别率，默认不支持，需通过CaptureHelper.supportLuminanceInvert(true)开启）
+
 #### v1.1.5：2019-12-16
 *  优化Camera初始化相关策略，减少出现卡顿的可能性
 
@@ -184,7 +188,7 @@ api 'com.google.zxing:core:3.3.3'
 
 #### v1.1.1：2019-5-20
 *  支持扫二维码过小时，自动缩放
-*  支持垂直条形码识别（增强条形码识别，默认不支持，需CaptureHelper.supportVerticalCode(true)开启）
+*  支持识别垂直条形码（增强条形码识别，默认不支持，需通过CaptureHelper.supportVerticalCode(true)开启）
 
 #### v1.1.0：2019-4-19
 *  将扫码相关逻辑与界面分离，ZXingLite使用更容易扩展
@@ -238,7 +242,7 @@ api 'com.google.zxing:core:3.3.3'
 
    Github: <a title="Github开源项目" href="https://github.com/jenly1314" target="_blank">jenly1314</a>
 
-   加入QQ群: <a title="点击加入QQ群" href="http://shang.qq.com/wpa/qunwpa?idkey=8fcc6a2f88552ea44b1411582c94fd124f7bb3ec227e2a400dbbfaad3dc2f5ad" target="_blank">20867961</a>
+   加入QQ群: <a title="点击加入QQ群" href="http://shang.qq.com/wpa/qunwpa?idkey=8fcc6a2f88552ea44b1.1.682c94fd124f7bb3ec227e2a400dbbfaad3dc2f5ad" target="_blank">20867961</a>
    <div>
        <img src="https://jenly1314.github.io/image/jenly666.png">
        <img src="https://jenly1314.github.io/image/qqgourp.png">
