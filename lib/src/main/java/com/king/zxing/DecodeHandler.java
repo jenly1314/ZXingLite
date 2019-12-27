@@ -102,31 +102,50 @@ final class DecodeHandler extends Handler {
         PlanarYUVLuminanceSource source = buildPlanarYUVLuminanceSource(data,width,height,isScreenPortrait);
 
         if (source != null) {
-            BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
-            try {
-                rawResult = multiFormatReader.decodeWithState(bitmap);
-            } catch (Exception e) {
-                BinaryBitmap bitmap1 = new BinaryBitmap(new GlobalHistogramBinarizer(source));
-                try{
-                    rawResult = multiFormatReader.decodeWithState(bitmap1);
-                }catch (Exception e1){
-                    if(isSupportVerticalCode){
-                        source = buildPlanarYUVLuminanceSource(data,width,height,!isScreenPortrait);
-                        if(source!=null){
-                            BinaryBitmap bitmap2 = new BinaryBitmap(new HybridBinarizer(source));
-                            try{
-                                rawResult = multiFormatReader.decodeWithState(bitmap2);
-                            }catch (Exception e2){
 
-                            }
-                        }
+            boolean isReDecode;
+            try {
+                BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
+                rawResult = multiFormatReader.decodeWithState(bitmap);
+                isReDecode = false;
+            } catch (Exception e) {
+                isReDecode = true;
+            }
+
+            if(isReDecode && handler.isSupportLuminanceInvert()){
+                try {
+                    BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source.invert()));
+                    rawResult = multiFormatReader.decodeWithState(bitmap);
+                    isReDecode = false;
+                } catch (Exception e) {
+                    isReDecode = true;
+                }
+            }
+
+            if(isReDecode){
+                try{
+                    BinaryBitmap bitmap = new BinaryBitmap(new GlobalHistogramBinarizer(source));
+                    rawResult = multiFormatReader.decodeWithState(bitmap);
+                    isReDecode = false;
+                }catch (Exception e){
+                    isReDecode = true;
+                }
+            }
+
+            if(isReDecode && isSupportVerticalCode){
+                source = buildPlanarYUVLuminanceSource(data,width,height,!isScreenPortrait);
+                if(source!=null){
+                    try{
+                        BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
+                        rawResult = multiFormatReader.decodeWithState(bitmap);
+                    }catch (Exception e){
 
                     }
                 }
 
-            } finally {
-                multiFormatReader.reset();
             }
+
+            multiFormatReader.reset();
         }
 
         if (rawResult != null) {
@@ -156,7 +175,6 @@ final class DecodeHandler extends Handler {
                         return;
                     }
                 }
-
 
             }
 
@@ -211,7 +229,7 @@ final class DecodeHandler extends Handler {
             return true;
         }
 
-        if(length<width/5){
+        if(length < width/ 5){
 
             Camera camera = cameraManager.getOpenCamera().getCamera();
             if(camera!=null){

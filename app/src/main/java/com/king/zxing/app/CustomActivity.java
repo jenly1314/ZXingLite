@@ -64,6 +64,7 @@ public class CustomActivity extends AppCompatActivity implements OnCaptureCallba
         mCaptureHelper.vibrate(true)
                 .fullScreenScan(true)//全屏扫码
                 .supportVerticalCode(true)//支持扫垂直条码，建议有此需求时才使用。
+                .supportLuminanceInvert(true)//是否支持识别反色码（黑白反色的码），增加识别率
                 .continuousScan(isContinuousScan);
 
     }
