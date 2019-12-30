@@ -140,6 +140,10 @@ api 'com.google.zxing:core:3.3.3'
     CodeUtils.createQRCode(content,600,logo);
     //生成条形码
     CodeUtils.createBarCode(content, BarcodeFormat.CODE_128,800,200);
+    //解析条形码/二维码
+    CodeUtils.parseCode(bitmapPath);
+    //解析二维码
+    CodeUtils.parseQRCode(bitmapPath);
 ```
 
 如果直接使用CaptureActivity需在您项目的AndroidManifest中添加如下配置
