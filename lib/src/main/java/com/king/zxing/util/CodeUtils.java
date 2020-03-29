@@ -25,6 +25,7 @@ import android.support.annotation.FloatRange;
 import android.support.annotation.NonNull;
 import android.text.TextPaint;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
@@ -41,6 +42,7 @@ import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.qrcode.QRCodeReader;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import com.king.zxing.CaptureHelper;
 import com.king.zxing.DecodeFormatManager;
 
 import java.util.HashMap;
@@ -182,7 +184,7 @@ public final class CodeUtils {
 
             return bitmap;
         } catch (WriterException e) {
-            e.printStackTrace();
+            Log.w(CaptureHelper.TAG,e.getMessage());
         }
 
         return null;
@@ -230,7 +232,7 @@ public final class CodeUtils {
             canvas.restore();
         } catch (Exception e) {
             bitmap = null;
-            e.printStackTrace();
+            Log.w(CaptureHelper.TAG,e.getMessage());
         }
 
         return bitmap;
@@ -244,6 +246,7 @@ public final class CodeUtils {
     public static String parseQRCode(String bitmapPath) {
         Map<DecodeHintType, Object> hints = new HashMap<>();
         hints.put(DecodeHintType.CHARACTER_SET, "utf-8");
+        hints.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
         return parseQRCode(bitmapPath,hints);
     }
 
@@ -317,7 +320,7 @@ public final class CodeUtils {
             }
 
         }catch (Exception e){
-            e.printStackTrace();
+            Log.w(CaptureHelper.TAG,e.getMessage());
         }
 
         return result;
@@ -338,6 +341,7 @@ public final class CodeUtils {
         decodeFormats.addAll(DecodeFormatManager.AZTEC_FORMATS);
         decodeFormats.addAll(DecodeFormatManager.PDF417_FORMATS);
 
+        hints.put(DecodeHintType.CHARACTER_SET, "utf-8");
         hints.put(DecodeHintType.TRY_HARDER,Boolean.TRUE);
         hints.put(DecodeHintType.POSSIBLE_FORMATS, decodeFormats);
         return parseCode(bitmapPath,hints);
@@ -414,7 +418,7 @@ public final class CodeUtils {
             }
 
         }catch (Exception e){
-            e.printStackTrace();
+            Log.w(CaptureHelper.TAG,e.getMessage());
         }
 
         return result;
@@ -604,7 +608,7 @@ public final class CodeUtils {
             }
             return bitmap;
         } catch (WriterException e) {
-            e.printStackTrace();
+            Log.w(CaptureHelper.TAG,e.getMessage());
         }
         return null;
     }
@@ -647,7 +651,7 @@ public final class CodeUtils {
             canvas.restore();
         } catch (Exception e) {
             bitmap = null;
-            e.printStackTrace();
+            Log.w(CaptureHelper.TAG,e.getMessage());
         }
 
         return bitmap;
