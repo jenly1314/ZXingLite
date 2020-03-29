@@ -306,7 +306,6 @@ public class CaptureHelper implements CaptureLifecycle,CaptureTouchEvent,Capture
                 }
             });
             cameraManager.setOnSensorListener((torch, tooDark, ambientLightLux) -> {
-                Log.d(TAG,"ambientLightLux:" + ambientLightLux);
                 if(tooDark){
                     if(ivTorch.getVisibility() != View.VISIBLE){
                         ivTorch.setVisibility(View.VISIBLE);
