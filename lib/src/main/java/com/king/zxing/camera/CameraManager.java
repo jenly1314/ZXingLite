@@ -156,6 +156,10 @@ public final class CameraManager {
             framingRect = null;
             framingRectInPreview = null;
         }
+        isTorch = false;
+        if(onTorchListener!=null){
+            onTorchListener.onTorchChanged(false);
+        }
     }
 
     /**

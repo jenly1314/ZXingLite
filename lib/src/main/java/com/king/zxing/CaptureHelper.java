@@ -247,6 +247,10 @@ public class CaptureHelper implements CaptureLifecycle,CaptureTouchEvent,Capture
         if (!hasSurface) {
             surfaceHolder.removeCallback(this);
         }
+        if(ivTorch != null && ivTorch.getVisibility() == View.VISIBLE){
+            ivTorch.setSelected(false);
+            ivTorch.setVisibility(View.INVISIBLE);
+        }
     }
 
 
