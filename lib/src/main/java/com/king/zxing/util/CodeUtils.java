@@ -252,12 +252,24 @@ public final class CodeUtils {
 
     /**
      * 解析二维码图片
-     * @param bitmapPath
+     * @param bitmap
+     * @return
+     */
+    public static String parseQRCode(Bitmap bitmap) {
+        Map<DecodeHintType, Object> hints = new HashMap<>();
+        hints.put(DecodeHintType.CHARACTER_SET, "utf-8");
+        hints.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
+        return parseQRCode(bitmap,hints);
+    }
+
+    /**
+     * 解析二维码图片
+     * @param bitmap
      * @param hints
      * @return
      */
-    public static String parseQRCode(String bitmapPath, Map<DecodeHintType,?> hints){
-        Result result = parseQRCodeResult(bitmapPath,hints);
+    public static String parseQRCode(Bitmap bitmap, Map<DecodeHintType,?> hints){
+        Result result = parseQRCodeResult(bitmap,hints);
         if(result != null){
             return result.getText();
         }
@@ -270,12 +282,26 @@ public final class CodeUtils {
      * @param hints
      * @return
      */
-    public static Result parseQRCodeResult(String bitmapPath, Map<DecodeHintType,?> hints){
+    public static String parseQRCode(String bitmapPath, Map<DecodeHintType,?> hints){
+        Result result = parseQRCodeResult(compressBitmap(bitmapPath),hints);
+        if(result != null){
+            return result.getText();
+        }
+        return null;
+    }
+
+    /**
+     * 解析二维码图片
+     * @param originBitmap
+     * @param hints
+     * @return
+     */
+    public static Result parseQRCodeResult(Bitmap originBitmap, Map<DecodeHintType,?> hints){
         Result result = null;
         try{
             QRCodeReader reader = new QRCodeReader();
 
-            RGBLuminanceSource source = getRGBLuminanceSource(compressBitmap(bitmapPath));
+            RGBLuminanceSource source = getRGBLuminanceSource(originBitmap);
             if (source != null) {
 
                 boolean isReDecode;
@@ -354,7 +380,7 @@ public final class CodeUtils {
      * @return
      */
     public static String parseCode(String bitmapPath, Map<DecodeHintType,Object> hints){
-        Result result = parseCodeResult(bitmapPath,hints);
+        Result result = parseCodeResult(compressBitmap(bitmapPath),hints);
         if(result != null){
             return result.getText();
         }
@@ -363,17 +389,52 @@ public final class CodeUtils {
 
     /**
      * 解析一维码/二维码图片
-     * @param bitmapPath
+     * @param bitmap
+     * @return
+     */
+    public static String parseCode(Bitmap bitmap){
+        Map<DecodeHintType,Object> hints = new HashMap<>();
+        //添加可以解析的编码类型
+        Vector<BarcodeFormat> decodeFormats = new Vector<>();
+        decodeFormats.addAll(DecodeFormatManager.ONE_D_FORMATS);
+        decodeFormats.addAll(DecodeFormatManager.QR_CODE_FORMATS);
+        decodeFormats.addAll(DecodeFormatManager.DATA_MATRIX_FORMATS);
+        decodeFormats.addAll(DecodeFormatManager.AZTEC_FORMATS);
+        decodeFormats.addAll(DecodeFormatManager.PDF417_FORMATS);
+
+        hints.put(DecodeHintType.CHARACTER_SET, "utf-8");
+        hints.put(DecodeHintType.TRY_HARDER,Boolean.TRUE);
+        hints.put(DecodeHintType.POSSIBLE_FORMATS, decodeFormats);
+        return parseCode(bitmap,hints);
+    }
+
+    /**
+     * 解析一维码/二维码图片
+     * @param bitmap
      * @param hints 解析编码类型
      * @return
      */
-    public static Result parseCodeResult(String bitmapPath, Map<DecodeHintType,Object> hints){
+    public static String parseCode(Bitmap bitmap, Map<DecodeHintType,Object> hints){
+        Result result = parseCodeResult(bitmap,hints);
+        if(result != null){
+            return result.getText();
+        }
+        return null;
+    }
+
+    /**
+     * 解析一维码/二维码图片
+     * @param originBitmap
+     * @param hints 解析编码类型
+     * @return
+     */
+    public static Result parseCodeResult(Bitmap originBitmap, Map<DecodeHintType,Object> hints){
         Result result = null;
         try{
             MultiFormatReader reader = new MultiFormatReader();
             reader.setHints(hints);
 
-            RGBLuminanceSource source = getRGBLuminanceSource(compressBitmap(bitmapPath));
+            RGBLuminanceSource source = getRGBLuminanceSource(originBitmap);
             if (source != null) {
 
                 boolean isReDecode;
