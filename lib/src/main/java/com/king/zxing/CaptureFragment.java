@@ -72,6 +72,10 @@ public class CaptureFragment extends Fragment implements OnCaptureCallback {
             ivTorch = mRootView.findViewById(ivTorchId);
             ivTorch.setVisibility(View.INVISIBLE);
         }
+        initCaptureHelper();
+    }
+
+    public void initCaptureHelper(){
         mCaptureHelper = new CaptureHelper(this,surfaceView,viewfinderView,ivTorch);
         mCaptureHelper.setOnCaptureCallback(this);
     }

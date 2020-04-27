@@ -21,13 +21,13 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.ResultPointCallback;
 import com.king.zxing.camera.CameraManager;
+import com.king.zxing.util.LogUtils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import java.util.Collection;
 import java.util.EnumMap;
@@ -98,7 +98,7 @@ final class DecodeThread extends Thread {
             hints.put(DecodeHintType.CHARACTER_SET, characterSet);
         }
         hints.put(DecodeHintType.NEED_RESULT_POINT_CALLBACK, resultPointCallback);
-        Log.i("DecodeThread", "Hints: " + hints);
+         LogUtils.i( "Hints: " + hints);
     }
 
     Handler getHandler() {

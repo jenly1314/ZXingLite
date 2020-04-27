@@ -26,7 +26,8 @@ import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
-import android.util.Log;
+
+import com.king.zxing.util.LogUtils;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -35,8 +36,6 @@ import java.io.IOException;
  * Manages beeps and vibrations for {@link Activity}.
  */
 public final class BeepManager implements MediaPlayer.OnErrorListener, Closeable {
-
-    private static final String TAG = BeepManager.class.getSimpleName();
 
     private static final float BEEP_VOLUME = 0.10f;
     private static final long VIBRATE_DURATION = 200L;
@@ -106,7 +105,7 @@ public final class BeepManager implements MediaPlayer.OnErrorListener, Closeable
             mediaPlayer.prepare();
             return mediaPlayer;
         } catch (IOException ioe) {
-            Log.w(TAG, ioe);
+             LogUtils.w( ioe);
             mediaPlayer.release();
             return null;
         }
