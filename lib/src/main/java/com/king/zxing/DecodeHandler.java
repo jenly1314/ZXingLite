@@ -19,13 +19,11 @@ package com.king.zxing;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Point;
-import android.graphics.PointF;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
 
@@ -33,21 +31,18 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.MultiFormatReader;
-import com.google.zxing.NotFoundException;
 import com.google.zxing.PlanarYUVLuminanceSource;
-import com.google.zxing.ReaderException;
 import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.common.GlobalHistogramBinarizer;
 import com.google.zxing.common.HybridBinarizer;
 import com.king.zxing.camera.CameraManager;
+import com.king.zxing.util.LogUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Map;
 
 final class DecodeHandler extends Handler {
-
-    private static final String TAG = DecodeHandler.class.getSimpleName();
 
     private final Context context;
     private final CameraManager cameraManager;
@@ -151,7 +146,7 @@ final class DecodeHandler extends Handler {
         if (rawResult != null) {
             // Don't log the barcode contents for security.
             long end = System.currentTimeMillis();
-            Log.d(TAG, "Found barcode in " + (end - start) + " ms");
+            LogUtils.d("Found barcode in " + (end - start) + " ms");
 
             BarcodeFormat barcodeFormat = rawResult.getBarcodeFormat();
             if(handler!=null && handler.isSupportAutoZoom() && barcodeFormat == BarcodeFormat.QR_CODE){
@@ -242,7 +237,7 @@ final class DecodeHandler extends Handler {
                     lastZoomTime = System.currentTimeMillis();
                     return true;
                 } else {
-                    Log.i(TAG, "Zoom not supported");
+                    LogUtils.d("Zoom not supported");
                 }
             }
 

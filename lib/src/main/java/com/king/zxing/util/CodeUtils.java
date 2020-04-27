@@ -20,9 +20,13 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+
 import android.text.TextPaint;
 import android.text.TextUtils;
-import android.util.Log;
+
+import androidx.annotation.ColorInt;
+import androidx.annotation.FloatRange;
+import androidx.annotation.NonNull;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
@@ -30,7 +34,6 @@ import com.google.zxing.DecodeHintType;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatReader;
 import com.google.zxing.MultiFormatWriter;
-import com.google.zxing.NotFoundException;
 import com.google.zxing.RGBLuminanceSource;
 import com.google.zxing.Result;
 import com.google.zxing.WriterException;
@@ -40,22 +43,20 @@ import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.qrcode.QRCodeReader;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
-import com.king.zxing.CaptureHelper;
 import com.king.zxing.DecodeFormatManager;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 
-import androidx.annotation.ColorInt;
-import androidx.annotation.FloatRange;
-import androidx.annotation.NonNull;
-
 
 /**
  * @author Jenly <a href="mailto:jenly1314@gmail.com">Jenly</a>
  */
 public final class CodeUtils {
+
+    public static final int DEFAULT_REQ_WIDTH = 450;
+    public static final int DEFAULT_REQ_HEIGHT = 800;
 
     private CodeUtils(){
         throw new AssertionError();
@@ -140,7 +141,7 @@ public final class CodeUtils {
         //容错级别
         hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
         //设置空白边距的宽度
-        hints.put(EncodeHintType.MARGIN, 1); //default is 4
+        hints.put(EncodeHintType.MARGIN, 1); //default is 1
         return createQRCode(content,heightPix,logo,ratio,hints,codeColor);
     }
 
@@ -186,7 +187,7 @@ public final class CodeUtils {
 
             return bitmap;
         } catch (WriterException e) {
-            Log.w(CaptureHelper.TAG,e.getMessage());
+            LogUtils.w(e.getMessage());
         }
 
         return null;
@@ -234,7 +235,7 @@ public final class CodeUtils {
             canvas.restore();
         } catch (Exception e) {
             bitmap = null;
-            Log.w(CaptureHelper.TAG,e.getMessage());
+            LogUtils.w(e.getMessage());
         }
 
         return bitmap;
@@ -273,11 +274,23 @@ public final class CodeUtils {
      * @return
      */
     public static Result parseQRCodeResult(String bitmapPath, Map<DecodeHintType,?> hints){
+        return parseQRCodeResult(bitmapPath,DEFAULT_REQ_WIDTH,DEFAULT_REQ_HEIGHT,hints);
+    }
+
+    /**
+     * 解析二维码图片
+     * @param bitmapPath
+     * @param reqWidth
+     * @param reqHeight
+     * @param hints
+     * @return
+     */
+    public static Result parseQRCodeResult(String bitmapPath,int reqWidth,int reqHeight,Map<DecodeHintType,?> hints){
         Result result = null;
         try{
             QRCodeReader reader = new QRCodeReader();
 
-            RGBLuminanceSource source = getRGBLuminanceSource(compressBitmap(bitmapPath));
+            RGBLuminanceSource source = getRGBLuminanceSource(compressBitmap(bitmapPath,reqWidth,reqHeight));
             if (source != null) {
 
                 boolean isReDecode;
@@ -322,7 +335,7 @@ public final class CodeUtils {
             }
 
         }catch (Exception e){
-            Log.w(CaptureHelper.TAG,e.getMessage());
+            LogUtils.w(e.getMessage());
         }
 
         return result;
@@ -370,12 +383,24 @@ public final class CodeUtils {
      * @return
      */
     public static Result parseCodeResult(String bitmapPath, Map<DecodeHintType,Object> hints){
+        return parseCodeResult(bitmapPath,DEFAULT_REQ_WIDTH,DEFAULT_REQ_HEIGHT,hints);
+    }
+
+    /**
+     * 解析一维码/二维码图片
+     * @param bitmapPath
+     * @param reqWidth
+     * @param reqHeight
+     * @param hints 解析编码类型
+     * @return
+     */
+    public static Result parseCodeResult(String bitmapPath,int reqWidth,int reqHeight, Map<DecodeHintType,Object> hints){
         Result result = null;
         try{
             MultiFormatReader reader = new MultiFormatReader();
             reader.setHints(hints);
 
-            RGBLuminanceSource source = getRGBLuminanceSource(compressBitmap(bitmapPath));
+            RGBLuminanceSource source = getRGBLuminanceSource(compressBitmap(bitmapPath,reqWidth,reqHeight));
             if (source != null) {
 
                 boolean isReDecode;
@@ -420,7 +445,7 @@ public final class CodeUtils {
             }
 
         }catch (Exception e){
-            Log.w(CaptureHelper.TAG,e.getMessage());
+            LogUtils.w(e.getMessage());
         }
 
         return result;
@@ -433,30 +458,32 @@ public final class CodeUtils {
      * @param path
      * @return
      */
-    private static Bitmap compressBitmap(String path){
+    private static Bitmap compressBitmap(String path,int reqWidth,int reqHeight){
 
         BitmapFactory.Options newOpts = new BitmapFactory.Options();
         // 开始读入图片，此时把options.inJustDecodeBounds 设回true了
         newOpts.inJustDecodeBounds = true;//获取原始图片大小
         BitmapFactory.decodeFile(path, newOpts);// 此时返回bm为空
-        int w = newOpts.outWidth;
-        int h = newOpts.outHeight;
-        float width = 800f;
-        float height = 480f;
+        float width = newOpts.outWidth;
+        float height = newOpts.outHeight;
         // 缩放比，由于是固定比例缩放，只用高或者宽其中一个数据进行计算即可
-        int be = 1;// be=1表示不缩放
-        if (w > h && w > width) {// 如果宽度大的话根据宽度固定大小缩放
-            be = (int) (newOpts.outWidth / width);
-        } else if (w < h && h > height) {// 如果高度高的话根据宽度固定大小缩放
-            be = (int) (newOpts.outHeight / height);
+        int wSize = 1;// wSize=1表示不缩放
+        if (width > reqWidth) {// 如果宽度大的话根据宽度固定大小缩放
+            wSize = (int) (width / reqWidth);
         }
-        if (be <= 0)
-            be = 1;
-        newOpts.inSampleSize = be;// 设置缩放比例
+        int hSize = 1;// wSize=1表示不缩放
+        if (height > reqHeight) {// 如果高度高的话根据宽度固定大小缩放
+            hSize = (int) (height / reqHeight);
+        }
+        int size = Math.max(wSize,hSize);
+        if (size <= 0)
+            size = 1;
+        newOpts.inSampleSize = size;// 设置缩放比例
         // 重新读入图片，注意此时已经把options.inJustDecodeBounds 设回false了
         newOpts.inJustDecodeBounds = false;
         return BitmapFactory.decodeFile(path, newOpts);
     }
+
 
     /**
      * 获取RGBLuminanceSource
@@ -610,7 +637,7 @@ public final class CodeUtils {
             }
             return bitmap;
         } catch (WriterException e) {
-            Log.w(CaptureHelper.TAG,e.getMessage());
+            LogUtils.w(e.getMessage());
         }
         return null;
     }
@@ -623,7 +650,7 @@ public final class CodeUtils {
      * @param textColor
      * @return
      */
-    private static Bitmap addCode(Bitmap src,String code,int textSize,@ColorInt int textColor,int offset) {
+    private static Bitmap addCode(Bitmap src, String code, int textSize, @ColorInt int textColor, int offset) {
         if (src == null) {
             return null;
         }
@@ -653,7 +680,7 @@ public final class CodeUtils {
             canvas.restore();
         } catch (Exception e) {
             bitmap = null;
-            Log.w(CaptureHelper.TAG,e.getMessage());
+            LogUtils.w(e.getMessage());
         }
 
         return bitmap;

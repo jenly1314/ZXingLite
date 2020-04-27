@@ -47,6 +47,7 @@ public class CaptureActivity extends AppCompatActivity implements OnCaptureCallb
             setContentView(layoutId);
         }
         initUI();
+        mCaptureHelper.onCreate();
     }
 
     /**
@@ -60,9 +61,12 @@ public class CaptureActivity extends AppCompatActivity implements OnCaptureCallb
             ivTorch = findViewById(ivTorchId);
             ivTorch.setVisibility(View.INVISIBLE);
         }
+        initCaptureHelper();
+    }
+
+    public void initCaptureHelper(){
         mCaptureHelper = new CaptureHelper(this,surfaceView,viewfinderView,ivTorch);
         mCaptureHelper.setOnCaptureCallback(this);
-        mCaptureHelper.onCreate();
     }
 
     /**

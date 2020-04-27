@@ -26,7 +26,8 @@ import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
-import android.util.Log;
+
+import com.king.zxing.util.LogUtils;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -106,7 +107,7 @@ public final class BeepManager implements MediaPlayer.OnErrorListener, Closeable
             mediaPlayer.prepare();
             return mediaPlayer;
         } catch (IOException ioe) {
-            Log.w(TAG, ioe);
+            LogUtils.w(ioe);
             mediaPlayer.release();
             return null;
         }
