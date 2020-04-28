@@ -242,6 +242,7 @@ public class CaptureHelper implements CaptureLifecycle,CaptureTouchEvent,Capture
     public void onPause(){
         if (captureHandler != null) {
             captureHandler.quitSynchronously();
+            captureHandler = null;
         }
         inactivityTimer.onPause();
         ambientLightManager.stop();
@@ -526,16 +527,18 @@ public class CaptureHelper implements CaptureLifecycle,CaptureTouchEvent,Capture
         }
 
         if(isPlayBeep){//如果播放音效，则稍微延迟一点，给予播放音效时间
-            captureHandler.postDelayed(() -> {
-                //如果设置了回调，并且onCallback返回为true，则表示拦截
-                if(onCaptureCallback!=null && onCaptureCallback.onResultCallback(text)){
-                    return;
-                }
-                Intent intent = new Intent();
-                intent.putExtra(Intents.Scan.RESULT,text);
-                activity.setResult(Activity.RESULT_OK,intent);
-                activity.finish();
-            },100);
+            if(captureHandler != null){
+                captureHandler.postDelayed(() -> {
+                    //如果设置了回调，并且onCallback返回为true，则表示拦截
+                    if(onCaptureCallback!=null && onCaptureCallback.onResultCallback(text)){
+                        return;
+                    }
+                    Intent intent = new Intent();
+                    intent.putExtra(Intents.Scan.RESULT,text);
+                    activity.setResult(Activity.RESULT_OK,intent);
+                    activity.finish();
+                },100);
+            }
             return;
         }
 
