@@ -67,7 +67,10 @@ public class CaptureFragment extends Fragment implements OnCaptureCallback {
      */
     public void initUI(){
         surfaceView = mRootView.findViewById(getSurfaceViewId());
-        viewfinderView = mRootView.findViewById(getViewfinderViewId());
+        int viewfinderViewId = getViewfinderViewId();
+        if(viewfinderViewId != 0){
+            viewfinderView = mRootView.findViewById(viewfinderViewId);
+        }
         int ivTorchId = getIvTorchId();
         if(ivTorchId != 0){
             ivTorch = mRootView.findViewById(ivTorchId);
@@ -100,7 +103,7 @@ public class CaptureFragment extends Fragment implements OnCaptureCallback {
 
     /**
      * {@link ViewfinderView} 的 id
-     * @return
+     * @return 默认返回{@code R.id.viewfinderView}, 如果不需要扫码框可以返回0
      */
     public int getViewfinderViewId(){
         return R.id.viewfinderView;
