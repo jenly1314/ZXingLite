@@ -237,6 +237,7 @@ public class CaptureHelper implements CaptureLifecycle,CaptureTouchEvent,Capture
     public void onPause(){
         if (captureHandler != null) {
             captureHandler.quitSynchronously();
+            captureHandler = null;
         }
         inactivityTimer.onPause();
         ambientLightManager.stop();
@@ -520,7 +521,7 @@ public class CaptureHelper implements CaptureLifecycle,CaptureTouchEvent,Capture
             return;
         }
 
-        if(isPlayBeep){//如果播放音效，则稍微延迟一点，给予播放音效时间
+        if(isPlayBeep && captureHandler != null){//如果播放音效，则稍微延迟一点，给予播放音效时间
             captureHandler.postDelayed(() -> {
                 //如果设置了回调，并且onCallback返回为true，则表示拦截
                 if(onCaptureCallback!=null && onCaptureCallback.onResultCallback(text)){
