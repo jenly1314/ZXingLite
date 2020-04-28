@@ -32,7 +32,6 @@ public class CaptureHandler extends Handler implements ResultPointCallback {
     private final DecodeThread decodeThread;
     private State state;
     private final CameraManager cameraManager;
-    private final Activity activity;
     private final ViewfinderView viewfinderView;
     /**
      * 是否支持垂直的条形码
@@ -66,7 +65,6 @@ public class CaptureHandler extends Handler implements ResultPointCallback {
                    Map<DecodeHintType,Object> baseHints,
                    String characterSet,
                    CameraManager cameraManager) {
-        this.activity = activity;
         this.viewfinderView = viewfinderView;
         this.onCaptureListener = onCaptureListener;
         decodeThread = new DecodeThread(activity,cameraManager,this, decodeFormats, baseHints, characterSet, this);
@@ -129,7 +127,9 @@ public class CaptureHandler extends Handler implements ResultPointCallback {
         if (state == State.SUCCESS) {
             state = State.PREVIEW;
             cameraManager.requestPreviewFrame(decodeThread.getHandler(), R.id.decode);
-            viewfinderView.drawViewfinder();
+            if(viewfinderView!= null){
+                viewfinderView.drawViewfinder();
+            }
         }
     }
 

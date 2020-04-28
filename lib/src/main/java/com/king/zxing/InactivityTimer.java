@@ -129,7 +129,7 @@ final class InactivityTimer {
         protected Object doInBackground(Object... objects) {
             try {
                 Thread.sleep(INACTIVITY_DELAY_MS);
-                 LogUtils.i( "Finishing activity due to inactivity");
+                LogUtils.i( "Finishing activity due to inactivity");
                 Activity activity = weakReference.get();
                 if(activity!=null){
                     activity.finish();
