@@ -76,7 +76,7 @@ implementation 'com.king.zxing:zxing-lite:1.1.9'
 </dependency>
 ```
 
-###### 如果Gradle出现compile失败的情况，可以在Project的build.gradle里面添加如下：（也可以使用上面的GitPack来complie）
+###### 如果Gradle出现compile失败的情况，可以在Project的build.gradle里面添加如下：（也可以使用上面的JitPack来complie）
 ```gradle
 allprojects {
     repositories {
