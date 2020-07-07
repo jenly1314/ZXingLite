@@ -28,7 +28,7 @@ versions.runner = "1.2.0"
 versions.espresso = "3.2.0"
 
 //zxing
-versions.zxing = "3.3.3"
+versions.zxing = "3.4.0"
 
 versions.easypermissions = "3.0.0"
 
