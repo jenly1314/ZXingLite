@@ -20,9 +20,10 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.zxing.Result;
 import com.king.zxing.CaptureActivity;
 import com.king.zxing.app.util.StatusBarUtils;
-import com.king.zxing.camera.FrontLightMode;
+
 
 import androidx.appcompat.widget.Toolbar;
 
@@ -33,6 +34,9 @@ import androidx.appcompat.widget.Toolbar;
 public class CustomCaptureActivity extends CaptureActivity {
 
     private boolean isContinuousScan;
+
+    private Toast toast;
+
     @Override
     public int getLayoutId() {
         return R.layout.custom_capture_activity;
@@ -51,12 +55,12 @@ public class CustomCaptureActivity extends CaptureActivity {
         //获取CaptureHelper，里面有扫码相关的配置设置
         getCaptureHelper().playBeep(false)//播放音效
                 .vibrate(true)//震动
+                .fullScreenScan(true)
                 .supportVerticalCode(true)//支持扫垂直条码，建议有此需求时才使用。
 //                .decodeFormats(DecodeFormatManager.QR_CODE_FORMATS)//设置只识别二维码会提升速度
 //                .framingRectRatio(0.9f)//设置识别区域比例，范围建议在0.625 ~ 1.0之间。非全屏识别时才有效
 //                .framingRectVerticalOffset(0)//设置识别区域垂直方向偏移量，非全屏识别时才有效
 //                .framingRectHorizontalOffset(0)//设置识别区域水平方向偏移量，非全屏识别时才有效
-                .frontLightMode(FrontLightMode.AUTO)//设置闪光灯模式
                 .tooDarkLux(45f)//设置光线太暗时，自动触发开启闪光灯的照度值
                 .brightEnoughLux(100f)//设置光线足够明亮时，自动触发关闭闪光灯的照度值
                 .continuousScan(isContinuousScan)//是否连扫
@@ -70,12 +74,22 @@ public class CustomCaptureActivity extends CaptureActivity {
      * @return
      */
     @Override
-    public boolean onResultCallback(String result) {
+    public boolean onResultCallback(Result result) {
         if(isContinuousScan){//连续扫码时，直接弹出结果
-            Toast.makeText(this,result,Toast.LENGTH_SHORT).show();
+            showToast(result.getText());
         }
 
         return super.onResultCallback(result);
+    }
+
+    private void showToast(String text){
+        if(toast == null){
+            toast = Toast.makeText(this,text,Toast.LENGTH_SHORT);
+        }else{
+            toast.setDuration(Toast.LENGTH_SHORT);
+            toast.setText(text);
+        }
+        toast.show();
     }
 
     public void onClick(View v){

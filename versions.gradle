@@ -1,7 +1,7 @@
 //App 
 def app_version = [:]
-app_version.versionCode = 26
-app_version.versionName = "1.1.9-androidx"
+app_version.versionCode = 27
+app_version.versionName = "2.0.0-beta1"
 ext.app_version = app_version
 
 //build version
@@ -28,7 +28,7 @@ versions.runner = "1.2.0"
 versions.espresso = "3.2.0"
 
 //zxing
-versions.zxing = "3.3.3"
+versions.zxing = "3.4.0"
 
 versions.easypermissions = "3.0.0"
 

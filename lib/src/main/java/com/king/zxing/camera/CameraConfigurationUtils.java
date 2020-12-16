@@ -26,6 +26,7 @@ import com.king.zxing.util.LogUtils;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -269,89 +270,56 @@ public final class CameraConfigurationUtils {
         }
     }
 
+
+    /**
+     * 预览尺寸与给定的宽高尺寸比较器。首先比较宽高的比例，在宽高比相同的情况下，根据宽和高的最小差进行比较。
+     */
+    private static class SizeComparator implements Comparator<Camera.Size> {
+        private final int width;
+        private final int height;
+        private final float ratio;
+        SizeComparator(int width, int height) {
+            //不管横屏还是竖屏，parameters.getSupportedPreviewSizes()的size.width 始终大于或等于 size.height
+            if (width < height) {
+                this.width = height;
+                this.height = width;
+            } else {
+                this.width = width;
+                this.height = height;
+            }
+            this.ratio = (float) this.height / this.width;
+        }
+
+        @Override
+        public int compare(Camera.Size size1, Camera.Size size2) {
+            int width1 = size1.width;
+            int height1 = size1.height;
+            int width2 = size2.width;
+            int height2 = size2.height;
+            float ratio1 = Math.abs((float) height1 / width1 - ratio);
+            float ratio2 = Math.abs((float) height2 / width2 - ratio);
+            int result = Float.compare(ratio1, ratio2);
+            if (result != 0) {
+                return result;
+            } else {
+                int minGap1 = Math.abs(width - width1) + Math.abs(height - height1);
+                int minGap2 = Math.abs(width - width2) + Math.abs(height - height2);
+                return minGap1 - minGap2;
+            }
+        }
+    }
+
+    /**
+     * 在Camera支持的预览尺寸中找到最佳的预览尺寸
+     * @param parameters
+     * @param screenResolution
+     * @return
+     */
     public static Point findBestPreviewSizeValue(Camera.Parameters parameters,final Point screenResolution) {
-
-        List<Camera.Size> rawSupportedSizes = parameters.getSupportedPreviewSizes();
-        if (rawSupportedSizes == null) {
-            LogUtils.w( "Device returned no supported preview sizes; using default");
-            Camera.Size defaultSize = parameters.getPreviewSize();
-            if (defaultSize == null) {
-                throw new IllegalStateException("Parameters contained no preview size!");
-            }
-            return new Point(defaultSize.width, defaultSize.height);
-        }
-
-
-        if (LogUtils.isShowLog()) {
-            StringBuilder previewSizesString = new StringBuilder();
-            for (Camera.Size size : rawSupportedSizes) {
-                previewSizesString.append(size.width).append('x').append(size.height).append(' ');
-            }
-            LogUtils.d( "Supported preview sizes: " + previewSizesString);
-        }
-
-        double screenAspectRatio;
-        if(screenResolution.x < screenResolution.y){
-            screenAspectRatio = screenResolution.x / (double) screenResolution.y;
-        }else{
-            screenAspectRatio = screenResolution.y / (double) screenResolution.x;
-        }
-        LogUtils.d( "screenAspectRatio: " + screenAspectRatio);
-        // Find a suitable size, with max resolution
-        int maxResolution = 0;
-
-        Camera.Size maxResPreviewSize = null;
-        for (Camera.Size size : rawSupportedSizes) {
-            int realWidth = size.width;
-            int realHeight = size.height;
-            int resolution = realWidth * realHeight;
-            if (resolution < MIN_PREVIEW_PIXELS) {
-                continue;
-            }
-
-            boolean isCandidatePortrait = realWidth < realHeight;
-            int maybeFlippedWidth = isCandidatePortrait ? realWidth: realHeight ;
-            int maybeFlippedHeight = isCandidatePortrait ? realHeight : realWidth;
-            LogUtils.d( String.format("maybeFlipped:%d * %d",maybeFlippedWidth,maybeFlippedHeight));
-
-            double aspectRatio = maybeFlippedWidth / (double) maybeFlippedHeight;
-            LogUtils.d( "aspectRatio: " + aspectRatio);
-            double distortion = Math.abs(aspectRatio - screenAspectRatio);
-            LogUtils.d( "distortion: " + distortion);
-            if (distortion > MAX_ASPECT_DISTORTION) {
-                continue;
-            }
-
-            if (maybeFlippedWidth == screenResolution.x && maybeFlippedHeight == screenResolution.y) {
-                Point exactPoint = new Point(realWidth, realHeight);
-                LogUtils.d( "Found preview size exactly matching screen size: " + exactPoint);
-                return exactPoint;
-            }
-
-            // Resolution is suitable; record the one with max resolution
-            if (resolution > maxResolution) {
-                maxResolution = resolution;
-                maxResPreviewSize = size;
-            }
-        }
-
-        // If no exact match, use largest preview size. This was not a great idea on older devices because
-        // of the additional computation needed. We're likely to get here on newer Android 4+ devices, where
-        // the CPU is much more powerful.
-        if (maxResPreviewSize != null) {
-            Point largestSize = new Point(maxResPreviewSize.width, maxResPreviewSize.height);
-            LogUtils.d( "Using largest suitable preview size: " + largestSize);
-            return largestSize;
-        }
-
-        // If there is nothing at all suitable, return current preview size
-        Camera.Size defaultPreview = parameters.getPreviewSize();
-        if (defaultPreview == null) {
-            throw new IllegalStateException("Parameters contained no preview size!");
-        }
-        Point defaultSize = new Point(defaultPreview.width, defaultPreview.height);
-        LogUtils.d( "No suitable preview sizes, using default: " + defaultSize);
-        return defaultSize;
+        List<Camera.Size> preList = parameters.getSupportedPreviewSizes();
+        Collections.sort(preList, new SizeComparator(screenResolution.x, screenResolution.y));
+        Camera.Size size = preList.get(0);
+        return new Point(size.width,size.height);
     }
 
     private static String findSettableValue(String name,

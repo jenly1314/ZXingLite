@@ -168,7 +168,7 @@ public final class CameraManager {
         if (theCamera != null && !previewing) {
             theCamera.getCamera().startPreview();
             previewing = true;
-            autoFocusManager = new AutoFocusManager(context, theCamera.getCamera());
+//            autoFocusManager = new AutoFocusManager(context, theCamera.getCamera());
         }
     }
 
@@ -204,7 +204,7 @@ public final class CameraManager {
             configManager.setTorch(theCamera.getCamera(), newSetting);
             if (wasAutoFocusManager) {
                 autoFocusManager = new AutoFocusManager(context, theCamera.getCamera());
-                autoFocusManager.start();
+//                autoFocusManager.start();
             }
 
             if(onTorchListener!=null){
@@ -225,6 +225,7 @@ public final class CameraManager {
      * @param message The what field of the message to be sent.
      */
     public synchronized void requestPreviewFrame(Handler handler, int message) {
+        LogUtils.d("requestPreviewFrame");
         OpenCamera theCamera = camera;
         if (theCamera != null && previewing) {
             previewCallback.setHandler(handler, message);
@@ -244,7 +245,7 @@ public final class CameraManager {
             if (camera == null) {
                 return null;
             }
-            Point point = configManager.getCameraResolution();
+            Point point = configManager.getBestPreviewSize();
             if (point == null) {
                 // Called early, before init even finished
                 return null;
@@ -281,22 +282,17 @@ public final class CameraManager {
                 return null;
             }
             Rect rect = new Rect(framingRect);
-            Point cameraResolution = configManager.getCameraResolution();
+            Point preViewResolution = configManager.getPreviewSizeOnScreen();
             Point screenResolution = configManager.getScreenResolution();
-            if (cameraResolution == null || screenResolution == null) {
+            if (preViewResolution == null || screenResolution == null) {
                 // Called early, before init even finished
                 return null;
             }
 
-//            rect.left = rect.left * cameraResolution.x / screenResolution.x;
-//            rect.right = rect.right * cameraResolution.x / screenResolution.x;
-//            rect.top = rect.top * cameraResolution.y / screenResolution.y;
-//            rect.bottom = rect.bottom * cameraResolution.y / screenResolution.y;
-
-            rect.left = rect.left * cameraResolution.y / screenResolution.x;
-            rect.right = rect.right * cameraResolution.y / screenResolution.x;
-            rect.top = rect.top * cameraResolution.x / screenResolution.y;
-            rect.bottom = rect.bottom * cameraResolution.x / screenResolution.y;
+            rect.left = rect.left * preViewResolution.x / screenResolution.x;
+            rect.right = rect.right * preViewResolution.x / screenResolution.x;
+            rect.top = rect.top * preViewResolution.y / screenResolution.y;
+            rect.bottom = rect.bottom * preViewResolution.y / screenResolution.y;
 
 
             framingRectInPreview = rect;
@@ -321,8 +317,12 @@ public final class CameraManager {
         this.framingRectHorizontalOffset = framingRectHorizontalOffset;
     }
 
-    public Point getCameraResolution() {
-        return configManager.getCameraResolution();
+    public Point getBestPreviewSize(){
+        return configManager.getBestPreviewSize();
+    }
+
+    public Point getPreviewSizeOnScreen() {
+        return configManager.getPreviewSizeOnScreen();
     }
 
     public Point getScreenResolution() {

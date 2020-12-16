@@ -7,7 +7,7 @@
 [![JitPack](https://jitpack.io/v/jenly1314/ZXingLite.svg)](https://jitpack.io/#jenly1314/ZXingLite)
 [![CI](https://travis-ci.org/jenly1314/ZXingLite.svg?branch=master)](https://travis-ci.org/jenly1314/ZXingLite)
 [![CircleCI](https://circleci.com/gh/jenly1314/ZXingLite.svg?style=svg)](https://circleci.com/gh/jenly1314/ZXingLite)
-[![API](https://img.shields.io/badge/API-16%2B-blue.svg?style=flat)](https://android-arsenal.com/api?level=16)
+[![API](https://img.shields.io/badge/API-21%2B-blue.svg?style=flat)](https://android-arsenal.com/api?level=21)
 [![License](https://img.shields.io/badge/license-Apche%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 [![Blog](https://img.shields.io/badge/blog-Jenly-9933CC.svg)](https://jenly1314.github.io/)
 [![QQGroup](https://img.shields.io/badge/QQGroup-20867961-blue.svg)](http://shang.qq.com/wpa/qunwpa?idkey=8fcc6a2f88552ea44b1.1.982c94fd124f7bb3ec227e2a400dbbfaad3dc2f5ad)
@@ -44,7 +44,7 @@ ZXingLite for Android 是ZXing的精简版，基于ZXing库优化扫码和生成
 | scannerLineMoveDistance | dimension | 2dp | 扫描线每次移动距离 |
 | scannerLineHeight | dimension | 5dp | 扫描线高度 |
 | frameLineWidth | dimension | 1dp | 边框线宽度 |
-| scannerAnimationDelay | integer | 15 | 扫描动画延迟间隔时间，单位：毫秒 |
+| scannerAnimationDelay | integer | 20 | 扫描动画延迟间隔时间，单位：毫秒 |
 | frameRatio | float | 0.625f | 扫码框与屏幕占比 |
 
 
@@ -74,10 +74,11 @@ implementation 'com.king.zxing:zxing-lite:1.1.9'
 </dependency>
 ```
 
-###### 如果Gradle出现compile失败的情况，可以在Project的build.gradle里面添加如下：（也可以使用上面的GitPack来complie）
+###### 如果Gradle出现compile失败的情况，可以在Project的build.gradle里面添加如下：（也可以使用上面的JitPack来compile）
 ```gradle
 allprojects {
     repositories {
+        //...
         maven { url 'https://dl.bintray.com/jenly/maven' }
     }
 }
@@ -165,6 +166,17 @@ api 'com.google.zxing:core:3.3.3'
 
 > 4、参照CaptureHelper写一个自定义的扫码帮助类，其它步骤同方式3。（扩展高级用法，谨慎使用）
 
+### 其他
+
+需使用JDK8+编译，在你项目中的build.gradle的android{}中添加配置：
+
+```gradle
+compileOptions {
+    targetCompatibility JavaVersion.VERSION_1_8
+    sourceCompatibility JavaVersion.VERSION_1_8
+}
+
+```
 
 更多使用详情，请查看[app](app)中的源码使用示例或直接查看[API帮助文档](https://jenly1314.github.io/projects/ZXingLite/doc/)
 
@@ -254,9 +266,11 @@ api 'com.google.zxing:core:3.3.3'
 
    CNBlogs: <a title="博客园" href="https://www.cnblogs.com/jenly" target="_blank">jenly</a>
 
-   Github: <a title="Github开源项目" href="https://github.com/jenly1314" target="_blank">jenly1314</a>
+   GitHub: <a title="GitHub开源项目" href="https://github.com/jenly1314" target="_blank">jenly1314</a>
 
-   加入QQ群: <a title="点击加入QQ群" href="http://shang.qq.com/wpa/qunwpa?idkey=8fcc6a2f88552ea44b1.1.982c94fd124f7bb3ec227e2a400dbbfaad3dc2f5ad" target="_blank">20867961</a>
+   Gitee: <a title="Gitee开源项目" href="https://gitee.com/jenly1314" target="_blank">jenly1314</a>
+
+   加入QQ群: <a title="点击加入QQ群" href="http://shang.qq.com/wpa/qunwpa?idkey=8fcc6a2f88552ea44b1411582c94fd124f7bb3ec227e2a400dbbfaad3dc2f5ad" target="_blank">20867961</a>
    <div>
        <img src="https://jenly1314.github.io/image/jenly666.png">
        <img src="https://jenly1314.github.io/image/qqgourp.png">

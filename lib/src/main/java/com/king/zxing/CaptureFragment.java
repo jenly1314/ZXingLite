@@ -21,6 +21,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.zxing.Result;
 import com.king.zxing.camera.CameraManager;
 
 import androidx.annotation.LayoutRes;
@@ -74,7 +75,6 @@ public class CaptureFragment extends Fragment implements OnCaptureCallback {
         int ivTorchId = getIvTorchId();
         if(ivTorchId != 0){
             ivTorch = mRootView.findViewById(ivTorchId);
-            ivTorch.setVisibility(View.INVISIBLE);
         }
         initCaptureHelper();
     }
@@ -185,7 +185,7 @@ public class CaptureFragment extends Fragment implements OnCaptureCallback {
      * @return 返回true表示拦截，将不自动执行后续逻辑，为false表示不拦截，默认不拦截
      */
     @Override
-    public boolean onResultCallback(String result) {
+    public boolean onResultCallback(Result result) {
         return false;
     }
 

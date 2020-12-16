@@ -26,7 +26,6 @@ import java.util.Map;
  */
 public class CaptureHandler extends Handler implements ResultPointCallback {
 
-    private static final String TAG = CaptureHandler.class.getSimpleName();
 
     private final OnCaptureListener onCaptureListener;
     private final DecodeThread decodeThread;
@@ -155,27 +154,13 @@ public class CaptureHandler extends Handler implements ResultPointCallback {
      */
     private ResultPoint transform(ResultPoint originPoint) {
         Point screenPoint = cameraManager.getScreenResolution();
-        Point cameraPoint = cameraManager.getCameraResolution();
+        Point previewPoint = cameraManager.getPreviewSizeOnScreen();
 
-        float scaleX;
-        float scaleY;
-        float x;
-        float y;
+        float scaleX = 1.0f * screenPoint.x / previewPoint.x;
+        float scaleY = 1.0f * screenPoint.y / previewPoint.y;
 
-        if(screenPoint.x < screenPoint.y){
-            scaleX = 1.0f * screenPoint.x / cameraPoint.y;
-            scaleY = 1.0f * screenPoint.y / cameraPoint.x;
-
-            x = originPoint.getX() * scaleX - Math.max(screenPoint.x,cameraPoint.y)/2;
-            y = originPoint.getY() * scaleY - Math.min(screenPoint.y,cameraPoint.x)/2;
-        }else{
-            scaleX = 1.0f * screenPoint.x / cameraPoint.x;
-            scaleY = 1.0f * screenPoint.y / cameraPoint.y;
-
-            x = originPoint.getX() * scaleX - Math.min(screenPoint.y,cameraPoint.y)/2;
-            y = originPoint.getY() * scaleY - Math.max(screenPoint.x,cameraPoint.x)/2;
-        }
-
+        float x = originPoint.getX() * scaleX - Math.min(screenPoint.y,previewPoint.y)/2;
+        float y = originPoint.getY() * scaleY - Math.max(screenPoint.x,previewPoint.x)/2;
 
         return new ResultPoint(x,y);
     }

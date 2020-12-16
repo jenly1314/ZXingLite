@@ -31,7 +31,6 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.Result;
 import com.king.zxing.camera.CameraManager;
-import com.king.zxing.camera.FrontLightMode;
 import com.king.zxing.util.LogUtils;
 
 import java.io.IOException;
@@ -154,6 +153,11 @@ public class CaptureHelper implements CaptureLifecycle,CaptureTouchEvent,Capture
     private boolean hasCameraFlash;
 
     /**
+     * 是否启用光线传感器
+     */
+    private boolean isAmbientLightEnabled = true;
+
+    /**
      * use {@link #CaptureHelper(Fragment, SurfaceView, ViewfinderView, View)}
      * @param fragment
      * @param surfaceView
@@ -233,7 +237,10 @@ public class CaptureHelper implements CaptureLifecycle,CaptureTouchEvent,Capture
         } else {
             surfaceHolder.addCallback(this);
         }
-        ambientLightManager.start(cameraManager);
+        if(isAmbientLightEnabled){
+            ambientLightManager.start(cameraManager);
+        }
+
     }
 
 
@@ -244,7 +251,9 @@ public class CaptureHelper implements CaptureLifecycle,CaptureTouchEvent,Capture
             captureHandler = null;
         }
         inactivityTimer.onPause();
-        ambientLightManager.stop();
+        if(isAmbientLightEnabled) {
+            ambientLightManager.stop();
+        }
         beepManager.close();
         cameraManager.closeDriver();
         if (!hasSurface) {
@@ -491,7 +500,7 @@ public class CaptureHelper implements CaptureLifecycle,CaptureTouchEvent,Capture
      * 重新启动扫码和解码器
      */
     public void restartPreviewAndDecode(){
-        if(captureHandler!=null){
+        if(captureHandler != null){
             captureHandler.restartPreviewAndDecode();
         }
     }
@@ -517,7 +526,7 @@ public class CaptureHelper implements CaptureLifecycle,CaptureTouchEvent,Capture
         final String text = result.getText();
         if(isContinuousScan){
             if(onCaptureCallback!=null){
-                onCaptureCallback.onResultCallback(text);
+                onCaptureCallback.onResultCallback(result);
             }
             if(isAutoRestartPreviewAndDecode){
                 restartPreviewAndDecode();
@@ -528,7 +537,7 @@ public class CaptureHelper implements CaptureLifecycle,CaptureTouchEvent,Capture
         if(isPlayBeep && captureHandler != null){//如果播放音效，则稍微延迟一点，给予播放音效时间
             captureHandler.postDelayed(() -> {
                 //如果设置了回调，并且onCallback返回为true，则表示拦截
-                if(onCaptureCallback!=null && onCaptureCallback.onResultCallback(text)){
+                if(onCaptureCallback!=null && onCaptureCallback.onResultCallback(result)){
                     return;
                 }
                 Intent intent = new Intent();
@@ -541,7 +550,7 @@ public class CaptureHelper implements CaptureLifecycle,CaptureTouchEvent,Capture
         }
 
         //如果设置了回调，并且onCallback返回为true，则表示拦截
-        if(onCaptureCallback!=null && onCaptureCallback.onResultCallback(text)){
+        if(onCaptureCallback!=null && onCaptureCallback.onResultCallback(result)){
             return;
         }
         Intent intent = new Intent();
@@ -663,23 +672,6 @@ public class CaptureHelper implements CaptureLifecycle,CaptureTouchEvent,Capture
     }
 
     /**
-     * 设置闪光灯模式。当设置模式为：{@link FrontLightMode#AUTO}时，如果满意默认的照度值范围，
-     * 可通过{@link #tooDarkLux(float)}和{@link #brightEnoughLux(float)}来自定义照度范围，
-     * 控制自动触发开启和关闭闪光灯。
-     * 当设置模式非{@link FrontLightMode#AUTO}时，传感器不会检测，则不使用手电筒
-     *
-     * @param mode 默认:{@link FrontLightMode#AUTO}
-     * @return
-     */
-    public CaptureHelper frontLightMode(FrontLightMode mode) {
-        FrontLightMode.put(activity,mode);
-        if(ivTorch!=null && mode != FrontLightMode.AUTO){
-            ivTorch.setVisibility(View.INVISIBLE);
-        }
-        return this;
-    }
-
-    /**
      * 设置光线太暗时，自动显示手电筒按钮
      * @param tooDarkLux  默认：{@link AmbientLightManager#TOO_DARK_LUX}
      * @return
@@ -795,6 +787,16 @@ public class CaptureHelper implements CaptureLifecycle,CaptureTouchEvent,Capture
         if(cameraManager!=null){
             cameraManager.setFramingRectHorizontalOffset(framingRectHorizontalOffset);
         }
+        return this;
+    }
+
+    /**
+     * 是否启用光线传感器
+     * @param isAmbientLightEnabled
+     * @return
+     */
+    public CaptureHelper ambientLightEnabled(boolean isAmbientLightEnabled){
+        this.isAmbientLightEnabled = isAmbientLightEnabled;
         return this;
     }
 

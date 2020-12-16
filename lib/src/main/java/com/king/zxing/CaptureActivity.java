@@ -20,6 +20,7 @@ import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
 
+import com.google.zxing.Result;
 import com.king.zxing.camera.CameraManager;
 
 import androidx.annotation.LayoutRes;
@@ -62,7 +63,6 @@ public class CaptureActivity extends AppCompatActivity implements OnCaptureCallb
         int ivTorchId = getIvTorchId();
         if(ivTorchId != 0){
             ivTorch = findViewById(ivTorchId);
-            ivTorch.setVisibility(View.INVISIBLE);
         }
         initCaptureHelper();
     }
@@ -161,7 +161,7 @@ public class CaptureActivity extends AppCompatActivity implements OnCaptureCallb
      * @return 返回true表示拦截，将不自动执行后续逻辑，为false表示不拦截，默认不拦截
      */
     @Override
-    public boolean onResultCallback(String result) {
+    public boolean onResultCallback(Result result) {
         return false;
     }
 }

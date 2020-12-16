@@ -31,6 +31,8 @@ import com.king.zxing.Intents;
 import com.king.zxing.app.util.UriUtils;
 import com.king.zxing.util.CodeUtils;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -70,6 +72,8 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
     private String title;
     private boolean isContinuousScan;
 
+    private Toast toast;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
             switch (requestCode){
                 case REQUEST_CODE_SCAN:
                     String result = data.getStringExtra(Intents.Scan.RESULT);
-                    Toast.makeText(this,result,Toast.LENGTH_SHORT).show();
+                    showToast(result);
                     break;
                 case REQUEST_CODE_PHOTO:
                     parsePhoto(data);
@@ -91,6 +95,16 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
             }
 
         }
+    }
+
+    private void showToast(String text){
+        if(toast == null){
+            toast = Toast.makeText(this,text,Toast.LENGTH_SHORT);
+        }else{
+            toast.setDuration(Toast.LENGTH_SHORT);
+            toast.setText(text);
+        }
+        toast.show();
     }
 
     private void parsePhoto(Intent data){

@@ -20,7 +20,8 @@
         app:cornerColor="@color/colorPrimary"
         app:resultPointColor="@color/colorAccent"
         app:labelTextLocation="bottom"
-        app:laserStyle="grid"/>
+        app:laserStyle="grid"
+        app:showResultPoint="true"/>
     <ImageView
         android:id="@+id/ivTorch"
         android:layout_width="wrap_content"

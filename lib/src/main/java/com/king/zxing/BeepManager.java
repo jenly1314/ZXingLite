@@ -16,16 +16,13 @@ package com.king.zxing;
  */
 
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.AssetFileDescriptor;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.os.Build;
 import android.os.Vibrator;
-import android.preference.PreferenceManager;
 
 import com.king.zxing.util.LogUtils;
 
@@ -37,9 +34,7 @@ import java.io.IOException;
  */
 public final class BeepManager implements MediaPlayer.OnErrorListener, Closeable {
 
-    private static final String TAG = BeepManager.class.getSimpleName();
-
-    private static final float BEEP_VOLUME = 0.10f;
+//    private static final float BEEP_VOLUME = 0.10f;
     private static final long VIBRATE_DURATION = 200L;
 
     private final Activity activity;
@@ -62,8 +57,8 @@ public final class BeepManager implements MediaPlayer.OnErrorListener, Closeable
     }
 
     synchronized void updatePrefs() {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
-        shouldBeep(prefs, activity);
+//        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+//        shouldBeep(prefs, activity);
 //        vibrate = prefs.getBoolean(Preferences.KEY_VIBRATE, false);
         if (playBeep && mediaPlayer == null) {
             // The volume on STREAM_SYSTEM is not adjustable, and users found it too loud,
@@ -77,6 +72,7 @@ public final class BeepManager implements MediaPlayer.OnErrorListener, Closeable
         if (playBeep && mediaPlayer != null) {
             mediaPlayer.start();
         }
+        LogUtils.d("vibrate:" + vibrate);
         if (vibrate) {
             Vibrator vibrator = (Vibrator) activity.getSystemService(Context.VIBRATOR_SERVICE);
             vibrator.vibrate(VIBRATE_DURATION);
@@ -95,7 +91,6 @@ public final class BeepManager implements MediaPlayer.OnErrorListener, Closeable
         return shouldPlayBeep;
     }
 
-    @TargetApi(Build.VERSION_CODES.KITKAT)
     private MediaPlayer buildMediaPlayer(Context activity) {
         MediaPlayer mediaPlayer = new MediaPlayer();
         try (AssetFileDescriptor file = activity.getResources().openRawResourceFd(R.raw.zxl_beep)) {
@@ -103,7 +98,7 @@ public final class BeepManager implements MediaPlayer.OnErrorListener, Closeable
             mediaPlayer.setOnErrorListener(this);
             mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
             mediaPlayer.setLooping(false);
-            mediaPlayer.setVolume(BEEP_VOLUME, BEEP_VOLUME);
+//            mediaPlayer.setVolume(BEEP_VOLUME, BEEP_VOLUME);
             mediaPlayer.prepare();
             return mediaPlayer;
         } catch (IOException ioe) {

@@ -27,7 +27,6 @@ import android.os.Message;
 import android.view.Display;
 import android.view.WindowManager;
 
-import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.MultiFormatReader;
@@ -148,16 +147,22 @@ final class DecodeHandler extends Handler {
             long end = System.currentTimeMillis();
             LogUtils.d("Found barcode in " + (end - start) + " ms");
 
-            BarcodeFormat barcodeFormat = rawResult.getBarcodeFormat();
-            if(handler!=null && handler.isSupportAutoZoom() && barcodeFormat == BarcodeFormat.QR_CODE){
-
+            if(handler.isSupportAutoZoom()){//是否支持自动放大
                 ResultPoint[] resultPoints = rawResult.getResultPoints();
-                if(resultPoints.length >= 3){
-                    float distance1 = ResultPoint.distance(resultPoints[0],resultPoints[1]);
-                    float distance2 = ResultPoint.distance(resultPoints[1],resultPoints[2]);
-                    float distance3 = ResultPoint.distance(resultPoints[0],resultPoints[2]);
-                    int maxDistance = (int)Math.max(Math.max(distance1,distance2),distance3);
-                    if(handleAutoZoom(maxDistance,width)){
+                LogUtils.d("resultPoints:" +resultPoints.length);
+
+                final int length = resultPoints.length;
+                if(length >= 2){//超过两个点则计算距离
+                    int ratio = 6;
+                    int maxDistance = (int)ResultPoint.distance(resultPoints[0],resultPoints[1]);
+                    if(length >= 3){
+                        float distance2 = ResultPoint.distance(resultPoints[1],resultPoints[2]);
+                        float distance3 = ResultPoint.distance(resultPoints[0],resultPoints[2]);
+                        maxDistance = (int)Math.max(Math.max(maxDistance,distance2),distance3);
+                        ratio = 5;
+                    }
+
+                    if(handleAutoZoom(maxDistance,width,ratio)){//根据点之间的最大距离
                         Message message = Message.obtain();
                         message.what = R.id.decode_succeeded;
                         message.obj = rawResult;
@@ -170,23 +175,19 @@ final class DecodeHandler extends Handler {
                         return;
                     }
                 }
-
             }
 
-            if (handler != null) {
-                Message message = Message.obtain(handler, R.id.decode_succeeded, rawResult);
-                if(handler.isReturnBitmap()){
-                    Bundle bundle = new Bundle();
-                    bundleThumbnail(source, bundle);
-                    message.setData(bundle);
-                }
-                message.sendToTarget();
+            Message message = Message.obtain(handler, R.id.decode_succeeded, rawResult);
+            if(handler.isReturnBitmap()){
+                Bundle bundle = new Bundle();
+                bundleThumbnail(source, bundle);
+                message.setData(bundle);
             }
+            message.sendToTarget();
+
         } else {
-            if (handler != null) {
-                Message message = Message.obtain(handler, R.id.decode_failed);
-                message.sendToTarget();
-            }
+            Message message = Message.obtain(handler, R.id.decode_failed);
+            message.sendToTarget();
         }
     }
 
@@ -219,12 +220,12 @@ final class DecodeHandler extends Handler {
         bundle.putFloat(DecodeThread.BARCODE_SCALED_FACTOR, (float) width / source.getWidth());
     }
 
-    private boolean handleAutoZoom(int length,int width){
+    private boolean handleAutoZoom(int length,int width,int ratio){
         if(lastZoomTime > System.currentTimeMillis() - 1000){
-            return true;
+            return false;
         }
 
-        if(length < width/ 5){
+        if(length < width / ratio){
 
             Camera camera = cameraManager.getOpenCamera().getCamera();
             if(camera!=null){

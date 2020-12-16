@@ -1,6 +1,7 @@
 package com.king.zxing;
 
 
+import com.google.zxing.Result;
 
 /**
  * @author <a href="mailto:jenly1314@gmail.com">Jenly</a>
@@ -12,5 +13,5 @@ public interface OnCaptureCallback {
      * @param result 扫码结果
      * @return 返回true表示拦截，将不自动执行后续逻辑，为false表示不拦截
      */
-    boolean onResultCallback(String result);
+    boolean onResultCallback(Result result);
 }

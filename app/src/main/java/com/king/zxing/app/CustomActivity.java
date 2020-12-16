@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.zxing.Result;
 import com.king.zxing.CaptureHelper;
 import com.king.zxing.OnCaptureCallback;
 import com.king.zxing.ViewfinderView;
@@ -34,6 +35,7 @@ public class CustomActivity extends AppCompatActivity implements OnCaptureCallba
 
     private View ivTorch;
 
+    private Toast toast;
 
     @Override
     public void onCreate(Bundle icicle) {
@@ -100,11 +102,21 @@ public class CustomActivity extends AppCompatActivity implements OnCaptureCallba
      * @return
      */
     @Override
-    public boolean onResultCallback(String result) {
+    public boolean onResultCallback(Result result) {
         if(isContinuousScan){
-            Toast.makeText(this,result,Toast.LENGTH_SHORT).show();
+            showToast(result.getText());
         }
         return false;
+    }
+
+    private void showToast(String text){
+        if(toast == null){
+            toast = Toast.makeText(this,text,Toast.LENGTH_SHORT);
+        }else{
+            toast.setDuration(Toast.LENGTH_SHORT);
+            toast.setText(text);
+        }
+        toast.show();
     }
 
 

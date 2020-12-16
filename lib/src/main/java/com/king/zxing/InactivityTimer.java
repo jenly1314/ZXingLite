@@ -35,8 +35,6 @@ import java.util.concurrent.RejectedExecutionException;
  */
 final class InactivityTimer {
 
-    private static final String TAG = InactivityTimer.class.getSimpleName();
-
     private static final long INACTIVITY_DELAY_MS = 5 * 60 * 1000L;
 
     private final Activity activity;
@@ -106,7 +104,7 @@ final class InactivityTimer {
                 // 0 indicates that we're on battery
 
                 InactivityTimer inactivityTimer = weakReference.get();
-                if(inactivityTimer!=null){
+                if(inactivityTimer != null){
                     boolean onBatteryNow = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1) <= 0;
                     if (onBatteryNow) {
                         inactivityTimer.onActivity();

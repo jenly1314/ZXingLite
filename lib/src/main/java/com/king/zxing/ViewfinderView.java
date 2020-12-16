@@ -52,7 +52,7 @@ public final class ViewfinderView extends View {
 
     private static final int CURRENT_POINT_OPACITY = 0xA0;
     private static final int MAX_RESULT_POINTS = 20;
-    private static final int POINT_SIZE = 20;
+    private static final int POINT_SIZE = 30;
 
     /**
      * 画笔
@@ -176,7 +176,7 @@ public final class ViewfinderView extends View {
     private int frameLineWidth;
 
     /**
-     * 扫描动画延迟间隔时间 默认15毫秒
+     * 扫描动画延迟间隔时间 默认20毫秒
      */
     private int scannerAnimationDelay;
 
@@ -274,7 +274,7 @@ public final class ViewfinderView extends View {
         scannerLineMoveDistance = (int)array.getDimension(R.styleable.ViewfinderView_scannerLineMoveDistance,TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,2,getResources().getDisplayMetrics()));
         scannerLineHeight = (int)array.getDimension(R.styleable.ViewfinderView_scannerLineHeight,TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,5,getResources().getDisplayMetrics()));
         frameLineWidth = (int)array.getDimension(R.styleable.ViewfinderView_frameLineWidth,TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,1,getResources().getDisplayMetrics()));
-        scannerAnimationDelay = array.getInteger(R.styleable.ViewfinderView_scannerAnimationDelay,15);
+        scannerAnimationDelay = array.getInteger(R.styleable.ViewfinderView_scannerAnimationDelay,20);
         frameRatio = array.getFloat(R.styleable.ViewfinderView_frameRatio,0.625f);
         array.recycle();
 

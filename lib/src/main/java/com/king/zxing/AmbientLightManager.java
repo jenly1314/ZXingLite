@@ -18,15 +18,12 @@ package com.king.zxing;
 
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.preference.PreferenceManager;
 
 import com.king.zxing.camera.CameraManager;
-import com.king.zxing.camera.FrontLightMode;
 
 /**
  * Detects ambient light and switches on the front light when very dark, and off again when sufficiently light.
@@ -35,6 +32,8 @@ import com.king.zxing.camera.FrontLightMode;
  * @author Nikolaus Huber
  */
 final class AmbientLightManager implements SensorEventListener {
+
+    private static final int INTERVAL_TIME = 200;
 
     protected static final float TOO_DARK_LUX = 45.0f;
     protected static final float BRIGHT_ENOUGH_LUX = 100.0f;
@@ -52,19 +51,18 @@ final class AmbientLightManager implements SensorEventListener {
     private CameraManager cameraManager;
     private Sensor lightSensor;
 
+    private long lastTime;
+
     AmbientLightManager(Context context) {
         this.context = context;
     }
 
     void start(CameraManager cameraManager) {
         this.cameraManager = cameraManager;
-        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-        if (FrontLightMode.readPref(sharedPrefs) == FrontLightMode.AUTO) {
-            SensorManager sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
-            lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
-            if (lightSensor != null) {
-                sensorManager.registerListener(this, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
-            }
+        SensorManager sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+        lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
+        if (lightSensor != null) {
+            sensorManager.registerListener(this, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
         }
     }
 
@@ -79,6 +77,12 @@ final class AmbientLightManager implements SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
+        long currentTime = System.currentTimeMillis();
+        if(currentTime - lastTime < INTERVAL_TIME){//降低频率
+            return;
+        }
+        lastTime = currentTime;
+
         float ambientLightLux = sensorEvent.values[0];
         if (cameraManager != null) {
             if (ambientLightLux <= tooDarkLux) {
