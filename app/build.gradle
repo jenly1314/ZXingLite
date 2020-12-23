@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion build_versions.compileSdk
@@ -22,9 +24,14 @@ android {
         abortOnError false
     }
 
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = '1.8'
     }
 }
 
@@ -33,10 +40,13 @@ dependencies {
     testImplementation deps.test.junit
     androidTestImplementation deps.test.runner
     androidTestImplementation deps.test.espresso
-    //support
+
     implementation deps.support.design
     implementation deps.support.appcompat
     implementation deps.support.constraintlayout
+
+    implementation deps.kotlin
+    implementation deps.corektx
 
     implementation deps.easypermissions
 

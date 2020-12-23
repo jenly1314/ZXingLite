@@ -15,8 +15,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <SurfaceView
-        android:id="@+id/surfaceView"
+    <androidx.camera.view.PreviewView
+        android:id="@+id/previewView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
     <com.king.zxing.ViewfinderView
@@ -24,7 +24,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
     <ImageView
-        android:id="@+id/ivTorch"
+        android:id="@+id/ivFlashlight"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

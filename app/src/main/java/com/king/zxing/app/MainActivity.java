@@ -26,12 +26,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.king.zxing.CameraScan;
 import com.king.zxing.CaptureActivity;
-import com.king.zxing.Intents;
 import com.king.zxing.app.util.UriUtils;
 import com.king.zxing.util.CodeUtils;
+import com.king.zxing.util.LogUtils;
 
-import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -78,6 +78,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
     }
 
     @Override
@@ -86,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         if(resultCode == RESULT_OK && data!=null){
             switch (requestCode){
                 case REQUEST_CODE_SCAN:
-                    String result = data.getStringExtra(Intents.Scan.RESULT);
+                    String result = CameraScan.parseScanResult(data);
                     showToast(result);
                     break;
                 case REQUEST_CODE_PHOTO:
@@ -109,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
 
     private void parsePhoto(Intent data){
         final String path = UriUtils.getImagePath(this,data);
-        Log.d("Jenly","path:" + path);
+        LogUtils.d("path:" + path);
         if(TextUtils.isEmpty(path)){
             return;
         }
@@ -253,6 +254,11 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                 break;
             case R.id.btn7:
                 checkExternalStoragePermissions();
+                break;
+            case R.id.btn8:
+                this.cls = QRCodeActivity.class;
+                this.title = ((Button)v).getText().toString();
+                checkCameraPermissions();
                 break;
         }
 

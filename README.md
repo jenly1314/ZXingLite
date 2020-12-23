@@ -46,6 +46,10 @@ ZXingLite for Android 是ZXing的精简版，基于ZXing库优化扫码和生成
 | frameLineWidth | dimension | 1dp | 边框线宽度 |
 | scannerAnimationDelay | integer | 20 | 扫描动画延迟间隔时间，单位：毫秒 |
 | frameRatio | float | 0.625f | 扫码框与屏幕占比 |
+| framePaddingLeft | dimension | 0 | 扫码框左边的内间距 |
+| framePaddingTop | dimension | 0 | 扫码框上边的内间距 |
+| framePaddingRight | dimension | 0 | 扫码框右边的内间距 |
+| framePaddingBottom | dimension | 0 | 扫码框下边的内间距 |
 
 
 ## 引入

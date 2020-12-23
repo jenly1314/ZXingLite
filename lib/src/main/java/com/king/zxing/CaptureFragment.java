@@ -17,31 +17,28 @@ package com.king.zxing;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.zxing.Result;
-import com.king.zxing.camera.CameraManager;
 
 import androidx.annotation.LayoutRes;
-import androidx.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.camera.view.PreviewView;
 import androidx.fragment.app.Fragment;
 
 /**
  * @author <a href="mailto:jenly1314@gmail.com">Jenly</a>
  */
-public class CaptureFragment extends Fragment implements OnCaptureCallback {
-
-    public static final String KEY_RESULT = Intents.Scan.RESULT;
+public class CaptureFragment extends Fragment implements CameraScan.OnScanResultCallback {
 
     private View mRootView;
 
-    private SurfaceView surfaceView;
-    private ViewfinderView viewfinderView;
-    private View ivTorch;
+    protected PreviewView previewView;
+    protected ViewfinderView viewfinderView;
+    protected View ivFlashlight;
 
-    private CaptureHelper mCaptureHelper;
+    private CameraScan mCameraScan;
 
     public static CaptureFragment newInstance() {
 
@@ -57,7 +54,7 @@ public class CaptureFragment extends Fragment implements OnCaptureCallback {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         int layoutId = getLayoutId();
         if(isContentView(layoutId)){
-            mRootView = inflater.inflate(getLayoutId(),container,false);
+            mRootView = createRootView(inflater,container);
         }
         initUI();
         return mRootView;
@@ -67,30 +64,73 @@ public class CaptureFragment extends Fragment implements OnCaptureCallback {
      * 初始化
      */
     public void initUI(){
-        surfaceView = mRootView.findViewById(getSurfaceViewId());
+        previewView = mRootView.findViewById(getPreviewViewId());
         int viewfinderViewId = getViewfinderViewId();
         if(viewfinderViewId != 0){
             viewfinderView = mRootView.findViewById(viewfinderViewId);
         }
-        int ivTorchId = getIvTorchId();
-        if(ivTorchId != 0){
-            ivTorch = mRootView.findViewById(ivTorchId);
+        int ivFlashlightId = getFlashlightId();
+        if(ivFlashlightId != 0){
+            ivFlashlight = mRootView.findViewById(ivFlashlightId);
+            if(ivFlashlight != null){
+                ivFlashlight.setOnClickListener(v -> toggleTorch());
+            }
         }
-        initCaptureHelper();
+        initCameraScan();
+        startCamera();
     }
 
-    public void initCaptureHelper(){
-        mCaptureHelper = new CaptureHelper(this,surfaceView,viewfinderView,ivTorch);
-        mCaptureHelper.setOnCaptureCallback(this);
+    public void initCameraScan(){
+        mCameraScan = new DefaultCameraScan(this,previewView);
+        mCameraScan.setOnScanResultCallback(this);
+    }
+
+    public void startCamera(){
+        if(mCameraScan != null){
+            mCameraScan.startCamera();
+        }
+    }
+
+    private void releaseCamera(){
+        if(mCameraScan != null){
+            mCameraScan.release();
+        }
+    }
+
+    protected void toggleTorch(){
+        if(mCameraScan != null){
+            boolean isTorch = mCameraScan.isTorchEnabled();
+            mCameraScan.enableTorch(!isTorch);
+            if(ivFlashlight != null){
+                ivFlashlight.setSelected(!isTorch);
+            }
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        releaseCamera();
+        super.onDestroy();
     }
 
     /**
-     * 返回true时会自动初始化{@link #mRootView}，返回为false时需自己去通过{@link #setRootView(View)}初始化{@link #mRootView}
+     * 返回true时会自动初始化{@link #createRootView(LayoutInflater, ViewGroup)}，返回为false是需自己去初始化{@link #createRootView(LayoutInflater, ViewGroup)}
      * @param layoutId
      * @return 默认返回true
      */
     public boolean isContentView(@LayoutRes int layoutId){
         return true;
+    }
+
+    /**
+     * 创建{@link #mRootView}
+     * @param inflater
+     * @param container
+     * @return
+     */
+    @NonNull
+    public View createRootView(LayoutInflater inflater, ViewGroup container){
+        return inflater.inflate(getLayoutId(),container,false);
     }
 
     /**
@@ -102,81 +142,36 @@ public class CaptureFragment extends Fragment implements OnCaptureCallback {
     }
 
     /**
-     * {@link ViewfinderView} 的 id
+     * {@link #viewfinderView} 的 ID
      * @return 默认返回{@code R.id.viewfinderView}, 如果不需要扫码框可以返回0
      */
     public int getViewfinderViewId(){
         return R.id.viewfinderView;
     }
 
+
     /**
-     * 预览界面{@link #surfaceView} 的id
+     * 预览界面{@link #previewView} 的ID
      * @return
      */
-    public int getSurfaceViewId(){
-        return R.id.surfaceView;
+    public int getPreviewViewId(){
+        return R.id.previewView;
     }
 
     /**
-     * 获取 {@link #ivTorch} 的ID
-     * @return  默认返回{@code R.id.ivTorch}, 如果不需要手电筒按钮可以返回0
+     * 获取 {@link #ivFlashlight} 的ID
+     * @return  默认返回{@code R.id.ivFlashlight}, 如果不需要手电筒按钮可以返回0
      */
-    public int getIvTorchId(){
-        return R.id.ivTorch;
+    public int getFlashlightId(){
+        return R.id.ivFlashlight;
     }
 
     /**
-     * Get {@link CaptureHelper}
-     * @return {@link #mCaptureHelper}
+     * Get {@link CameraScan}
+     * @return {@link #mCameraScan}
      */
-    public CaptureHelper getCaptureHelper(){
-        return mCaptureHelper;
-    }
-
-    /**
-     * Get {@link CameraManager} use {@link #getCaptureHelper()#getCameraManager()}
-     * @return {@link #mCaptureHelper#getCameraManager()}
-     */
-    @Deprecated
-    public CameraManager getCameraManager(){
-        return mCaptureHelper.getCameraManager();
-    }
-
-    //--------------------------------------------
-
-    public View getRootView() {
-        return mRootView;
-    }
-
-    public void setRootView(View rootView) {
-        this.mRootView = rootView;
-    }
-
-
-    //--------------------------------------------
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mCaptureHelper.onCreate();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        mCaptureHelper.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        mCaptureHelper.onPause();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mCaptureHelper.onDestroy();
+    public CameraScan getCameraScan(){
+        return mCameraScan;
     }
 
     /**
@@ -185,8 +180,15 @@ public class CaptureFragment extends Fragment implements OnCaptureCallback {
      * @return 返回true表示拦截，将不自动执行后续逻辑，为false表示不拦截，默认不拦截
      */
     @Override
-    public boolean onResultCallback(Result result) {
+    public boolean onScanResultCallback(Result result) {
         return false;
     }
+
+    //--------------------------------------------
+
+    public View getRootView() {
+        return mRootView;
+    }
+
 
 }

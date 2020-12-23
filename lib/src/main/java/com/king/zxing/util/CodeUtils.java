@@ -32,6 +32,7 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.EncodeHintType;
+import com.google.zxing.LuminanceSource;
 import com.google.zxing.MultiFormatReader;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.RGBLuminanceSource;
@@ -40,14 +41,12 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.GlobalHistogramBinarizer;
 import com.google.zxing.common.HybridBinarizer;
-import com.google.zxing.qrcode.QRCodeReader;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.king.zxing.DecodeFormatManager;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Vector;
 
 
 /**
@@ -55,8 +54,8 @@ import java.util.Vector;
  */
 public final class CodeUtils {
 
-    public static final int DEFAULT_REQ_WIDTH = 450;
-    public static final int DEFAULT_REQ_HEIGHT = 800;
+    public static final int DEFAULT_REQ_WIDTH = 480;
+    public static final int DEFAULT_REQ_HEIGHT = 640;
 
     private CodeUtils(){
         throw new AssertionError();
@@ -246,21 +245,8 @@ public final class CodeUtils {
      * @param bitmapPath
      * @return
      */
-    public static String parseQRCode(String bitmapPath) {
-        Map<DecodeHintType, Object> hints = new HashMap<>();
-        hints.put(DecodeHintType.CHARACTER_SET, "utf-8");
-        hints.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
-        return parseQRCode(bitmapPath,hints);
-    }
-
-    /**
-     * 解析二维码图片
-     * @param bitmapPath
-     * @param hints
-     * @return
-     */
-    public static String parseQRCode(String bitmapPath, Map<DecodeHintType,?> hints){
-        Result result = parseQRCodeResult(bitmapPath,hints);
+    public static String parseQRCode(String bitmapPath){
+        Result result = parseQRCodeResult(bitmapPath);
         if(result != null){
             return result.getText();
         }
@@ -270,11 +256,10 @@ public final class CodeUtils {
     /**
      * 解析二维码图片
      * @param bitmapPath
-     * @param hints
      * @return
      */
-    public static Result parseQRCodeResult(String bitmapPath, Map<DecodeHintType,?> hints){
-        return parseQRCodeResult(bitmapPath,DEFAULT_REQ_WIDTH,DEFAULT_REQ_HEIGHT,hints);
+    public static Result parseQRCodeResult(String bitmapPath){
+        return parseQRCodeResult(bitmapPath,DEFAULT_REQ_WIDTH,DEFAULT_REQ_HEIGHT);
     }
 
     /**
@@ -282,63 +267,10 @@ public final class CodeUtils {
      * @param bitmapPath
      * @param reqWidth
      * @param reqHeight
-     * @param hints
      * @return
      */
-    public static Result parseQRCodeResult(String bitmapPath,int reqWidth,int reqHeight,Map<DecodeHintType,?> hints){
-        Result result = null;
-        try{
-            QRCodeReader reader = new QRCodeReader();
-
-            RGBLuminanceSource source = getRGBLuminanceSource(compressBitmap(bitmapPath,reqWidth,reqHeight));
-            if (source != null) {
-
-                boolean isReDecode;
-                try {
-                    BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
-                    result = reader.decode(bitmap,hints);
-                    isReDecode = false;
-                } catch (Exception e) {
-                    isReDecode = true;
-                }
-
-                if(isReDecode){
-                    try {
-                        BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source.invert()));
-                        result = reader.decode(bitmap,hints);
-                        isReDecode = false;
-                    } catch (Exception e) {
-                        isReDecode = true;
-                    }
-                }
-
-                if(isReDecode){
-                    try{
-                        BinaryBitmap bitmap = new BinaryBitmap(new GlobalHistogramBinarizer(source));
-                        result = reader.decode(bitmap,hints);
-                        isReDecode = false;
-                    }catch (Exception e){
-                        isReDecode = true;
-                    }
-                }
-
-                if(isReDecode && source.isRotateSupported()){
-                    try{
-                        BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source.rotateCounterClockwise()));
-                        result = reader.decode(bitmap,hints);
-                    }catch (Exception e){
-
-                    }
-                }
-
-                reader.reset();
-            }
-
-        }catch (Exception e){
-            LogUtils.w(e.getMessage());
-        }
-
-        return result;
+    public static Result parseQRCodeResult(String bitmapPath,int reqWidth,int reqHeight){
+        return parseCodeResult(bitmapPath,reqWidth,reqHeight, DecodeFormatManager.QR_CODE_HINTS);
     }
 
     /**
@@ -347,19 +279,7 @@ public final class CodeUtils {
      * @return
      */
     public static String parseCode(String bitmapPath){
-        Map<DecodeHintType,Object> hints = new HashMap<>();
-        //添加可以解析的编码类型
-        Vector<BarcodeFormat> decodeFormats = new Vector<>();
-        decodeFormats.addAll(DecodeFormatManager.ONE_D_FORMATS);
-        decodeFormats.addAll(DecodeFormatManager.QR_CODE_FORMATS);
-        decodeFormats.addAll(DecodeFormatManager.DATA_MATRIX_FORMATS);
-        decodeFormats.addAll(DecodeFormatManager.AZTEC_FORMATS);
-        decodeFormats.addAll(DecodeFormatManager.PDF417_FORMATS);
-
-        hints.put(DecodeHintType.CHARACTER_SET, "utf-8");
-        hints.put(DecodeHintType.TRY_HARDER,Boolean.TRUE);
-        hints.put(DecodeHintType.POSSIBLE_FORMATS, decodeFormats);
-        return parseCode(bitmapPath,hints);
+        return parseCode(bitmapPath, DecodeFormatManager.ALL_HINTS);
     }
 
     /**
@@ -396,58 +316,45 @@ public final class CodeUtils {
      */
     public static Result parseCodeResult(String bitmapPath,int reqWidth,int reqHeight, Map<DecodeHintType,Object> hints){
         Result result = null;
+        MultiFormatReader reader = new MultiFormatReader();
         try{
-            MultiFormatReader reader = new MultiFormatReader();
             reader.setHints(hints);
-
             RGBLuminanceSource source = getRGBLuminanceSource(compressBitmap(bitmapPath,reqWidth,reqHeight));
             if (source != null) {
-
-                boolean isReDecode;
-                try {
-                    BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
-                    result = reader.decodeWithState(bitmap);
-                    isReDecode = false;
-                } catch (Exception e) {
-                    isReDecode = true;
+                result = decodeInternal(reader,source);
+                if(result == null){
+                    result = decodeInternal(reader,source.invert());
                 }
-
-                if(isReDecode){
-                    try {
-                        BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source.invert()));
-                        result = reader.decodeWithState(bitmap);
-                        isReDecode = false;
-                    } catch (Exception e) {
-                        isReDecode = true;
-                    }
+                if(result == null && source.isRotateSupported()){
+                    result = decodeInternal(reader,source.rotateCounterClockwise());
                 }
-
-                if(isReDecode){
-                    try{
-                        BinaryBitmap bitmap = new BinaryBitmap(new GlobalHistogramBinarizer(source));
-                        result = reader.decodeWithState(bitmap);
-                        isReDecode = false;
-                    }catch (Exception e){
-                        isReDecode = true;
-                    }
-                }
-
-                if(isReDecode && source.isRotateSupported()){
-                    try{
-                        BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source.rotateCounterClockwise()));
-                        result = reader.decodeWithState(bitmap);
-                    }catch (Exception e){
-
-                    }
-                }
-
-                reader.reset();
             }
 
         }catch (Exception e){
             LogUtils.w(e.getMessage());
+        }finally {
+            reader.reset();
         }
 
+        return result;
+    }
+
+    private static Result decodeInternal(MultiFormatReader reader,LuminanceSource source){
+        Result result = null;
+        try{
+            try{
+                //采用HybridBinarizer解析
+                result = reader.decodeWithState(new BinaryBitmap(new HybridBinarizer(source)));
+            }catch (Exception e){
+
+            }
+            if(result == null){
+                //如果没有解析成功，再采用GlobalHistogramBinarizer解析一次
+                result = reader.decodeWithState(new BinaryBitmap(new GlobalHistogramBinarizer(source)));
+            }
+        }catch (Exception e){
+
+        }
         return result;
     }
 
@@ -685,5 +592,7 @@ public final class CodeUtils {
 
         return bitmap;
     }
+
+
 
 }

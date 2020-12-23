@@ -42,10 +42,15 @@ public class EasyCaptureActivity extends CaptureActivity {
         StatusBarUtils.immersiveStatusBar(this,toolbar,0.2f);
         TextView tvTitle = findViewById(R.id.tvTitle);
         tvTitle.setText(getIntent().getStringExtra(MainActivity.KEY_TITLE));
-        getCaptureHelper()
-//                .decodeFormats(DecodeFormatManager.QR_CODE_FORMATS)//设置只识别二维码会提升速度
-                .playBeep(true)
-                .vibrate(true);
+
+    }
+
+    @Override
+    public void initCameraScan() {
+        super.initCameraScan();
+        getCameraScan()
+                .setPlayBeep(true)
+                .setVibrate(true);
     }
 
     public void onClick(View v){

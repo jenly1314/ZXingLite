@@ -9,31 +9,33 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.zxing.Result;
-import com.king.zxing.CaptureHelper;
-import com.king.zxing.OnCaptureCallback;
+import com.king.zxing.CameraScan;
+import com.king.zxing.DefaultCameraScan;
+import com.king.zxing.ICameraScan;
 import com.king.zxing.ViewfinderView;
 import com.king.zxing.app.util.StatusBarUtils;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.camera.view.PreviewView;
 import androidx.fragment.app.Fragment;
 
 /**
  * 自定义扫码：当直接使用CaptureActivity
- * 自定义扫码，切记自定义扫码需在{@link Activity}或者{@link Fragment}相对应的生命周期里面调用{@link #mCaptureHelper}对应的生命周期
+ * 自定义扫码，切记自定义扫码需在{@link Activity}或者{@link Fragment}相对应的生命周期里面调用{@link #mCameraScan}对应的生命周期
  * @author <a href="mailto:jenly1314@gmail.com">Jenly</a>
  */
-public class CustomActivity extends AppCompatActivity implements OnCaptureCallback {
+public class CustomActivity extends AppCompatActivity implements CameraScan.OnScanResultCallback {
 
     private boolean isContinuousScan;
 
-    private CaptureHelper mCaptureHelper;
+    private CameraScan mCameraScan;
 
-    private SurfaceView surfaceView;
+    private PreviewView previewView;
 
     private ViewfinderView viewfinderView;
 
-    private View ivTorch;
+    private View ivFlash;
 
     private Toast toast;
 
@@ -53,48 +55,25 @@ public class CustomActivity extends AppCompatActivity implements OnCaptureCallba
         tvTitle.setText(getIntent().getStringExtra(MainActivity.KEY_TITLE));
 
 
-        surfaceView = findViewById(R.id.surfaceView);
+        previewView = findViewById(R.id.previewView);
         viewfinderView = findViewById(R.id.viewfinderView);
-        ivTorch = findViewById(R.id.ivFlash);
-        ivTorch.setVisibility(View.INVISIBLE);
+        ivFlash = findViewById(R.id.ivFlash);
+        ivFlash.setVisibility(View.INVISIBLE);
 
         isContinuousScan = getIntent().getBooleanExtra(MainActivity.KEY_IS_CONTINUOUS,false);
 
-        mCaptureHelper = new CaptureHelper(this,surfaceView,viewfinderView,ivTorch);
-        mCaptureHelper.setOnCaptureCallback(this);
-        mCaptureHelper.onCreate();
-        mCaptureHelper.vibrate(true)
-                .fullScreenScan(true)//全屏扫码
-                .supportVerticalCode(true)//支持扫垂直条码，建议有此需求时才使用。
-                .supportLuminanceInvert(true)//是否支持识别反色码（黑白反色的码），增加识别率
-                .continuousScan(isContinuousScan);
+        mCameraScan = new DefaultCameraScan(this,previewView);
+        mCameraScan.setOnScanResultCallback(this);
 
-    }
+        mCameraScan.startCamera();
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mCaptureHelper.onResume();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        mCaptureHelper.onPause();
     }
 
     @Override
     protected void onDestroy() {
+        mCameraScan.release();
         super.onDestroy();
-        mCaptureHelper.onDestroy();
     }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        mCaptureHelper.onTouchEvent(event);
-        return super.onTouchEvent(event);
-    }
-
 
     /**
      * 扫码结果回调
@@ -102,11 +81,12 @@ public class CustomActivity extends AppCompatActivity implements OnCaptureCallba
      * @return
      */
     @Override
-    public boolean onResultCallback(Result result) {
+    public boolean onScanResultCallback(Result result) {
         if(isContinuousScan){
             showToast(result.getText());
         }
-        return false;
+        //如果需支持连扫，返回true即可
+        return isContinuousScan;
     }
 
     private void showToast(String text){

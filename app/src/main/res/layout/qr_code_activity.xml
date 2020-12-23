@@ -21,9 +21,9 @@
         app:resultPointColor="@color/colorAccent"
         app:labelTextLocation="bottom"
         app:laserStyle="grid"
-        app:gridHeight="0dp"/>
+        app:showResultPoint="true"/>
     <ImageView
-        android:id="@+id/ivFlash"
+        android:id="@+id/ivFlashlight"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/flash_selected_selector"

@@ -6,7 +6,7 @@ ext.app_version = app_version
 
 //build version
 def build_versions = [:]
-build_versions.minSdk = 16
+build_versions.minSdk = 21
 build_versions.targetSdk = 28
 build_versions.compileSdk = 28
 build_versions.buildTools = "28.0.3"
@@ -27,8 +27,15 @@ versions.test = "1.2.0"
 versions.runner = "1.2.0"
 versions.espresso = "3.2.0"
 
+versions.bintray_release = "0.9.2"
+versions.gralde = "3.6.3"
+versions.kotlin = "1.4.10"
+versions.coreKtx = "1.3.2"
+
 //zxing
-versions.zxing = "3.4.0"
+versions.zxing = "3.3.0"
+
+versions.camerax = "1.0.0-beta12"
 
 versions.easypermissions = "3.0.0"
 
@@ -49,8 +56,20 @@ test.runner = "androidx.test:runner:$versions.runner"
 test.espresso = "androidx.test.espresso:espresso-core:$versions.espresso"
 deps.test = test
 
+
+deps.kotlin = "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin"
+
+deps.corektx = "androidx.core:core-ktx:$versions.coreKtx"
+
 //zxing
 deps.zxing = "com.google.zxing:core:$versions.zxing"
+
+//CameraX
+deps.camera_core = "androidx.camera:camera-core:$versions.camerax"
+deps.camera_camera2 = "androidx.camera:camera-camera2:$versions.camerax"
+deps.camera_lifecycle = "androidx.camera:camera-lifecycle:$versions.camerax"
+deps.camera_view = "androidx.camera:camera-view:1.0.0-alpha19"
+
 
 //permission
 deps.easypermissions = "pub.devrel:easypermissions:$versions.easypermissions"

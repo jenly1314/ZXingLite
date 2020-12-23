@@ -48,7 +48,7 @@ import androidx.core.content.ContextCompat;
  *
  * @author dswitkin@google.com (Daniel Switkin)
  */
-public final class ViewfinderView extends View {
+public class ViewfinderView extends View {
 
     private static final int CURRENT_POINT_OPACITY = 0xA0;
     private static final int MAX_RESULT_POINTS = 20;
@@ -185,6 +185,10 @@ public final class ViewfinderView extends View {
      */
     private float frameRatio;
 
+    private float framePaddingLeft;
+    private float framePaddingTop;
+    private float framePaddingRight;
+    private float framePaddingBottom;
 
     private List<ResultPoint> possibleResultPoints;
     private List<ResultPoint> lastPossibleResultPoints;
@@ -276,6 +280,10 @@ public final class ViewfinderView extends View {
         frameLineWidth = (int)array.getDimension(R.styleable.ViewfinderView_frameLineWidth,TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,1,getResources().getDisplayMetrics()));
         scannerAnimationDelay = array.getInteger(R.styleable.ViewfinderView_scannerAnimationDelay,20);
         frameRatio = array.getFloat(R.styleable.ViewfinderView_frameRatio,0.625f);
+        framePaddingLeft = array.getDimension(R.styleable.ViewfinderView_framePaddingLeft,0);
+        framePaddingTop = array.getDimension(R.styleable.ViewfinderView_framePaddingTop,0);
+        framePaddingRight = array.getDimension(R.styleable.ViewfinderView_framePaddingRight,0);
+        framePaddingBottom = array.getDimension(R.styleable.ViewfinderView_framePaddingBottom,0);
         array.recycle();
 
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -323,8 +331,8 @@ public final class ViewfinderView extends View {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         //扫码框默认居中，支持利用内距偏移扫码框
-        int leftOffset = (screenWidth - frameWidth) / 2 + getPaddingLeft() - getPaddingRight();
-        int topOffset = (screenHeight - frameHeight) / 2 + getPaddingTop() - getPaddingBottom();
+        int leftOffset = (int)((screenWidth - frameWidth) / 2 + framePaddingLeft - framePaddingRight);
+        int topOffset = (int)((screenHeight - frameHeight) / 2 + framePaddingTop - framePaddingBottom);
         frame = new Rect(leftOffset, topOffset, leftOffset + frameWidth, topOffset + frameHeight);
     }
 

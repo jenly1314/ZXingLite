@@ -47,8 +47,15 @@
             android:theme="@style/CaptureTheme"/>
 
         <activity
+            android:name=".QRCodeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/CaptureTheme"/>
+
+        <activity
             android:name=".CodeActivity"
             android:screenOrientation="portrait"/>
+
+
     </application>
 
 </manifest>

@@ -30,6 +30,10 @@
         <attr name="frameLineWidth" format="dimension"/>
         <attr name="scannerAnimationDelay" format="integer"/>
         <attr name="frameRatio" format="float"/>
+        <attr name="framePaddingLeft" format="dimension"/>
+        <attr name="framePaddingTop" format="dimension"/>
+        <attr name="framePaddingRight" format="dimension"/>
+        <attr name="framePaddingBottom" format="dimension"/>
     </declare-styleable>
 
 

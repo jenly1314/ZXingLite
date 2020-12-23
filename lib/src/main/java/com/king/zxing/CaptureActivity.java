@@ -17,28 +17,27 @@ package com.king.zxing;
 
 import android.os.Bundle;
 import android.view.MotionEvent;
-import android.view.SurfaceView;
 import android.view.View;
 
 import com.google.zxing.Result;
-import com.king.zxing.camera.CameraManager;
 
 import androidx.annotation.LayoutRes;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.camera.view.PreviewView;
+import androidx.core.app.ActivityCompat;
 
 /**
  * @author <a href="mailto:jenly1314@gmail.com">Jenly</a>
  */
-public class CaptureActivity extends AppCompatActivity implements OnCaptureCallback{
+public class CaptureActivity extends AppCompatActivity implements CameraScan.OnScanResultCallback{
 
-    public static final String KEY_RESULT = Intents.Scan.RESULT;
 
-    private SurfaceView surfaceView;
-    private ViewfinderView viewfinderView;
-    private View ivTorch;
+    protected PreviewView previewView;
+    protected ViewfinderView viewfinderView;
+    protected View ivFlashlight;
 
-    private CaptureHelper mCaptureHelper;
+    private CameraScan mCameraScan;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,28 +47,60 @@ public class CaptureActivity extends AppCompatActivity implements OnCaptureCallb
             setContentView(layoutId);
         }
         initUI();
-        mCaptureHelper.onCreate();
     }
 
     /**
      * 初始化
      */
     public void initUI(){
-        surfaceView = findViewById(getSurfaceViewId());
+        previewView = findViewById(getPreviewViewId());
         int viewfinderViewId = getViewfinderViewId();
         if(viewfinderViewId != 0){
             viewfinderView = findViewById(viewfinderViewId);
         }
-        int ivTorchId = getIvTorchId();
-        if(ivTorchId != 0){
-            ivTorch = findViewById(ivTorchId);
+        int ivFlashlightId = getFlashlightId();
+        if(ivFlashlightId != 0){
+            ivFlashlight = findViewById(ivFlashlightId);
+            if(ivFlashlight != null){
+                ivFlashlight.setOnClickListener(v -> toggleTorch());
+            }
         }
-        initCaptureHelper();
+        initCameraScan();
+        startCamera();
     }
 
-    public void initCaptureHelper(){
-        mCaptureHelper = new CaptureHelper(this,surfaceView,viewfinderView,ivTorch);
-        mCaptureHelper.setOnCaptureCallback(this);
+    public void initCameraScan(){
+        mCameraScan = new DefaultCameraScan(this,previewView);
+        mCameraScan.setOnScanResultCallback(this);
+    }
+
+
+    public void startCamera(){
+        if(mCameraScan != null){
+            mCameraScan.startCamera();
+        }
+    }
+
+    private void releaseCamera(){
+        if(mCameraScan != null){
+            mCameraScan.release();
+        }
+    }
+
+    protected void toggleTorch(){
+        if(mCameraScan != null){
+            boolean isTorch = mCameraScan.isTorchEnabled();
+            mCameraScan.enableTorch(!isTorch);
+            if(ivFlashlight != null){
+                ivFlashlight.setSelected(!isTorch);
+            }
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        releaseCamera();
+        super.onDestroy();
     }
 
     /**
@@ -99,60 +130,27 @@ public class CaptureActivity extends AppCompatActivity implements OnCaptureCallb
 
 
     /**
-     * 预览界面{@link #surfaceView} 的ID
+     * 预览界面{@link #previewView} 的ID
      * @return
      */
-    public int getSurfaceViewId(){
-        return R.id.surfaceView;
+    public int getPreviewViewId(){
+        return R.id.previewView;
     }
 
     /**
-     * 获取 {@link #ivTorch} 的ID
-     * @return  默认返回{@code R.id.ivTorch}, 如果不需要手电筒按钮可以返回0
+     * 获取 {@link #ivFlashlight} 的ID
+     * @return  默认返回{@code R.id.ivFlashlight}, 如果不需要手电筒按钮可以返回0
      */
-    public int getIvTorchId(){
-        return R.id.ivTorch;
+    public int getFlashlightId(){
+        return R.id.ivFlashlight;
     }
 
     /**
-     * Get {@link CaptureHelper}
-     * @return {@link #mCaptureHelper}
+     * Get {@link CameraScan}
+     * @return {@link #mCameraScan}
      */
-    public CaptureHelper getCaptureHelper(){
-        return mCaptureHelper;
-    }
-
-    /**
-     * Get {@link CameraManager} use {@link #getCaptureHelper()#getCameraManager()}
-     * @return {@link #mCaptureHelper#getCameraManager()}
-     */
-    @Deprecated
-    public CameraManager getCameraManager(){
-        return mCaptureHelper.getCameraManager();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        mCaptureHelper.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        mCaptureHelper.onPause();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mCaptureHelper.onDestroy();
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        mCaptureHelper.onTouchEvent(event);
-        return super.onTouchEvent(event);
+    public CameraScan getCameraScan(){
+        return mCameraScan;
     }
 
     /**
@@ -161,7 +159,7 @@ public class CaptureActivity extends AppCompatActivity implements OnCaptureCallb
      * @return 返回true表示拦截，将不自动执行后续逻辑，为false表示不拦截，默认不拦截
      */
     @Override
-    public boolean onResultCallback(Result result) {
+    public boolean onScanResultCallback(Result result) {
         return false;
     }
 }
