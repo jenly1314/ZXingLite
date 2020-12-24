@@ -3,7 +3,7 @@
 ![Image](app/src/main/ic_launcher-web.png)
 
 [![Download](https://img.shields.io/badge/download-App-blue.svg)](https://raw.githubusercontent.com/jenly1314/ZXingLite/master/app/release/app-release.apk)
-[![JCenter](https://img.shields.io/badge/JCenter-1.1.9-46C018.svg)](https://bintray.com/beta/#/jenly/maven/zxing-lite)
+[![JCenter](https://img.shields.io/badge/JCenter-2.0.0-46C018.svg)](https://bintray.com/beta/#/jenly/maven/zxing-lite)
 [![JitPack](https://jitpack.io/v/jenly1314/ZXingLite.svg)](https://jitpack.io/#jenly1314/ZXingLite)
 [![CI](https://travis-ci.org/jenly1314/ZXingLite.svg?branch=master)](https://travis-ci.org/jenly1314/ZXingLite)
 [![CircleCI](https://circleci.com/gh/jenly1314/ZXingLite.svg?style=svg)](https://circleci.com/gh/jenly1314/ZXingLite)
@@ -84,14 +84,17 @@ allprojects {
 
 ## 版本说明
 
+### v2.x基于CameraX重构已震撼发布
+
 #### v2.x 相对于 v1.x 的优势
+
 * v2.x基于CameraX，抽象整体流程，可扩展性更高。
 * v2.x基于CameraX通过预览裁剪的方式确保预览界面不变形，无需铺满屏幕，就能适配（v1.x通过遍历Camera支持预览的尺寸，找到与屏幕最接近的比例，减少变形的可能性（需铺满屏幕，才能适配）)
 * v2.x如果您是通过继承CaptureActivity或CaptureFragment实现扫码功能，那么动态权限申请相关都已经在CaptureActivity或CaptureFragment处理好了，无需您格外申请。
 
 [【v1.1.9】](https://github.com/jenly1314/ZXingLite/tree/androidx) 如果您正在使用 **1.x** 版本请调转，当前 **2.x** 版本已经基于 **Camerx** 进行重构，不支持升级，请在新项目中使用。
 
-下面的示例和相关说明都是针对于当前最新版本，如果您使用的是v1.x旧版本，[请戳此处查看分支](https://github.com/jenly1314/ZXingLite/tree/v1.x)
+下面的示例和相关说明都是针对于当前最新版本，如果您使用的是 **1.x** 旧版本，[请戳此处查看v1.x分支](https://github.com/jenly1314/ZXingLite/tree/v1.x)
 
 ## 示例
 
@@ -109,7 +112,6 @@ allprojects {
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
     <androidx.camera.view.PreviewView
         android:id="@+id/previewView"
         android:layout_width="match_parent"
