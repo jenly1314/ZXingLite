@@ -166,6 +166,19 @@ api 'com.google.zxing:core:3.3.3'
 > 4、参照CaptureHelper写一个自定义的扫码帮助类，其它步骤同方式3。（扩展高级用法，谨慎使用）
 
 
+### 其他
+
+需使用JDK8+编译，在你项目中的build.gradle的android{}中添加配置：
+
+```gradle
+compileOptions {
+    targetCompatibility JavaVersion.VERSION_1_8
+    sourceCompatibility JavaVersion.VERSION_1_8
+}
+
+```
+
+
 更多使用详情，请查看[app](app)中的源码使用示例或直接查看[API帮助文档](https://jenly1314.github.io/projects/ZXingLite/doc/)
 
 ## 版本记录
