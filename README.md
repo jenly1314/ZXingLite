@@ -90,7 +90,7 @@ allprojects {
 
 (【v1.1.9】)[https://github.com/jenly1314/ZXingLite/tree/androidx] 如果您正在使用 **1.x** 版本请调转，当前 **2.x** 版本已经基于 **Camerx** 进行重构，不支持升级，请在新项目中使用。
 
-下面的示例和相关说明都是针对于当前最新版本，如果您使用的是v1.x旧版本，(请戳此处查看分支)[https://github.com/jenly1314/ZXingLite/tree/androidx]。
+下面的示例和相关说明都是针对于当前最新版本，如果您使用的是v1.x旧版本，(请戳此处查看分支)[https://github.com/jenly1314/ZXingLite/tree/v1.x]
 
 ## 示例
 
