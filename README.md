@@ -94,7 +94,7 @@ allprojects {
 
 [【v1.1.9】](https://github.com/jenly1314/ZXingLite/tree/androidx) 如果您正在使用 **1.x** 版本请[查看v1.x分支](https://github.com/jenly1314/ZXingLite/tree/v1.x)，当前 **2.x** 版本已经基于 **Camerx** 进行重构，不支持升级，请在新项目中使用。
 
-如果您使用的是 **1.x** 旧版本，[请戳此处查看v1.x分支Android Support版](https://github.com/jenly1314/ZXingLite/tree/v1.x)[请戳此处查看v1.x分支AndroidX版](https://github.com/jenly1314/ZXingLite/tree/androidx)
+如果您使用的是 **1.x** 旧版本，查看Android Support版分支 [请戳此处](https://github.com/jenly1314/ZXingLite/tree/v1.x) 查看AndroidX版分支 [请戳此处](https://github.com/jenly1314/ZXingLite/tree/androidx)
 
 使用 **v1.x** 版本的无需往下看了，下面的示例和相关说明都是针对于当前最新版本。
 
