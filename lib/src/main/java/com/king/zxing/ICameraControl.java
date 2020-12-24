@@ -1,29 +1,11 @@
 package com.king.zxing;
 
-
-import android.view.MotionEvent;
-
-import com.google.zxing.Result;
-
 import androidx.annotation.FloatRange;
-import androidx.annotation.Nullable;
-import androidx.camera.core.Camera;
 
 /**
  * @author <a href="mailto:jenly1314@gmail.com">Jenly</a>
  */
-public interface ICameraScan {
-
-    /**
-     * 启动相机预览
-     */
-    void startCamera();
-
-    /**
-     * 停止相机预览
-     */
-    void stopCamera();
-
+public interface ICameraControl {
 
     /**
      * 放大
@@ -42,12 +24,12 @@ public interface ICameraScan {
     void zoomTo(float ratio);
 
     /**
-     * 放大
+     * 线性放大
      */
     void lineZoomIn();
 
     /**
-     * 缩小
+     * 线性缩小
      */
     void lineZoomOut();
 
@@ -57,13 +39,21 @@ public interface ICameraScan {
      */
     void lineZoomTo(@FloatRange(from = 0.0,to = 1.0) float linearZoom);
 
+    /**
+     * 设置闪光灯（手电筒）是否开启
+     * @param torch
+     */
+    void enableTorch(boolean torch);
 
     /**
-     * 获取{@link Camera}
+     * 闪光灯（手电筒）是否开启
      * @return
      */
-    @Nullable Camera getCamera();
+    boolean isTorchEnabled();
 
-    void release();
-
+    /**
+     * 是否支持闪光灯
+     * @return
+     */
+    boolean hasFlashUnit();
 }

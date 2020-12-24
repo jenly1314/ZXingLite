@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.DisplayMetrics;
-import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.View;
 
 import com.google.common.util.concurrent.ListenableFuture;
@@ -24,6 +24,7 @@ import androidx.camera.core.CameraSelector;
 import androidx.camera.core.ImageAnalysis;
 import androidx.camera.core.Preview;
 import androidx.camera.core.TorchState;
+import androidx.camera.core.ZoomState;
 import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.camera.view.PreviewView;
 import androidx.core.content.ContextCompat;
@@ -87,18 +88,38 @@ public class DefaultCameraScan extends CameraScan {
         initData();
     }
 
+    private ScaleGestureDetector.OnScaleGestureListener mOnScaleGestureListener = new ScaleGestureDetector.SimpleOnScaleGestureListener(){
+        @Override
+        public boolean onScale(ScaleGestureDetector detector) {
+            float scale = detector.getScaleFactor();
+            if(mCamera != null){
+                float ratio = mCamera.getCameraInfo().getZoomState().getValue().getZoomRatio();
+                zoomTo(ratio * scale);
+            }
+            return true;
+        }
+
+    };
+
     private void initData(){
         mResultLiveData = new MutableLiveData<>();
         mResultLiveData.observe(mLifecycleOwner, result -> {
             handleAnalyzeResult(result);
         });
+
+        ScaleGestureDetector scaleGestureDetector = new ScaleGestureDetector(mContext, mOnScaleGestureListener);
         mPreviewView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 LogUtils.d("click");
             }
         });
-        mPreviewView.setOnTouchListener((v, event) -> onTouchEvent(event));
+        mPreviewView.setOnTouchListener((v, event) -> {
+            if(isNeedTouchZoom()){
+                return scaleGestureDetector.onTouchEvent(event);
+            }
+            return false;
+        });
 
         DisplayMetrics displayMetrics = mContext.getResources().getDisplayMetrics();
         mScreenWidth = displayMetrics.widthPixels;
@@ -109,14 +130,16 @@ public class DefaultCameraScan extends CameraScan {
             mAmbientLightManager.register();
             mAmbientLightManager.setOnLightSensorEventListener((dark, lightLux) -> {
                 if(flashlightView != null){
-                    flashlightView.setSelected(!dark);
                     if(dark){
                         if(flashlightView.getVisibility() != View.VISIBLE){
                             flashlightView.setVisibility(View.VISIBLE);
+                            flashlightView.setSelected(isTorchEnabled());
                         }
-                    }else if(flashlightView.getVisibility() == View.VISIBLE){
+                    }else if(flashlightView.getVisibility() == View.VISIBLE && !isTorchEnabled()){
                         flashlightView.setVisibility(View.INVISIBLE);
+                        flashlightView.setSelected(false);
                     }
+
                 }
             });
         }
@@ -130,7 +153,6 @@ public class DefaultCameraScan extends CameraScan {
             mAnalyzer = new MultiFormatAnalyzer();
         }
     }
-
 
     @Override
     public CameraScan setCameraConfig(CameraConfig cameraConfig) {
@@ -288,10 +310,15 @@ public class DefaultCameraScan extends CameraScan {
         }
     }
 
+
     @Override
     public void zoomTo(float ratio) {
         if(mCamera != null){
-            mCamera.getCameraControl().setZoomRatio(ratio);
+            ZoomState zoomState = mCamera.getCameraInfo().getZoomState().getValue();
+            float maxRatio = zoomState.getMaxZoomRatio();
+            float minRatio = zoomState.getMinZoomRatio();
+            float zoom = Math.max(Math.min(ratio,maxRatio),minRatio);
+            mCamera.getCameraControl().setZoomRatio(zoom);
         }
     }
 
@@ -323,11 +350,10 @@ public class DefaultCameraScan extends CameraScan {
     }
 
     @Override
-    public CameraScan enableTorch(boolean torch) {
+    public void enableTorch(boolean torch) {
         if(mCamera != null && hasFlashUnit()){
             mCamera.getCameraControl().enableTorch(torch);
         }
-        return this;
     }
 
     @Override
@@ -397,6 +423,20 @@ public class DefaultCameraScan extends CameraScan {
         flashlightView = v;
         if(mAmbientLightManager != null){
             mAmbientLightManager.setLightSensorEnabled(v != null);
+        }
+        return this;
+    }
+
+    public CameraScan setDarkLightLux(float lightLux){
+        if(mAmbientLightManager != null){
+            mAmbientLightManager.setDarkLightLux(lightLux);
+        }
+        return this;
+    }
+
+    public CameraScan setBrightLightLux(float lightLux){
+        if(mAmbientLightManager != null){
+            mAmbientLightManager.setBrightLightLux(lightLux);
         }
         return this;
     }

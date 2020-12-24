@@ -18,7 +18,6 @@
         app:laserColor="@color/colorAccent"
         app:frameColor="@color/colorPrimary"
         app:cornerColor="@color/colorPrimary"
-        app:resultPointColor="@color/colorAccent"
         app:labelTextLocation="bottom"
         app:laserStyle="grid"
         app:gridHeight="0dp"/>

@@ -2,8 +2,6 @@ package com.king.zxing.app;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.view.MotionEvent;
-import android.view.SurfaceView;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -11,7 +9,6 @@ import android.widget.Toast;
 import com.google.zxing.Result;
 import com.king.zxing.CameraScan;
 import com.king.zxing.DefaultCameraScan;
-import com.king.zxing.ICameraScan;
 import com.king.zxing.ViewfinderView;
 import com.king.zxing.app.util.StatusBarUtils;
 
@@ -63,9 +60,9 @@ public class CustomActivity extends AppCompatActivity implements CameraScan.OnSc
         isContinuousScan = getIntent().getBooleanExtra(MainActivity.KEY_IS_CONTINUOUS,false);
 
         mCameraScan = new DefaultCameraScan(this,previewView);
-        mCameraScan.setOnScanResultCallback(this);
-
-        mCameraScan.startCamera();
+        mCameraScan.setOnScanResultCallback(this)
+                .setVibrate(true)
+                .startCamera();
 
     }
 

@@ -27,13 +27,11 @@ ZXingLite for Android 是ZXing的精简版，基于ZXing库优化扫码和生成
 | frameColor | color |<font color=#1FB3E2>#7F1FB3E2</font>| 扫描区边框的颜色 |
 | cornerColor | color |<font color=#1FB3E2>#FF1FB3E2</font>| 扫描区边角的颜色 |
 | laserColor | color |<font color=#1FB3E2>#FF1FB3E2</font>| 扫描区激光线的颜色 |
-| resultPointColor | color |<font color=#EFBD21>#C0EFBD21</font>| 扫描区结果点的颜色 |
 | labelText | string |  | 扫描提示文本信息 |
 | labelTextColor | color |<font color=#C0C0C0>#FFC0C0C0</font>| 提示文本字体颜色 |
 | labelTextSize | dimension |14sp| 提示文本字体大小 |
 | labelTextPadding | dimension |24dp| 提示文本距离扫描区的间距 |
 | labelTextLocation | enum |bottom| 提示文本显示位置 |
-| showResultPoint | boolean | false | 是否显示合适的扫码结果点 |
 | frameWidth | dimension |  | 扫码框宽度 |
 | frameHeight | dimension |  | 扫码框高度 |
 | laserStyle | enum | line | 扫描激光的样式 |
@@ -50,20 +48,20 @@ ZXingLite for Android 是ZXing的精简版，基于ZXing库优化扫码和生成
 | framePaddingTop | dimension | 0 | 扫码框上边的内间距 |
 | framePaddingRight | dimension | 0 | 扫码框右边的内间距 |
 | framePaddingBottom | dimension | 0 | 扫码框下边的内间距 |
+| frameGravity | enum | center | 扫码框对齐方式 |
 
 
 ## 引入
 
-### Maven：
-```maven
-<dependency>
-  <groupId>com.king.zxing</groupId>
-  <artifactId>zxing-lite</artifactId>
-  <version>1.1.9</version>
-  <type>pom</type>
-</dependency>
-```
+最新版本
 ### Gradle:
+```gradle
+//AndroidX 版本
+implementation 'com.king.zxing:zxing-lite:2.0.0'
+
+```
+
+以前 **v1.x** 旧版本
 ```gradle
 //AndroidX 版本
 implementation 'com.king.zxing:zxing-lite:1.1.9-androidx'
@@ -71,12 +69,7 @@ implementation 'com.king.zxing:zxing-lite:1.1.9-androidx'
 //Android 版本
 implementation 'com.king.zxing:zxing-lite:1.1.9'
 ```
-### Lvy:
-```lvy
-<dependency org='com.king.zxing' name='zxing-lite' rev='1.1.9'>
-  <artifact name='$AID' ext='pom'></artifact>
-</dependency>
-```
+
 
 ###### 如果Gradle出现compile失败的情况，可以在Project的build.gradle里面添加如下：（也可以使用上面的JitPack来compile）
 ```gradle
@@ -88,47 +81,50 @@ allprojects {
 }
 ```
 
-## 引入的库：
-```gradle
-//AndroidX
-api 'androidx.appcompat:appcompat:1.1.0'
-api 'com.google.zxing:core:3.3.3'
+## 版本说明
 
-//Android
-api 'com.android.support:appcompat-v7:28.0.0'
-api 'com.google.zxing:core:3.3.3'
-```
+#### v2.x 相对于 v1.x 的优势
+* v2.x基于CameraX，抽象整体流程，可扩展性更高。
+* v2.x基于CameraX通过预览裁剪的方式确保预览界面不变形，无需铺满屏幕，就能适配（v1.x通过遍历Camera支持预览的尺寸，找到与屏幕最接近的比例，减少变形的可能性（需铺满屏幕，才能适配）)
+* v2.x如果您是通过继承CaptureActivity或CaptureFragment实现扫码功能，那么动态权限申请相关都已经在CaptureActivity或CaptureFragment处理好了，无需您格外申请。
+
+(【v1.1.9】)[https://github.com/jenly1314/ZXingLite/tree/androidx] 如果您正在使用 **1.x** 版本请调转，当前 **2.x** 版本已经基于 **Camerx** 进行重构，不支持升级，请在新项目中使用。
+
+下面的示例和相关说明都是针对于当前最新版本，如果您使用的是v1.x旧版本，(请戳此处查看分支)[https://github.com/jenly1314/ZXingLite/tree/androidx]。
 
 ## 示例
 
 布局示例
->  可自定义布局（覆写getLayoutId方法），布局内至少要保证有SurfaceView和ViewfinderView，控件id可根据覆写CaptureActivity 的 getSurfaceViewId 和 getViewfinderViewId方法自定义
+>  可自定义布局（覆写getLayoutId方法），布局内至少要保证有PreviewView。
 
->  ivTorch为 v1.1.4版本新增的手电筒按钮，如果想改ID可通过CaptureActivity中的getIvTorchId自定义ID
+> PreviewView 用来预览，布局内至少要保证有PreviewView，如果是继承CaptureActivity或CaptureFragment，控件id可覆写getPreviewViewId方法自定义
 
->  如果是从v1.1.4以前版本升级至v1.1.4以上版本，请参考如下布局示例（新增ivTorch），也可忽略内置手电筒功能可直接将CaptureActivity中的getIvTorchId方法返回0
+> ViewfinderView 用来渲染扫码视图，给用户起到一个视觉效果，本身扫码识别本身没有关系，如果是继承CaptureActivity或CaptureFragment，控件id可复写getViewfinderViewId方法自定义，默认为previewView，返回0表示无需ViewfinderView
+
+> ivFlashlight 用来内置手电筒，如果是继承CaptureActivity或CaptureFragment，控件id可复写getFlashlightId方法自定义，默认为ivFlashlight。返回0表示无需内置手电筒。您也可以自己去定义
+
 
 ```Xml
-    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-        <SurfaceView
-            android:id="@+id/surfaceView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-        <com.king.zxing.ViewfinderView
-            android:id="@+id/viewfinderView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-        <ImageView
-            android:id="@+id/ivTorch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:src="@drawable/zxl_torch_selector"
-            android:layout_marginTop="@dimen/torchMarginTop" />
-    </FrameLayout>
+    <androidx.camera.view.PreviewView
+        android:id="@+id/previewView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+    <com.king.zxing.ViewfinderView
+        android:id="@+id/viewfinderView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+    <ImageView
+        android:id="@+id/ivFlashlight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:src="@drawable/zxl_flashlight_selector"
+        android:layout_marginTop="@dimen/zxl_flashlight_margin_top" />
+</FrameLayout>
 ```
 
 或在你的布局中添加
@@ -152,6 +148,44 @@ api 'com.google.zxing:core:3.3.3'
     CodeUtils.parseQRCode(bitmapPath);
 ```
 
+CameraScan配置示例
+```java
+    //获取CameraScan，扫码相关的配置设置。CameraScan里面包含部分支持链式调用的方法，即调用返回是CameraScan本身的一些配置建议在startCamera之前调用。
+    getCameraScan().setPlayBeep(true)//设置是否播放音效，默认为false
+            .setVibrate(true)//设置是否震动，默认为false
+            .setCameraConfig(new CameraConfig())//设置相机配置信息，CameraConfig可覆写options方法自定义配置
+            .setNeedAutoZoom(false)//二维码太小时可自动缩放，默认为false
+            .setNeedTouchZoom(true)//支持多指触摸捏合缩放，默认为true
+            .setDarkLightLux(45f)//设置光线足够暗的阈值（单位：lux），需要通过{@link #bindFlashlightView(View)}绑定手电筒才有效
+            .setBrightLightLux(100f)//设置光线足够明亮的阈值（单位：lux），需要通过{@link #bindFlashlightView(View)}绑定手电筒才有效
+            .bindFlashlightView(ivFlashlight)//绑定手电筒，绑定后可根据光线传感器，动态显示或隐藏手电筒按钮
+            .setOnScanResultCallback(this)//设置扫码结果回调，需要自己处理或者需要连扫时，可设置回调，自己去处理相关逻辑
+            .setAnalyzer(new MultiFormatAnalyzer(new DecodeConfig()))//设置分析器,DecodeConfig可以配置一些解码时的配置信息，如果内置的不满足您的需求，你也可以自定义实现，
+            .setAnalyzeImage(true)//设置是否分析图片，默认为true。如果设置为false，相当于关闭了扫码识别功能
+            .startCamera();//启动预览
+
+
+    //设置闪光灯（手电筒）是否开启,需在startCamera之后调用才有效
+    getCameraScan().enableTorch(torch);
+
+```
+
+CameraScan配置示例（只需识别二维码的配置示例）
+```java
+        //初始化解码配置
+        DecodeConfig decodeConfig = new DecodeConfig();
+        decodeConfig.setHints(DecodeFormatManager.QR_CODE_HINTS)//如果只有识别二维码的需求，这样设置效率会更高
+            .setFullAreaScan(false)//设置是否全区域识别，默认true
+            .setAreaRectRatio(0.9f)//设置识别区域比例，默认0.9，设置的比例最终会在预览区域裁剪基于此比例的一个矩形进行扫码识别
+            .setAreaRectVerticalOffset(0)//设置识别区域垂直方向偏移量，默认为0，为0表示居中，可以为负数
+            .setAreaRectHorizontalOffset(0);//设置识别区域水平方向偏移量，默认为0，为0表示居中，可以为负数
+
+        //在启动预览之前，设置分析器，只识别二维码
+        getCameraScan()
+                .setVibrate(true)//设置是否震动，默认为false
+                .setAnalyzer(new MultiFormatAnalyzer(decodeConfig));//设置分析器,如果内置实现的一些分析器不满足您的需求，你也可以自定义去实现
+```
+
 如果直接使用CaptureActivity需在您项目的AndroidManifest中添加如下配置
 ```Xml
     <activity
@@ -166,9 +200,9 @@ api 'com.google.zxing:core:3.3.3'
 
 > 2、通过继承CaptureActivity或者CaptureFragment并自定义布局。（适用于大多场景，并无需关心扫码相关逻辑，自定义布局时需覆写getLayoutId方法）
 
-> 3、在你项目的Activity或者Fragment中创建一个CaptureHelper并在相应的生命周期中调用CaptureHelper的周期。（适用于想在扫码界面写交互逻辑，又因为项目架构或其它原因，无法直接或间接继承CaptureActivity或CaptureFragment时使用）
+> 3、在你项目的Activity或者Fragment中实例化一个CameraScan即可。（适用于想在扫码界面写交互逻辑，又因为项目架构或其它原因，无法直接或间接继承CaptureActivity或CaptureFragment时使用）
 
-> 4、参照CaptureHelper写一个自定义的扫码帮助类，其它步骤同方式3。（扩展高级用法，谨慎使用）
+> 4、继承CameraScan自己实现一个，可参照默认实现类DefaultCameraScan，其它步骤同方式3。（扩展高级用法，谨慎使用）
 
 ### 其他
 
@@ -186,6 +220,12 @@ compileOptions {
 
 ## 版本记录
 
+#### v2.0.0：2020-12-24
+* 基于CameraX进行重构
+* 抽象整体流程，可扩展性更高
+* 从2.x开始只支持AndroidX
+* minSdk要求从 **16+** 改为 **21+**
+
 #### v1.1.9：2020-4-28
 * 修复1.1.8版本优化细节时，不小心改出个Bug(fix #86) 
 
@@ -199,7 +239,7 @@ compileOptions {
 
 #### v1.1.6：2019-12-27
 *  生成条形码/二维码时支持自定义配置颜色
-*  支持识别反色码（增强识别率，默认不支持，需通过CaptureHelper.supportLuminanceInvert(true)开启）
+*  支持识别反色码（增强识别率，默认不支持，需通过CameraScan.supportLuminanceInvert(true)开启）
 
 #### v1.1.5：2019-12-16
 *  优化Camera初始化相关策略，减少出现卡顿的可能性
@@ -218,7 +258,7 @@ compileOptions {
 
 #### v1.1.1：2019-5-20
 *  支持扫二维码过小时，自动缩放
-*  支持识别垂直条形码（增强条形码识别，默认不支持，需通过CaptureHelper.supportVerticalCode(true)开启）
+*  支持识别垂直条形码（增强条形码识别，默认不支持，需通过CameraScan.supportVerticalCode(true)开启）
 
 #### v1.1.0：2019-4-19
 *  将扫码相关逻辑与界面分离，ZXingLite使用更容易扩展

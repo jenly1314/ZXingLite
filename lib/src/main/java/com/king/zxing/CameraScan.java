@@ -1,27 +1,23 @@
 package com.king.zxing;
 
 import android.content.Intent;
-import android.view.MotionEvent;
 import android.view.View;
 
 import com.google.zxing.Result;
+import com.google.zxing.qrcode.QRCodeReader;
 import com.king.zxing.analyze.Analyzer;
-import com.king.zxing.util.LogUtils;
+import com.king.zxing.analyze.AreaRectAnalyzer;
+import com.king.zxing.analyze.BarcodeFormatAnalyzer;
+import com.king.zxing.analyze.ImageAnalyzer;
+import com.king.zxing.analyze.MultiFormatAnalyzer;
 
 import androidx.annotation.Nullable;
 import androidx.camera.core.CameraSelector;
 
-import static com.king.zxing.CameraScan.*;
-
 /**
  * @author <a href="mailto:jenly1314@gmail.com">Jenly</a>
  */
-public abstract class CameraScan implements ICameraScan {
-
-    /**
-     * 默认触控误差值
-     */
-    private static final int DEVIATION = 6;
+public abstract class CameraScan implements ICamera,ICameraControl {
 
     public static String SCAN_RESULT = "SCAN_RESULT";
 
@@ -34,14 +30,20 @@ public abstract class CameraScan implements ICameraScan {
     /**
      * 是否需要支持自动缩放
      */
-    private boolean isNeedAutoZoom = true;
+    private boolean isNeedAutoZoom = false;
 
     /**
      * 是否需要支持触摸缩放
      */
     private boolean isNeedTouchZoom = true;
 
-    private float mOldDistance;
+    /**
+     * 是否需要支持触摸缩放
+     * @return
+     */
+    protected boolean isNeedTouchZoom() {
+        return isNeedTouchZoom;
+    }
 
 
     /**
@@ -72,46 +74,6 @@ public abstract class CameraScan implements ICameraScan {
         return this;
     }
 
-    protected boolean onTouchEvent(MotionEvent event) {
-        if(getCamera() != null && isNeedTouchZoom){
-            LogUtils.d("action:" + (event.getAction() & MotionEvent.ACTION_MASK));
-            if(event.getPointerCount() > 1) {
-                switch (event.getAction() & MotionEvent.ACTION_MASK) {//多点触控
-                    case MotionEvent.ACTION_POINTER_DOWN:
-                        mOldDistance = calcFingerSpacing(event);
-                        break;
-                    case MotionEvent.ACTION_MOVE:
-                        float newDistance = calcFingerSpacing(event);
-
-                        if (newDistance > mOldDistance + DEVIATION) {
-                            zoomIn();
-                        } else if (newDistance < mOldDistance - DEVIATION) {
-                            zoomOut();
-                        }
-                        mOldDistance = newDistance;
-                        break;
-                    case MotionEvent.ACTION_POINTER_UP:
-                    case MotionEvent.ACTION_UP:
-                        return false;
-                }
-
-            }
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * 计算两指间距离
-     * @param event
-     * @return
-     */
-    private float calcFingerSpacing(MotionEvent event) {
-        float x = event.getX(0) - event.getX(1);
-        float y = event.getY(0) - event.getY(1);
-        return (float) Math.sqrt(x * x + y * y);
-    }
-
     /**
      * 设置相机配置，请在{@link #startCamera()}之前调用
      * @param cameraConfig
@@ -125,28 +87,17 @@ public abstract class CameraScan implements ICameraScan {
     public abstract CameraScan setAnalyzeImage(boolean analyze);
 
     /**
-     * 设置分析器
+     * 设置分析器，内置了一些{@link Analyzer}的实现类如下
+     * @see {@link MultiFormatAnalyzer}
+     * @see {@link AreaRectAnalyzer}
+     * @see {@link ImageAnalyzer}
+     *
+     * @see {@link BarcodeFormatAnalyzer}
+     * @see {@link QRCodeReader}
+     *
      * @param analyzer
      */
     public abstract CameraScan setAnalyzer(Analyzer analyzer);
-
-    /**
-     * 设置手电筒是否开启
-     * @param torch
-     */
-    public abstract CameraScan enableTorch(boolean torch);
-
-    /**
-     * 手电筒是否开启
-     * @return
-     */
-    public abstract boolean isTorchEnabled();
-
-    /**
-     * 是否支持闪光灯
-     * @return
-     */
-    public abstract boolean hasFlashUnit();
 
     /**
      * 设置是否震动
@@ -172,6 +123,17 @@ public abstract class CameraScan implements ICameraScan {
      */
     public abstract CameraScan bindFlashlightView(@Nullable View v);
 
+    /**
+     * 设置光线足够暗的阈值（单位：lux），需要通过{@link #bindFlashlightView(View)}绑定手电筒才有效
+     * @param lightLux
+     */
+    public abstract CameraScan setDarkLightLux(float lightLux);
+
+    /**
+     * 设置光线足够明亮的阈值（单位：lux），需要通过{@link #bindFlashlightView(View)}绑定手电筒才有效
+     * @param lightLux
+     */
+    public abstract CameraScan setBrightLightLux(float lightLux);
 
     public interface OnScanResultCallback{
         boolean onScanResultCallback(Result result);

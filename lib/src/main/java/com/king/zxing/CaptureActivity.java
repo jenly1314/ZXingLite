@@ -15,23 +15,26 @@
  */
 package com.king.zxing;
 
+import android.Manifest;
 import android.os.Bundle;
-import android.view.MotionEvent;
 import android.view.View;
 
 import com.google.zxing.Result;
+import com.king.zxing.util.LogUtils;
+import com.king.zxing.util.PermissionUtils;
 
 import androidx.annotation.LayoutRes;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.camera.view.PreviewView;
-import androidx.core.app.ActivityCompat;
 
 /**
  * @author <a href="mailto:jenly1314@gmail.com">Jenly</a>
  */
 public class CaptureActivity extends AppCompatActivity implements CameraScan.OnScanResultCallback{
 
+    private static final int CAMERA_PERMISSION_REQUEST_CODE = 0X86;
 
     protected PreviewView previewView;
     protected ViewfinderView viewfinderView;
@@ -62,38 +65,77 @@ public class CaptureActivity extends AppCompatActivity implements CameraScan.OnS
         if(ivFlashlightId != 0){
             ivFlashlight = findViewById(ivFlashlightId);
             if(ivFlashlight != null){
-                ivFlashlight.setOnClickListener(v -> toggleTorch());
+                ivFlashlight.setOnClickListener(v -> toggleTorchState());
             }
         }
         initCameraScan();
         startCamera();
     }
 
+    /**
+     * 初始化CameraScan
+     */
     public void initCameraScan(){
         mCameraScan = new DefaultCameraScan(this,previewView);
         mCameraScan.setOnScanResultCallback(this);
     }
 
 
+    /**
+     * 启动相机预览
+     */
     public void startCamera(){
         if(mCameraScan != null){
-            mCameraScan.startCamera();
+            if(PermissionUtils.checkPermission(this,Manifest.permission.CAMERA)){
+                mCameraScan.startCamera();
+            }else{
+                LogUtils.d("checkPermissionResult != PERMISSION_GRANTED");
+                PermissionUtils.requestPermission(this,Manifest.permission.CAMERA,CAMERA_PERMISSION_REQUEST_CODE);
+            }
         }
     }
 
+
+    /**
+     * 释放相机
+     */
     private void releaseCamera(){
         if(mCameraScan != null){
             mCameraScan.release();
         }
     }
 
-    protected void toggleTorch(){
+    /**
+     * 切换闪光灯状态（开启/关闭）
+     */
+    protected void toggleTorchState(){
         if(mCameraScan != null){
             boolean isTorch = mCameraScan.isTorchEnabled();
             mCameraScan.enableTorch(!isTorch);
             if(ivFlashlight != null){
                 ivFlashlight.setSelected(!isTorch);
             }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode == CAMERA_PERMISSION_REQUEST_CODE){
+            requestCameraPermissionResult(permissions,grantResults);
+        }
+    }
+
+    /**
+     * 请求Camera权限回调结果
+     * @param permissions
+     * @param grantResults
+     */
+    public void requestCameraPermissionResult(@NonNull String[] permissions, @NonNull int[] grantResults){
+        if(PermissionUtils.requestPermissionsResult(Manifest.permission.CAMERA,permissions,grantResults)){
+            startCamera();
+        }else{
+            finish();
         }
     }
 

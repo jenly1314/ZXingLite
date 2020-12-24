@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.graphics.ImageFormat;
 
 import com.google.zxing.Result;
+import com.king.zxing.util.LogUtils;
 
 import java.nio.ByteBuffer;
 
@@ -35,6 +36,7 @@ public abstract class ImageAnalyzer implements Analyzer {
             buffer.get(data);
             return analyze(data,image.getWidth(),image.getHeight());
         }
+        LogUtils.w("imageFormat: " + image.getFormat());
         return null;
     }
 

@@ -8,8 +8,8 @@
         <item name="colorPrimaryDark">@android:color/black</item>
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">true</item>
-        <item name="android:statusBarColor">@color/capture_status_bar_color</item>
-        <item name="android:navigationBarColor">@color/capture_navigation_bar_color</item>
+        <item name="android:statusBarColor">@color/zxl_capture_status_bar_color</item>
+        <item name="android:navigationBarColor">@color/zxl_capture_navigation_bar_color</item>
     </style>
 
 </resources>

@@ -21,7 +21,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.zxing.Result;
+import com.king.zxing.CameraConfig;
 import com.king.zxing.CaptureActivity;
+import com.king.zxing.DecodeConfig;
+import com.king.zxing.DecodeFormatManager;
+import com.king.zxing.analyze.MultiFormatAnalyzer;
 import com.king.zxing.app.util.StatusBarUtils;
 
 
@@ -58,9 +62,27 @@ public class CustomCaptureActivity extends CaptureActivity {
     @Override
     public void initCameraScan() {
         super.initCameraScan();
-        //获取CaptureHelper，里面有扫码相关的配置设置
-        getCameraScan().setPlayBeep(false)//播放音效
-                .setVibrate(true);//震动
+        //初始化解码配置
+        DecodeConfig decodeConfig = new DecodeConfig();
+        decodeConfig.setHints(DecodeFormatManager.DEFAULT_HINTS)////设置解码
+//                .setAreaRectRatio(0.9f)//设置识别区域比例，默认0.9，设置的比例最终会在预览区域裁剪基于此比例的一个矩形进行扫码识别
+//                .setAreaRectVerticalOffset(0)//设置识别区域垂直方向偏移量，默认为0，为0表示居中，可以为负数
+//                .setAreaRectHorizontalOffset(0)//设置识别区域水平方向偏移量，默认为0，为0表示居中，可以为负数
+                .setFullAreaScan(true);//设置是否全区域识别，默认true
+
+        //获取CameraScan，里面有扫码相关的配置设置。CameraScan里面包含部分支持链式调用的方法，即调用返回是CameraScan本身的一些配置建议在startCamera之前调用。
+        getCameraScan().setPlayBeep(true)//设置是否播放音效，默认为false
+                .setVibrate(true)//设置是否震动，默认为false
+                .setCameraConfig(new CameraConfig())//设置相机配置信息，CameraConfig可覆写options方法自定义配置
+                .setNeedAutoZoom(false)//二维码太小时可自动缩放，默认为false
+                .setNeedTouchZoom(true)//支持多指触摸捏合缩放，默认为true
+                .setDarkLightLux(45f)//设置光线足够暗的阈值（单位：lux），需要通过{@link #bindFlashlightView(View)}绑定手电筒才有效
+                .setBrightLightLux(100f)//设置光线足够明亮的阈值（单位：lux），需要通过{@link #bindFlashlightView(View)}绑定手电筒才有效
+                .bindFlashlightView(ivFlashlight)//绑定手电筒，绑定后可根据光线传感器，动态显示或隐藏手电筒按钮
+                .setOnScanResultCallback(this)//设置扫码结果回调，需要自己处理或者需要连扫时，可设置回调，自己去处理相关逻辑
+                .setAnalyzer(new MultiFormatAnalyzer(decodeConfig))//设置分析器,DecodeConfig可以配置一些解码时的配置信息，如果内置的不满足您的需求，你也可以自定义实现，
+                .setAnalyzeImage(true)//设置是否分析图片，默认为true。如果设置为false，相当于关闭了扫码识别功能
+                .startCamera();//启动预览
     }
 
     /**

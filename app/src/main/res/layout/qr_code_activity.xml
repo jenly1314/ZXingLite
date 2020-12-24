@@ -18,10 +18,8 @@
         app:laserColor="@color/colorAccent"
         app:frameColor="@color/colorPrimary"
         app:cornerColor="@color/colorPrimary"
-        app:resultPointColor="@color/colorAccent"
         app:labelTextLocation="bottom"
-        app:laserStyle="grid"
-        app:showResultPoint="true"/>
+        app:laserStyle="grid" />
     <ImageView
         android:id="@+id/ivFlashlight"
         android:layout_width="wrap_content"
