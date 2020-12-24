@@ -84,7 +84,7 @@ allprojects {
 
 ## 版本说明
 
-### v2.x基于CameraX重构已震撼发布
+### v2.x 基于CameraX重构震撼发布
 
 #### v2.x 相对于 v1.x 的优势
 
