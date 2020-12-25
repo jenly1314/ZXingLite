@@ -250,7 +250,7 @@ compileOptions {
 
 #### v1.1.6：2019-12-27
 *  生成条形码/二维码时支持自定义配置颜色
-*  支持识别反色码（增强识别率，默认不支持，需通过CameraScan.supportLuminanceInvert(true)开启）
+*  支持识别反色码（增强识别率，默认不支持，需通过CaptureHelper.supportLuminanceInvert(true)开启）
 
 #### v1.1.5：2019-12-16
 *  优化Camera初始化相关策略，减少出现卡顿的可能性
@@ -269,7 +269,7 @@ compileOptions {
 
 #### v1.1.1：2019-5-20
 *  支持扫二维码过小时，自动缩放
-*  支持识别垂直条形码（增强条形码识别，默认不支持，需通过CameraScan.supportVerticalCode(true)开启）
+*  支持识别垂直条形码（增强条形码识别，默认不支持，需通过CaptureHelper.supportVerticalCode(true)开启）
 
 #### v1.1.0：2019-4-19
 *  将扫码相关逻辑与界面分离，ZXingLite使用更容易扩展
