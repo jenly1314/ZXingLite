@@ -100,7 +100,7 @@ allprojects {
 
 查看AndroidX版 **1.x** 分支 [请戳此处](https://github.com/jenly1314/ZXingLite/tree/androidx)
 
-查看Android Support版 **1.x** 分支 [请戳此处](https://github.com/jenly1314/ZXingLite/tree/v1.x)
+查看Android Support版 **1.x** 分支 [请戳此处](https://github.com/jenly1314/ZXingLite/tree/android)
 
 使用 **v1.x** 版本的无需往下看了，下面的示例和相关说明都是针对于当前最新版本。
 
