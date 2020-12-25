@@ -90,13 +90,17 @@ allprojects {
 
 * v2.x基于CameraX，抽象整体流程，可扩展性更高。
 * v2.x基于CameraX通过预览裁剪的方式确保预览界面不变形，无需铺满屏幕，就能适配（v1.x通过遍历Camera支持预览的尺寸，找到与屏幕最接近的比例，减少变形的可能性（需铺满屏幕，才能适配）)
-* v2.x如果您是通过继承CaptureActivity或CaptureFragment实现扫码功能，那么动态权限申请相关都已经在CaptureActivity或CaptureFragment处理好了，无需您格外申请。
+
+#### v2.x 特别说明
+
+* v2.x如果您是通过继承CaptureActivity或CaptureFragment实现扫码功能，那么动态权限申请相关都已经在CaptureActivity或CaptureFragment处理好了。
+* v2.x如果您是通过继承CaptureActivity或CaptureFragment实现扫码功能，如果有想要修改默认配置，可重写**initCameraScan**方法，修改CameraScan的配置即可，如果无需修改配置，直接在跳转原界面的**onActivityResult** 接收扫码结果即可（更多具体详情可参见[app](app)中的使用示例）。
 
 [【v1.1.9】](https://github.com/jenly1314/ZXingLite/tree/androidx) 如果您正在使用 **1.x** 版本请点击下面的链接查看分支版本，当前 **2.x** 版本已经基于 **Camerx** 进行重构，不支持升级，请在新项目中使用。
 
-查看Android Support版 **1.x** 分支 [请戳此处](https://github.com/jenly1314/ZXingLite/tree/v1.x)
-
 查看AndroidX版 **1.x** 分支 [请戳此处](https://github.com/jenly1314/ZXingLite/tree/androidx)
+
+查看Android Support版 **1.x** 分支 [请戳此处](https://github.com/jenly1314/ZXingLite/tree/v1.x)
 
 使用 **v1.x** 版本的无需往下看了，下面的示例和相关说明都是针对于当前最新版本。
 
