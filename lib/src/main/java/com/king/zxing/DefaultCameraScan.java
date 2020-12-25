@@ -108,12 +108,6 @@ public class DefaultCameraScan extends CameraScan {
         });
 
         ScaleGestureDetector scaleGestureDetector = new ScaleGestureDetector(mContext, mOnScaleGestureListener);
-        mPreviewView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                LogUtils.d("click");
-            }
-        });
         mPreviewView.setOnTouchListener((v, event) -> {
             if(isNeedTouchZoom()){
                 return scaleGestureDetector.onTouchEvent(event);

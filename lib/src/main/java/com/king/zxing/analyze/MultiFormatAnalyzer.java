@@ -53,9 +53,9 @@ public class MultiFormatAnalyzer extends AreaRectAnalyzer {
             if(rawResult == null && mDecodeConfig != null){
                 if(rawResult == null && mDecodeConfig.isSupportVerticalCode()){
                     byte[] rotatedData = new byte[data.length];
-                    for (int y = 0; y < height; y++) {
-                        for (int x = 0; x < width; x++)
-                            rotatedData[x * height + height - y - 1] = data[x + y * width];
+                    for (int y = 0; y < dataHeight; y++) {
+                        for (int x = 0; x < dataWidth; x++)
+                            rotatedData[x * dataHeight + dataHeight - y - 1] = data[x + y * dataWidth];
                     }
                     rawResult = decodeInternal(new PlanarYUVLuminanceSource(rotatedData,dataHeight,dataWidth,top,left,height,width,false),mDecodeConfig.isSupportVerticalCodeMultiDecode());
                 }
