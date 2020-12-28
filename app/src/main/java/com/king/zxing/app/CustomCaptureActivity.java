@@ -65,8 +65,8 @@ public class CustomCaptureActivity extends CaptureActivity {
         //初始化解码配置
         DecodeConfig decodeConfig = new DecodeConfig();
         decodeConfig.setHints(DecodeFormatManager.ALL_HINTS)////设置解码
-                .setSupportVerticalCode(true)//设置是否支持扫垂直的条码
-                .setSupportLuminanceInvert(true)//设置是否支持识别反色码，黑白颜色反转
+                .setSupportVerticalCode(true)//设置是否支持扫垂直的条码 （增强识别率，相应的也会增加性能消耗）
+                .setSupportLuminanceInvert(true)//设置是否支持识别反色码，黑白颜色反转（增强识别率，相应的也会增加性能消耗）
 //                .setAreaRectRatio(0.9f)//设置识别区域比例，默认0.9，设置的比例最终会在预览区域裁剪基于此比例的一个矩形进行扫码识别
 //                .setAreaRectVerticalOffset(0)//设置识别区域垂直方向偏移量，默认为0，为0表示居中，可以为负数
 //                .setAreaRectHorizontalOffset(0)//设置识别区域水平方向偏移量，默认为0，为0表示居中，可以为负数

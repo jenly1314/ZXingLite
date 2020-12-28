@@ -60,7 +60,7 @@ public class MultiFormatAnalyzer extends AreaRectAnalyzer {
                     rawResult = decodeInternal(new PlanarYUVLuminanceSource(rotatedData,dataHeight,dataWidth,top,left,height,width,false),mDecodeConfig.isSupportVerticalCodeMultiDecode());
                 }
 
-                if(mDecodeConfig.isSupportLuminanceInvert()){
+                if(rawResult == null && mDecodeConfig.isSupportLuminanceInvert()){
                     rawResult = decodeInternal(source.invert(),mDecodeConfig.isSupportLuminanceInvertMultiDecode());
                 }
             }
