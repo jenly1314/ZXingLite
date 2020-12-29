@@ -108,6 +108,8 @@ allprojects {
 
 查看Android Support版 **1.x** 分支 [请戳此处](https://github.com/jenly1314/ZXingLite/tree/android)
 
+查看 [ **1.x** API帮助文档](https://jenly1314.github.io/projects/ZXingLite/doc/)
+
 使用 **v1.x** 版本的无需往下看了，下面的示例和相关说明都是针对于当前最新版本。
 
 ## 示例
