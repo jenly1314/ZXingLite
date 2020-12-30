@@ -1,7 +1,7 @@
 //App 
 def app_version = [:]
-app_version.versionCode = 27
-app_version.versionName = "2.0.0"
+app_version.versionCode = 28
+app_version.versionName = "2.0.1"
 ext.app_version = app_version
 
 //build version
@@ -35,18 +35,18 @@ versions.coreKtx = "1.3.2"
 //zxing
 versions.zxing = "3.3.0"
 
-versions.camerax = "1.0.0-beta12"
+versions.camerax = "1.0.0-rc01"
 
 versions.easypermissions = "3.0.0"
 
 ext.versions = versions
 
-//support
-def support = [:]
-support.design = "com.google.android.material:material:$versions.material"
-support.appcompat = "androidx.appcompat:appcompat:$versions.appcompat"
-support.constraintlayout = "androidx.constraintlayout:constraintlayout:$versions.constraintLayout"
-deps.support = support
+//androidx
+def androidx = [:]
+androidx.design = "com.google.android.material:material:$versions.material"
+androidx.appcompat = "androidx.appcompat:appcompat:$versions.appcompat"
+androidx.constraintlayout = "androidx.constraintlayout:constraintlayout:$versions.constraintLayout"
+deps.androidx = androidx
 
 //test
 def test = [:]

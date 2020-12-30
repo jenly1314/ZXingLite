@@ -41,9 +41,9 @@ dependencies {
     androidTestImplementation deps.test.runner
     androidTestImplementation deps.test.espresso
 
-    implementation deps.support.design
-    implementation deps.support.appcompat
-    implementation deps.support.constraintlayout
+    implementation deps.androidx.design
+    implementation deps.androidx.appcompat
+    implementation deps.androidx.constraintlayout
 
     implementation deps.kotlin
     implementation deps.corektx

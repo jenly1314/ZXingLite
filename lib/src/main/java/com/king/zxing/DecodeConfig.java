@@ -44,6 +44,8 @@ public class DecodeConfig {
 
     private Map<DecodeHintType,Object> hints = DecodeFormatManager.DEFAULT_HINTS;
 
+    public static final float DEFAULT_AREA_RECT_RATIO = 0.8f;
+
     /**
      * 是否支持使用多解码
      */
@@ -74,12 +76,12 @@ public class DecodeConfig {
     /**
      * 是否支持全区域扫码识别
      */
-    private boolean isFullAreaScan = true;
+    private boolean isFullAreaScan = false;
 
     /**
-     * 识别区域比例，默认0.9
+     * 识别区域比例，默认0.8
      */
-    private float areaRectRatio = 0.9f;
+    private float areaRectRatio = DEFAULT_AREA_RECT_RATIO;
     /**
      * 识别区域垂直方向偏移量
      */

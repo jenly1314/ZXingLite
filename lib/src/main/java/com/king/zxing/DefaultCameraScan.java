@@ -1,16 +1,21 @@
 package com.king.zxing;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.DisplayMetrics;
+import android.util.Size;
+import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
+import android.view.ViewConfiguration;
 
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
+import com.google.zxing.common.detector.MathUtils;
 import com.king.zxing.analyze.Analyzer;
 import com.king.zxing.analyze.MultiFormatAnalyzer;
 import com.king.zxing.util.LogUtils;
@@ -21,7 +26,9 @@ import androidx.annotation.FloatRange;
 import androidx.annotation.Nullable;
 import androidx.camera.core.Camera;
 import androidx.camera.core.CameraSelector;
+import androidx.camera.core.FocusMeteringAction;
 import androidx.camera.core.ImageAnalysis;
+import androidx.camera.core.MeteringPoint;
 import androidx.camera.core.Preview;
 import androidx.camera.core.TorchState;
 import androidx.camera.core.ZoomState;
@@ -37,6 +44,20 @@ import androidx.lifecycle.MutableLiveData;
  * @author <a href="mailto:jenly1314@gmail.com">Jenly</a>
  */
 public class DefaultCameraScan extends CameraScan {
+
+    /**
+     * Defines the maximum duration in milliseconds between a touch pad
+     * touch and release for a given touch to be considered a tap (click) as
+     * opposed to a hover movement gesture.
+     */
+    private static final int HOVER_TAP_TIMEOUT = 150;
+
+    /**
+     * Defines the maximum distance in pixels that a touch pad touch can move
+     * before being released for it to be considered a tap (click) as opposed
+     * to a hover movement gesture.
+     */
+    private static final int HOVER_TAP_SLOP = 20;
 
     private FragmentActivity mFragmentActivity;
     private Context mContext;
@@ -68,9 +89,14 @@ public class DefaultCameraScan extends CameraScan {
     private BeepManager mBeepManager;
     private AmbientLightManager mAmbientLightManager;
 
+    private int mOrientation;
     private int mScreenWidth;
     private int mScreenHeight;
     private long mLastAutoZoomTime;
+    private long mLastHoveTapTime;
+    private boolean isClickTap;
+    private float mDownX;
+    private float mDownY;
 
     public DefaultCameraScan(FragmentActivity activity, PreviewView previewView){
         this.mFragmentActivity = activity;
@@ -107,8 +133,10 @@ public class DefaultCameraScan extends CameraScan {
             handleAnalyzeResult(result);
         });
 
+        mOrientation = mContext.getResources().getConfiguration().orientation;
         ScaleGestureDetector scaleGestureDetector = new ScaleGestureDetector(mContext, mOnScaleGestureListener);
         mPreviewView.setOnTouchListener((v, event) -> {
+            handlePreviewViewClickTap(event);
             if(isNeedTouchZoom()){
                 return scaleGestureDetector.onTouchEvent(event);
             }
@@ -139,6 +167,37 @@ public class DefaultCameraScan extends CameraScan {
         }
     }
 
+    private void handlePreviewViewClickTap(MotionEvent event){
+        if(event.getPointerCount() == 1){
+            switch (event.getAction()){
+                case MotionEvent.ACTION_DOWN:
+                    isClickTap = true;
+                    mDownX = event.getX();
+                    mDownY = event.getY();
+                    mLastHoveTapTime = System.currentTimeMillis();
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    isClickTap = MathUtils.distance(mDownX,mDownY,event.getX(),event.getY()) < HOVER_TAP_SLOP;
+                    break;
+                case MotionEvent.ACTION_UP:
+                    if(isClickTap && mLastHoveTapTime + HOVER_TAP_TIMEOUT > System.currentTimeMillis()){
+                        startFocusAndMetering(event.getX(),event.getY());
+                    }
+                    break;
+            }
+        }
+    }
+
+    private void startFocusAndMetering(float x, float y){
+        if(mCamera != null){
+            LogUtils.d("startFocusAndMetering:" + x + "," + y);
+            MeteringPoint point = mPreviewView.getMeteringPointFactory().createPoint(x,y);
+            mCamera.getCameraControl().startFocusAndMetering(new FocusMeteringAction.Builder(point).build());
+        }
+    }
+
+
+
     private void initConfig(){
         if(mCameraConfig == null){
             mCameraConfig = new CameraConfig();
@@ -147,6 +206,7 @@ public class DefaultCameraScan extends CameraScan {
             mAnalyzer = new MultiFormatAnalyzer();
         }
     }
+
 
     @Override
     public CameraScan setCameraConfig(CameraConfig cameraConfig) {
@@ -176,7 +236,7 @@ public class DefaultCameraScan extends CameraScan {
                         .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST));
                 imageAnalysis.setAnalyzer(Executors.newSingleThreadExecutor(), image -> {
                     if(isAnalyze && !isAnalyzeResult && mAnalyzer != null){
-                        Result result = mAnalyzer.analyze(image);
+                        Result result = mAnalyzer.analyze(image,mOrientation);
                         if(result != null){
                             mResultLiveData.postValue(result);
                         }

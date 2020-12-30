@@ -194,8 +194,8 @@ CameraScan配置示例（只需识别二维码的配置示例）
         //初始化解码配置
         DecodeConfig decodeConfig = new DecodeConfig();
         decodeConfig.setHints(DecodeFormatManager.QR_CODE_HINTS)//如果只有识别二维码的需求，这样设置效率会更高
-            .setFullAreaScan(false)//设置是否全区域识别，默认true
-            .setAreaRectRatio(0.9f)//设置识别区域比例，默认0.9，设置的比例最终会在预览区域裁剪基于此比例的一个矩形进行扫码识别
+            .setFullAreaScan(false)//设置是否全区域识别，默认false
+            .setAreaRectRatio(0.8f)//设置识别区域比例，默认0.8，设置的比例最终会在预览区域裁剪基于此比例的一个矩形进行扫码识别
             .setAreaRectVerticalOffset(0)//设置识别区域垂直方向偏移量，默认为0，为0表示居中，可以为负数
             .setAreaRectHorizontalOffset(0);//设置识别区域水平方向偏移量，默认为0，为0表示居中，可以为负数
 
@@ -238,6 +238,12 @@ compileOptions {
 更多使用详情，请查看[app](app)中的源码使用示例或直接查看[API帮助文档](https://jenly1314.github.io/projects/ZXingLite/doc/)
 
 ## 版本记录
+
+#### v2.0.1：2020-12-30
+* 更新CameraX至v1.0.0-rc01
+* 新增支持点击预览区域对焦目标
+* 修改一些默认配置
+* 优化细节
 
 #### v2.0.0：2020-12-24
 * 基于CameraX进行重构
