@@ -17,9 +17,13 @@ package com.king.zxing;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Shader;
@@ -32,6 +36,7 @@ import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.View;
 
+import com.google.zxing.Result;
 import com.google.zxing.ResultPoint;
 
 import java.util.ArrayList;
@@ -191,6 +196,15 @@ public class ViewfinderView extends View {
      */
     private FrameGravity frameGravity;
 
+
+    private Point point;
+    private int pointColor;
+    private int pointStrokeColor;
+
+    private float pointRadius;
+    private float pointStrokeRatio = 1.2f;
+
+
     public enum LaserStyle{
         NONE(0),LINE(1),GRID(2);
         private int mValue;
@@ -299,6 +313,10 @@ public class ViewfinderView extends View {
         frameGravity = FrameGravity.getFromInt(array.getInt(R.styleable.ViewfinderView_frameGravity, CENTER.mValue));
         array.recycle();
 
+        pointColor = laserColor;
+        pointStrokeColor = Color.WHITE;
+
+        pointRadius = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,10,getResources().getDisplayMetrics());
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         textPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
 
@@ -378,23 +396,18 @@ public class ViewfinderView extends View {
         int width = canvas.getWidth();
         int height = canvas.getHeight();
 
-        // Draw the exterior (i.e. outside the framing rect) darkened
+        // 绘制模糊区域
         drawExterior(canvas,frame,width,height);
-        // Draw a red "laser scanner" line through the middle to show decoding is active
+        // 绘制扫描动画
         drawLaserScanner(canvas,frame);
-        // Draw a two pixel solid black border inside the framing rect
+        // 绘制取景区域框
         drawFrame(canvas, frame);
-        // 绘制边角
+        // 绘制取景区域边角
         drawCorner(canvas, frame);
         //绘制提示信息
         drawTextInfo(canvas, frame);
-        // Request another update at the animation interval, but only repaint the laser line,
-        // not the entire viewfinder mask.
-        postInvalidateDelayed(scannerAnimationDelay,
-                frame.left - POINT_SIZE,
-                frame.top - POINT_SIZE,
-                frame.right + POINT_SIZE,
-                frame.bottom + POINT_SIZE);
+        // 间隔更新取景区域
+        postInvalidateDelayed(scannerAnimationDelay, frame.left, frame.top, frame.right, frame.bottom);
     }
 
     /**
