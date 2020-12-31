@@ -1,15 +1,12 @@
 package com.king.zxing;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.DisplayMetrics;
-import android.util.Size;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
-import android.view.ViewConfiguration;
 
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.zxing.BarcodeFormat;
