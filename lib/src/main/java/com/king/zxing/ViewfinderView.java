@@ -96,6 +96,10 @@ public class ViewfinderView extends View {
      */
     private float labelTextPadding;
     /**
+     * 提示文本的宽度
+     */
+    private int labelTextWidth;
+    /**
      * 提示文本的位置
      */
     private TextLocation labelTextLocation;
@@ -288,6 +292,7 @@ public class ViewfinderView extends View {
         labelTextColor = array.getColor(R.styleable.ViewfinderView_labelTextColor, ContextCompat.getColor(context,R.color.viewfinder_text_color));
         labelTextSize = array.getDimension(R.styleable.ViewfinderView_labelTextSize, TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP,14f,getResources().getDisplayMetrics()));
         labelTextPadding = array.getDimension(R.styleable.ViewfinderView_labelTextPadding,TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,24,getResources().getDisplayMetrics()));
+        labelTextWidth = array.getDimensionPixelSize(R.styleable.ViewfinderView_labelTextWidth,0);
         labelTextLocation = TextLocation.getFromInt(array.getInt(R.styleable.ViewfinderView_labelTextLocation,0));
 
 //        isShowResultPoint = array.getBoolean(R.styleable.ViewfinderView_showResultPoint,false);
@@ -361,6 +366,10 @@ public class ViewfinderView extends View {
             frameHeight = size;
         }
 
+        if(labelTextWidth <= 0){
+            labelTextWidth = width - getPaddingLeft() - getPaddingRight();
+        }
+
         float leftOffsets = (width - frameWidth) / 2 + framePaddingLeft - framePaddingRight;
         float topOffsets = (height - frameHeight) / 2 + framePaddingTop - framePaddingBottom;
         switch (frameGravity){
@@ -420,7 +429,7 @@ public class ViewfinderView extends View {
             textPaint.setColor(labelTextColor);
             textPaint.setTextSize(labelTextSize);
             textPaint.setTextAlign(Paint.Align.CENTER);
-            StaticLayout staticLayout = new StaticLayout(labelText,textPaint,canvas.getWidth(), Layout.Alignment.ALIGN_NORMAL,1.0f,0.0f,true);
+            StaticLayout staticLayout = new StaticLayout(labelText,textPaint,labelTextWidth, Layout.Alignment.ALIGN_NORMAL,1.2f,0.0f,true);
             if(labelTextLocation == TextLocation.BOTTOM){
                 canvas.translate(frame.left + frame.width() / 2,frame.bottom + labelTextPadding);
             }else{

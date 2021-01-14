@@ -8,6 +8,7 @@
         <attr name="labelTextColor" format="color"/>
         <attr name="labelTextSize" format="dimension"/>
         <attr name="labelTextPadding" format="dimension"/>
+        <attr name="labelTextWidth" format="dimension"/>
         <attr name="labelTextLocation" format="enum">
             <enum name="top" value="0"/>
             <enum name="bottom" value="1"/>
