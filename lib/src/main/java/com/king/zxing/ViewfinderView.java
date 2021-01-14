@@ -458,7 +458,7 @@ public class ViewfinderView extends View {
      * @param frame
      */
     private void drawLaserScanner(Canvas canvas, Rect frame) {
-        if(laserStyle!=null){
+        if(laserStyle != null){
             paint.setColor(laserColor);
             switch (laserStyle){
                 case LINE://线

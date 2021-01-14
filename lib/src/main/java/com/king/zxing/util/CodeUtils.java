@@ -242,7 +242,7 @@ public final class CodeUtils {
 
     /**
      * 解析二维码图片
-     * @param bitmapPath
+     * @param bitmapPath 需要解析的图片路径
      * @return
      */
     public static String parseQRCode(String bitmapPath){
@@ -255,7 +255,7 @@ public final class CodeUtils {
 
     /**
      * 解析二维码图片
-     * @param bitmapPath
+     * @param bitmapPath 需要解析的图片路径
      * @return
      */
     public static Result parseQRCodeResult(String bitmapPath){
@@ -264,9 +264,9 @@ public final class CodeUtils {
 
     /**
      * 解析二维码图片
-     * @param bitmapPath
-     * @param reqWidth
-     * @param reqHeight
+     * @param bitmapPath 需要解析的图片路径
+     * @param reqWidth 请求目标宽度，如果实际图片宽度大于此值，会自动进行压缩处理，当 reqWidth 和 reqHeight都小于或等于0时，则不进行压缩处理
+     * @param reqHeight 请求目标高度，如果实际图片高度大于此值，会自动进行压缩处理，当 reqWidth 和 reqHeight都小于或等于0时，则不进行压缩处理
      * @return
      */
     public static Result parseQRCodeResult(String bitmapPath,int reqWidth,int reqHeight){
@@ -275,7 +275,7 @@ public final class CodeUtils {
 
     /**
      * 解析一维码/二维码图片
-     * @param bitmapPath
+     * @param bitmapPath 需要解析的图片路径
      * @return
      */
     public static String parseCode(String bitmapPath){
@@ -284,7 +284,7 @@ public final class CodeUtils {
 
     /**
      * 解析一维码/二维码图片
-     * @param bitmapPath
+     * @param bitmapPath 需要解析的图片路径
      * @param hints 解析编码类型
      * @return
      */
@@ -308,9 +308,9 @@ public final class CodeUtils {
 
     /**
      * 解析一维码/二维码图片
-     * @param bitmapPath
-     * @param reqWidth
-     * @param reqHeight
+     * @param bitmapPath 需要解析的图片路径
+     * @param reqWidth 请求目标宽度，如果实际图片宽度大于此值，会自动进行压缩处理，当 reqWidth 和 reqHeight都小于或等于0时，则不进行压缩处理
+     * @param reqHeight 请求目标高度，如果实际图片高度大于此值，会自动进行压缩处理，当 reqWidth 和 reqHeight都小于或等于0时，则不进行压缩处理
      * @param hints 解析编码类型
      * @return
      */
@@ -366,29 +366,35 @@ public final class CodeUtils {
      * @return
      */
     private static Bitmap compressBitmap(String path,int reqWidth,int reqHeight){
+        if(reqWidth > 0 && reqHeight > 0){//都大于进行判断是否压缩
 
-        BitmapFactory.Options newOpts = new BitmapFactory.Options();
-        // 开始读入图片，此时把options.inJustDecodeBounds 设回true了
-        newOpts.inJustDecodeBounds = true;//获取原始图片大小
-        BitmapFactory.decodeFile(path, newOpts);// 此时返回bm为空
-        float width = newOpts.outWidth;
-        float height = newOpts.outHeight;
-        // 缩放比，由于是固定比例缩放，只用高或者宽其中一个数据进行计算即可
-        int wSize = 1;// wSize=1表示不缩放
-        if (width > reqWidth) {// 如果宽度大的话根据宽度固定大小缩放
-            wSize = (int) (width / reqWidth);
+            BitmapFactory.Options newOpts = new BitmapFactory.Options();
+            // 开始读入图片，此时把options.inJustDecodeBounds 设回true了
+            newOpts.inJustDecodeBounds = true;//获取原始图片大小
+            BitmapFactory.decodeFile(path, newOpts);// 此时返回bm为空
+            float width = newOpts.outWidth;
+            float height = newOpts.outHeight;
+            // 缩放比，由于是固定比例缩放，只用高或者宽其中一个数据进行计算即可
+            int wSize = 1;// wSize=1表示不缩放
+            if (width > reqWidth) {// 如果宽度大的话根据宽度固定大小缩放
+                wSize = (int) (width / reqWidth);
+            }
+            int hSize = 1;// wSize=1表示不缩放
+            if (height > reqHeight) {// 如果高度高的话根据宽度固定大小缩放
+                hSize = (int) (height / reqHeight);
+            }
+            int size = Math.max(wSize,hSize);
+            if (size <= 0)
+                size = 1;
+            newOpts.inSampleSize = size;// 设置缩放比例
+            // 重新读入图片，注意此时已经把options.inJustDecodeBounds 设回false了
+            newOpts.inJustDecodeBounds = false;
+
+            return BitmapFactory.decodeFile(path, newOpts);
+
         }
-        int hSize = 1;// wSize=1表示不缩放
-        if (height > reqHeight) {// 如果高度高的话根据宽度固定大小缩放
-            hSize = (int) (height / reqHeight);
-        }
-        int size = Math.max(wSize,hSize);
-        if (size <= 0)
-            size = 1;
-        newOpts.inSampleSize = size;// 设置缩放比例
-        // 重新读入图片，注意此时已经把options.inJustDecodeBounds 设回false了
-        newOpts.inJustDecodeBounds = false;
-        return BitmapFactory.decodeFile(path, newOpts);
+
+        return BitmapFactory.decodeFile(path);
     }
 
 
