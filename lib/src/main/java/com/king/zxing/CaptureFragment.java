@@ -78,11 +78,18 @@ public class CaptureFragment extends Fragment implements CameraScan.OnScanResult
         if(ivFlashlightId != 0){
             ivFlashlight = mRootView.findViewById(ivFlashlightId);
             if(ivFlashlight != null){
-                ivFlashlight.setOnClickListener(v -> toggleTorchState());
+                ivFlashlight.setOnClickListener(v -> onClickFlashlight());
             }
         }
         initCameraScan();
         startCamera();
+    }
+
+    /**
+     * 点击手电筒
+     */
+    protected void onClickFlashlight(){
+        toggleTorchState();
     }
 
     /**

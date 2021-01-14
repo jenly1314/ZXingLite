@@ -65,11 +65,18 @@ public class CaptureActivity extends AppCompatActivity implements CameraScan.OnS
         if(ivFlashlightId != 0){
             ivFlashlight = findViewById(ivFlashlightId);
             if(ivFlashlight != null){
-                ivFlashlight.setOnClickListener(v -> toggleTorchState());
+                ivFlashlight.setOnClickListener(v -> onClickFlashlight());
             }
         }
         initCameraScan();
         startCamera();
+    }
+
+    /**
+     * 点击手电筒
+     */
+    protected void onClickFlashlight(){
+        toggleTorchState();
     }
 
     /**
