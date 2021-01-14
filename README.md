@@ -3,7 +3,7 @@
 ![Image](app/src/main/ic_launcher-web.png)
 
 [![Download](https://img.shields.io/badge/download-App-blue.svg)](https://raw.githubusercontent.com/jenly1314/ZXingLite/master/app/release/app-release.apk)
-[![JCenter](https://img.shields.io/badge/JCenter-2.0.1-46C018.svg)](https://bintray.com/beta/#/jenly/maven/zxing-lite)
+[![JCenter](https://img.shields.io/badge/JCenter-2.0.2-46C018.svg)](https://bintray.com/beta/#/jenly/maven/zxing-lite)
 [![JitPack](https://jitpack.io/v/jenly1314/ZXingLite.svg)](https://jitpack.io/#jenly1314/ZXingLite)
 [![CI](https://travis-ci.org/jenly1314/ZXingLite.svg?branch=master)](https://travis-ci.org/jenly1314/ZXingLite)
 [![CircleCI](https://circleci.com/gh/jenly1314/ZXingLite.svg?style=svg)](https://circleci.com/gh/jenly1314/ZXingLite)
@@ -31,6 +31,7 @@ ZXingLite for Android 是ZXing的精简版，基于ZXing库优化扫码和生成
 | labelTextColor | color |<font color=#C0C0C0>#FFC0C0C0</font>| 提示文本字体颜色 |
 | labelTextSize | dimension |14sp| 提示文本字体大小 |
 | labelTextPadding | dimension |24dp| 提示文本距离扫描区的间距 |
+| labelTextWidth | dimension | | 提示文本的宽度，默认为View的宽度 |
 | labelTextLocation | enum |bottom| 提示文本显示位置 |
 | frameWidth | dimension |  | 扫码框宽度 |
 | frameHeight | dimension |  | 扫码框高度 |
@@ -58,7 +59,7 @@ ZXingLite for Android 是ZXing的精简版，基于ZXing库优化扫码和生成
 最新版本
 ```gradle
 //AndroidX 版本
-implementation 'com.king.zxing:zxing-lite:2.0.1'
+implementation 'com.king.zxing:zxing-lite:2.0.2'
 
 ```
 
@@ -238,6 +239,9 @@ compileOptions {
 更多使用详情，请查看[app](app)中的源码使用示例或直接查看[API帮助文档](https://jenly1314.github.io/projects/ZXingLite/doc/)
 
 ## 版本记录
+
+#### v2.0.2：2021-1-14
+* **ViewfinderView** 新增 **labelTextWidth** 属性
 
 #### v2.0.1：2020-12-30
 * 更新CameraX至v1.0.0-rc01
