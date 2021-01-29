@@ -30,7 +30,7 @@ import androidx.annotation.FloatRange;
  * 识别区域可设置的方式有如下几种：
  * {@link #setFullAreaScan(boolean)} 设置是否支持全区域扫码识别，优先级比识别区域高
  * {@link #setAnalyzeAreaRect(Rect)} 设置需要分析识别区域，优先级比识别区域比例高，当设置了指定的分析区域时，识别区域比例和识别区域偏移量相关参数都将无效
- * {@link #setAreaRectRatio(float)} 设置识别区域比例，默认0.9，设置的比例最终会在预览区域裁剪基于此比例的一个矩形进行扫码识别，优先级最低
+ * {@link #setAreaRectRatio(float)} 设置识别区域比例，默认{@link #DEFAULT_AREA_RECT_RATIO}，设置的比例最终会在预览区域裁剪基于此比例的一个矩形进行扫码识别，优先级最低
  *
  * 因为{@link androidx.camera.view.PreviewView}的预览区域是经过裁剪的，所以这里的区域并不是用户所能预览到的区域，而是指Camera预览的真实区域，
  * 您还可以通过{@link CameraScan#setCameraConfig(CameraConfig)}去自定义配置{@link CameraConfig}的配置信息控制预览相关配置信息
@@ -229,7 +229,7 @@ public class DecodeConfig {
      * 识别区域可设置的方式有如下几种：
      * {@link #setFullAreaScan(boolean)} 设置是否支持全区域扫码识别，优先级比识别区域高
      * {@link #setAnalyzeAreaRect(Rect)} 设置需要分析识别区域，优先级比识别区域比例高，当设置了指定的分析区域时，识别区域比例和识别区域偏移量相关参数都将无效
-     * {@link #setAreaRectRatio(float)} 设置识别区域比例，默认0.9，设置的比例最终会在预览区域裁剪基于此比例的一个矩形进行扫码识别，优先级最低
+     * {@link #setAreaRectRatio(float)} 设置识别区域比例，默认{@link #DEFAULT_AREA_RECT_RATIO}，设置的比例最终会在预览区域裁剪基于此比例的一个矩形进行扫码识别，优先级最低
      *
      * 因为{@link androidx.camera.view.PreviewView}的预览区域是经过裁剪的，所以这里的区域并不是用户所能预览到的区域，而是指Camera预览的真实区域，
      * 您还可以通过{@link CameraScan#setCameraConfig(CameraConfig)}去自定义配置{@link CameraConfig}的配置信息控制预览相关配置信息
@@ -258,7 +258,7 @@ public class DecodeConfig {
      * 识别区域可设置的方式有如下几种：
      * {@link #setFullAreaScan(boolean)} 设置是否支持全区域扫码识别，优先级比识别区域高
      * {@link #setAnalyzeAreaRect(Rect)} 设置需要分析识别区域，优先级比识别区域比例高，当设置了指定的分析区域时，识别区域比例和识别区域偏移量相关参数都将无效
-     * {@link #setAreaRectRatio(float)} 设置识别区域比例，默认0.9，设置的比例最终会在预览区域裁剪基于此比例的一个矩形进行扫码识别，优先级最低
+     * {@link #setAreaRectRatio(float)} 设置识别区域比例，默认{@link #DEFAULT_AREA_RECT_RATIO}，设置的比例最终会在预览区域裁剪基于此比例的一个矩形进行扫码识别，优先级最低
      *
      * 因为{@link androidx.camera.view.PreviewView}的预览区域是经过裁剪的，所以这里的区域并不是用户所能预览到的区域，而是指Camera预览的真实区域，
      * 您还可以通过{@link CameraScan#setCameraConfig(CameraConfig)}去自定义配置{@link CameraConfig}的配置信息控制预览相关配置信息
@@ -272,7 +272,7 @@ public class DecodeConfig {
     }
 
     /**
-     * 识别区域比例，默认0.9，设置的比例最终会在预览区域裁剪基于此比例的一个矩形进行扫码识别
+     * 识别区域比例，默认{@link #DEFAULT_AREA_RECT_RATIO}，设置的比例最终会在预览区域裁剪基于此比例的一个矩形进行扫码识别
      * @return
      */
     public float getAreaRectRatio() {
@@ -280,13 +280,13 @@ public class DecodeConfig {
     }
 
     /**
-     * 设置识别区域比例，默认0.9，设置的比例最终会在预览区域裁剪基于此比例的一个矩形进行扫码识别，优先级最低
+     * 设置识别区域比例，默认{@link #DEFAULT_AREA_RECT_RATIO}，设置的比例最终会在预览区域裁剪基于此比例的一个矩形进行扫码识别，优先级最低
      * @param areaRectRatio
      *
      * 识别区域可设置的方式有如下几种：
      * {@link #setFullAreaScan(boolean)} 设置是否支持全区域扫码识别，优先级比识别区域高
      * {@link #setAnalyzeAreaRect(Rect)} 设置需要分析识别区域，优先级比识别区域比例高，当设置了指定的分析区域时，识别区域比例和识别区域偏移量相关参数都将无效
-     * {@link #setAreaRectRatio(float)} 设置识别区域比例，默认0.9，设置的比例最终会在预览区域裁剪基于此比例的一个矩形进行扫码识别，优先级最低
+     * {@link #setAreaRectRatio(float)} 设置识别区域比例，默认{@link #DEFAULT_AREA_RECT_RATIO}，设置的比例最终会在预览区域裁剪基于此比例的一个矩形进行扫码识别，优先级最低
      *
      * 因为{@link androidx.camera.view.PreviewView}的预览区域是经过裁剪的，所以这里的区域并不是用户所能预览到的区域，而是指Camera预览的真实区域，
      * 您还可以通过{@link CameraScan#setCameraConfig(CameraConfig)}去自定义配置{@link CameraConfig}的配置信息控制预览相关配置信息
