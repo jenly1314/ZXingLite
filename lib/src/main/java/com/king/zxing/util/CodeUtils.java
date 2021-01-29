@@ -297,6 +297,15 @@ public final class CodeUtils {
     }
 
     /**
+     * 解析二维码图片
+     * @param bitmap 解析的图片
+     * @return
+     */
+    public static String parseQRCode(Bitmap bitmap){
+        return parseCode(bitmap,DecodeFormatManager.QR_CODE_HINTS);
+    }
+
+    /**
      * 解析一维码/二维码图片
      * @param bitmap 解析的图片
      * @return
