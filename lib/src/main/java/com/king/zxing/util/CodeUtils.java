@@ -298,6 +298,29 @@ public final class CodeUtils {
 
     /**
      * 解析一维码/二维码图片
+     * @param bitmap 解析的图片
+     * @return
+     */
+    public static String parseCode(Bitmap bitmap){
+        return parseCode(bitmap,DecodeFormatManager.ALL_HINTS);
+    }
+
+    /**
+     * 解析一维码/二维码图片
+     * @param bitmap 解析的图片
+     * @param hints 解析编码类型
+     * @return
+     */
+    public static String parseCode(Bitmap bitmap,Map<DecodeHintType,Object> hints){
+        Result result = parseCodeResult(bitmap,hints);
+        if(result != null){
+            return result.getText();
+        }
+        return null;
+    }
+
+    /**
+     * 解析一维码/二维码图片
      * @param bitmapPath
      * @param hints 解析编码类型
      * @return
@@ -315,11 +338,39 @@ public final class CodeUtils {
      * @return
      */
     public static Result parseCodeResult(String bitmapPath,int reqWidth,int reqHeight, Map<DecodeHintType,Object> hints){
+        return parseCodeResult(compressBitmap(bitmapPath,reqWidth,reqHeight),hints);
+    }
+
+    /**
+     * 解析一维码/二维码图片
+     * @param bitmap 解析的图片
+     * @return
+     */
+    public static Result parseCodeResult(Bitmap bitmap){
+        return parseCodeResult(getRGBLuminanceSource(bitmap),DecodeFormatManager.ALL_HINTS);
+    }
+
+    /**
+     * 解析一维码/二维码图片
+     * @param bitmap 解析的图片
+     * @param hints 解析编码类型
+     * @return
+     */
+    public static Result parseCodeResult(Bitmap bitmap,Map<DecodeHintType,Object> hints){
+        return parseCodeResult(getRGBLuminanceSource(bitmap),hints);
+    }
+
+    /**
+     * 解析一维码/二维码图片
+     * @param source
+     * @param hints
+     * @return
+     */
+    public static Result parseCodeResult(LuminanceSource source, Map<DecodeHintType,Object> hints){
         Result result = null;
         MultiFormatReader reader = new MultiFormatReader();
         try{
             reader.setHints(hints);
-            RGBLuminanceSource source = getRGBLuminanceSource(compressBitmap(bitmapPath,reqWidth,reqHeight));
             if (source != null) {
                 result = decodeInternal(reader,source);
                 if(result == null){
