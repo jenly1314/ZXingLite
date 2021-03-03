@@ -81,7 +81,7 @@ public abstract class CameraScan implements ICamera,ICameraControl {
     public abstract CameraScan setCameraConfig(CameraConfig cameraConfig);
 
     /**
-     * 设置是否分析图像
+     * 设置是否分析图像，通过此方法可以动态控制是否分析图像，常用于中断扫码识别。如：连扫时，扫到结果，然后停止分析图像
      * @param analyze
      */
     public abstract CameraScan setAnalyzeImage(boolean analyze);
@@ -136,6 +136,16 @@ public abstract class CameraScan implements ICamera,ICameraControl {
     public abstract CameraScan setBrightLightLux(float lightLux);
 
     public interface OnScanResultCallback{
+        /**
+         * 扫码结果回调
+         * @param result
+         * @return 返回false表示不拦截，将关闭扫码界面并将结果返回给调用界面；
+         *  返回true表示拦截，需自己处理逻辑。当isAnalyze为true时，默认会继续分析图像（也就是连扫）。
+         *  如果只是想拦截扫码结果回调，并不想继续分析图像（不想连扫），请在拦截扫码逻辑处通过调
+         *  用{@link CameraScan#setAnalyzeImage(boolean)}，
+         *  因为{@link CameraScan#setAnalyzeImage(boolean)}方法能动态控制是否继续分析图像。
+         *
+         */
         boolean onScanResultCallback(Result result);
     }
 

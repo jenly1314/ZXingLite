@@ -297,7 +297,11 @@ public class DefaultCameraScan extends CameraScan {
 
     private void scanResultCallback(Result result){
         if(mOnScanResultCallback != null && mOnScanResultCallback.onScanResultCallback(result)){
-            //如果拦截了结果，则重置分析结果状态，直接可以连扫
+            /*
+             * 如果拦截了结果，则重置分析结果状态，并当isAnalyze为true时，默认会继续分析图像（也就是连扫）。
+             * 如果只是想拦截扫码结果回调，并不想继续分析图像（不想连扫），请在拦截扫码逻辑处通过调用
+             * setAnalyzeImage(false)，因为setAnalyzeImage方法能动态控制是否继续分析图像。
+             */
             isAnalyzeResult = false;
             return;
         }
