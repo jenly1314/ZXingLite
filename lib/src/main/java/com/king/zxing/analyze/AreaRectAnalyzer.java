@@ -61,6 +61,7 @@ public abstract class AreaRectAnalyzer extends ImageAnalyzer {
 
     }
 
-    abstract Result analyze(byte[] data, int dataWidth, int dataHeight,int left,int top,int width,int height);
+    @Nullable
+    public abstract Result analyze(byte[] data, int dataWidth, int dataHeight,int left,int top,int width,int height);
 
 }
