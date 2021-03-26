@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.DisplayMetrics;
+import android.util.Size;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
@@ -20,6 +21,7 @@ import com.king.zxing.util.LogUtils;
 import java.util.concurrent.Executors;
 
 import androidx.annotation.FloatRange;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.camera.core.Camera;
 import androidx.camera.core.CameraSelector;
@@ -94,8 +96,9 @@ public class DefaultCameraScan extends CameraScan {
     private boolean isClickTap;
     private float mDownX;
     private float mDownY;
+    private Size mTargetSize;
 
-    public DefaultCameraScan(FragmentActivity activity, PreviewView previewView){
+    public DefaultCameraScan(@NonNull FragmentActivity activity,@NonNull  PreviewView previewView){
         this.mFragmentActivity = activity;
         this.mLifecycleOwner = activity;
         this.mContext = activity;
@@ -103,7 +106,7 @@ public class DefaultCameraScan extends CameraScan {
         initData();
     }
 
-    public DefaultCameraScan(Fragment fragment, PreviewView previewView){
+    public DefaultCameraScan(@NonNull Fragment fragment,@NonNull PreviewView previewView){
         this.mFragmentActivity = fragment.getActivity();
         this.mLifecycleOwner = fragment;
         this.mContext = fragment.getContext();
@@ -127,10 +130,15 @@ public class DefaultCameraScan extends CameraScan {
     private void initData(){
         mResultLiveData = new MutableLiveData<>();
         mResultLiveData.observe(mLifecycleOwner, result -> {
-            handleAnalyzeResult(result);
+            if(result != null){
+                handleAnalyzeResult(result);
+            }else if(mOnScanResultCallback != null){
+                mOnScanResultCallback.onScanResultFailure();
+            }
         });
 
         mOrientation = mContext.getResources().getConfiguration().orientation;
+
         ScaleGestureDetector scaleGestureDetector = new ScaleGestureDetector(mContext, mOnScaleGestureListener);
         mPreviewView.setOnTouchListener((v, event) -> {
             handlePreviewViewClickTap(event);
@@ -143,6 +151,15 @@ public class DefaultCameraScan extends CameraScan {
         DisplayMetrics displayMetrics = mContext.getResources().getDisplayMetrics();
         mScreenWidth = displayMetrics.widthPixels;
         mScreenHeight = displayMetrics.heightPixels;
+
+        LogUtils.d(String.format("screenSize: %d * %d",mScreenWidth,mScreenHeight));
+        //因为为了保持流畅性和性能，限制在1080p，在此前提下尽可能的找到屏幕接近的分辨率
+        if(mScreenWidth < mScreenHeight){
+            mTargetSize = new Size(mScreenWidth,mScreenWidth / 9 * 16);
+        }else{
+            mTargetSize = new Size(mScreenHeight / 9 * 16, mScreenHeight);
+        }
+
         mBeepManager = new BeepManager(mContext);
         mAmbientLightManager = new AmbientLightManager(mContext);
         if(mAmbientLightManager != null){
@@ -223,20 +240,18 @@ public class DefaultCameraScan extends CameraScan {
                 Preview preview = mCameraConfig.options(new Preview.Builder());
 
                 //相机选择器
-                CameraSelector cameraSelector = mCameraConfig.options(new CameraSelector.Builder()
-                        .requireLensFacing(LENS_FACING_BACK));
+                CameraSelector cameraSelector = mCameraConfig.options(new CameraSelector.Builder());
                 //设置SurfaceProvider
                 preview.setSurfaceProvider(mPreviewView.getSurfaceProvider());
 
                 //图像分析
                 ImageAnalysis imageAnalysis = mCameraConfig.options(new ImageAnalysis.Builder()
+                        .setTargetResolution(mTargetSize)
                         .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST));
                 imageAnalysis.setAnalyzer(Executors.newSingleThreadExecutor(), image -> {
                     if(isAnalyze && !isAnalyzeResult && mAnalyzer != null){
                         Result result = mAnalyzer.analyze(image,mOrientation);
-                        if(result != null){
-                            mResultLiveData.postValue(result);
-                        }
+                        mResultLiveData.postValue(result);
                     }
                     image.close();
                 });
@@ -257,6 +272,7 @@ public class DefaultCameraScan extends CameraScan {
      * @param result
      */
     private synchronized void handleAnalyzeResult(Result result){
+
         if(isAnalyzeResult || !isAnalyze){
             return;
         }
@@ -332,11 +348,6 @@ public class DefaultCameraScan extends CameraScan {
         return this;
     }
 
-    /**
-     * 设置分析器，如果内置的一些分析器不满足您的需求，你也可以自定义{@link Analyzer}，
-     * 自定义时，切记需在{@link #startCamera()}之前调用才有效
-     * @param analyzer
-     */
     @Override
     public CameraScan setAnalyzer(Analyzer analyzer) {
         mAnalyzer = analyzer;

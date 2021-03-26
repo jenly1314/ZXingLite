@@ -86,10 +86,6 @@ public class ViewfinderView extends View {
      * 扫码框四角颜色
      */
     private int cornerColor;
-//    /**
-//     * 结果点颜色
-//     */
-//    private int resultPointColor;
 
     /**
      * 提示文本与扫码框的边距
@@ -124,10 +120,6 @@ public class ViewfinderView extends View {
      * 扫描线结束位置
      */
     public int scannerEnd = 0;
-    /**
-     * 是否显示结果点
-     */
-    private boolean isShowResultPoint;
 
     /**
      * 扫码框宽
@@ -286,7 +278,6 @@ public class ViewfinderView extends View {
         frameColor = array.getColor(R.styleable.ViewfinderView_frameColor, ContextCompat.getColor(context,R.color.viewfinder_frame));
         cornerColor = array.getColor(R.styleable.ViewfinderView_cornerColor, ContextCompat.getColor(context,R.color.viewfinder_corner));
         laserColor = array.getColor(R.styleable.ViewfinderView_laserColor, ContextCompat.getColor(context,R.color.viewfinder_laser));
-//        resultPointColor = array.getColor(R.styleable.ViewfinderView_resultPointColor, ContextCompat.getColor(context,R.color.viewfinder_result_point_color));
 
         labelText = array.getString(R.styleable.ViewfinderView_labelText);
         labelTextColor = array.getColor(R.styleable.ViewfinderView_labelTextColor, ContextCompat.getColor(context,R.color.viewfinder_text_color));
@@ -294,8 +285,6 @@ public class ViewfinderView extends View {
         labelTextPadding = array.getDimension(R.styleable.ViewfinderView_labelTextPadding,TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,24,getResources().getDisplayMetrics()));
         labelTextWidth = array.getDimensionPixelSize(R.styleable.ViewfinderView_labelTextWidth,0);
         labelTextLocation = TextLocation.getFromInt(array.getInt(R.styleable.ViewfinderView_labelTextLocation,0));
-
-//        isShowResultPoint = array.getBoolean(R.styleable.ViewfinderView_showResultPoint,false);
 
         frameWidth = array.getDimensionPixelSize(R.styleable.ViewfinderView_frameWidth,0);
         frameHeight = array.getDimensionPixelSize(R.styleable.ViewfinderView_frameHeight,0);
@@ -589,21 +578,10 @@ public class ViewfinderView extends View {
         invalidate();
     }
 
-    public boolean isShowResultPoint() {
-        return isShowResultPoint;
-    }
-
     public void setLaserStyle(LaserStyle laserStyle) {
         this.laserStyle = laserStyle;
     }
 
-    /**
-     * 设置显示结果点
-     * @param showResultPoint 是否显示结果点
-     */
-    public void setShowResultPoint(boolean showResultPoint) {
-        isShowResultPoint = showResultPoint;
-    }
 
 
 

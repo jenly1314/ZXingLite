@@ -3,7 +3,7 @@
 ![Image](app/src/main/ic_launcher-web.png)
 
 [![Download](https://img.shields.io/badge/download-App-blue.svg)](https://raw.githubusercontent.com/jenly1314/ZXingLite/master/app/release/app-release.apk)
-[![JCenter](https://img.shields.io/badge/JCenter-2.0.2-46C018.svg)](https://bintray.com/beta/#/jenly/maven/zxing-lite)
+[![JCenter](https://img.shields.io/badge/JCenter-2.0.3-46C018.svg)](https://bintray.com/beta/#/jenly/maven/zxing-lite)
 [![JitPack](https://jitpack.io/v/jenly1314/ZXingLite.svg)](https://jitpack.io/#jenly1314/ZXingLite)
 [![CI](https://travis-ci.org/jenly1314/ZXingLite.svg?branch=master)](https://travis-ci.org/jenly1314/ZXingLite)
 [![CircleCI](https://circleci.com/gh/jenly1314/ZXingLite.svg?style=svg)](https://circleci.com/gh/jenly1314/ZXingLite)
@@ -59,16 +59,16 @@ ZXingLite for Android 是ZXing的精简版，基于ZXing库优化扫码和生成
 最新版本
 ```gradle
 //AndroidX 版本
-implementation 'com.king.zxing:zxing-lite:2.0.2'
+implementation 'com.king.zxing:zxing-lite:2.0.3'
 
 ```
 
-以前 **v1.x** 旧版本
+**v1.x** 旧版本
 ```gradle
 //AndroidX 版本
 implementation 'com.king.zxing:zxing-lite:1.1.9-androidx'
 
-//Android 版本
+//Android Support 版本
 implementation 'com.king.zxing:zxing-lite:1.1.9'
 ```
 
@@ -239,6 +239,10 @@ compileOptions {
 更多使用详情，请查看[app](app)中的源码使用示例或直接查看[API帮助文档](https://jenly1314.github.io/projects/ZXingLite/doc/)
 
 ## 版本记录
+
+#### v2.0.3：2021-3-26
+* 更新CameraX至v1.0.0-rc03
+* 优化一些默认配置
 
 #### v2.0.2：2021-1-14
 * **ViewfinderView** 新增 **labelTextWidth** 属性

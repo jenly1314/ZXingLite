@@ -10,6 +10,7 @@ import com.king.zxing.analyze.AreaRectAnalyzer;
 import com.king.zxing.analyze.BarcodeFormatAnalyzer;
 import com.king.zxing.analyze.ImageAnalyzer;
 import com.king.zxing.analyze.MultiFormatAnalyzer;
+import com.king.zxing.util.LogUtils;
 
 import androidx.annotation.Nullable;
 import androidx.camera.core.CameraSelector;
@@ -82,12 +83,22 @@ public abstract class CameraScan implements ICamera,ICameraControl {
 
     /**
      * 设置是否分析图像，通过此方法可以动态控制是否分析图像，常用于中断扫码识别。如：连扫时，扫到结果，然后停止分析图像
+     *
+     * 1. 因为分析图像默认为true，如果想支持连扫，在{@link OnScanResultCallback#onScanResultCallback(Result)}返回true拦截即可。
+     * 当连扫的处理逻辑比较复杂时，请在处理逻辑前通过调用setAnalyzeImage(false)来停止分析图像，
+     * 等逻辑处理完后再调用getCameraScan().setAnalyzeImage(true)来继续分析图像。
+     *
+     * 2. 如果只是想拦截扫码结果回调自己处理逻辑，但并不想继续分析图像（即不想连扫），可通过
+     * 调用getCameraScan().setAnalyzeImage(false)来停止分析图像。
      * @param analyze
      */
     public abstract CameraScan setAnalyzeImage(boolean analyze);
 
     /**
-     * 设置分析器，内置了一些{@link Analyzer}的实现类如下
+     * 设置分析器，如果内置的一些分析器不满足您的需求，你也可以自定义{@link Analyzer}，
+     * 自定义时，切记需在{@link #startCamera()}之前调用才有效。
+     *
+     * 内置了一些{@link Analyzer}的实现类如下：
      * @see {@link MultiFormatAnalyzer}
      * @see {@link AreaRectAnalyzer}
      * @see {@link ImageAnalyzer}
@@ -147,9 +158,21 @@ public abstract class CameraScan implements ICamera,ICameraControl {
          *
          */
         boolean onScanResultCallback(Result result);
+
+        /**
+         * 扫码结果识别失败时触发此回调方法
+         */
+        default void onScanResultFailure(){
+
+        }
+
     }
 
-
+    /**
+     * 解析扫码结果
+     * @param data
+     * @return
+     */
     @Nullable
     public static String parseScanResult(Intent data){
         if(data != null){

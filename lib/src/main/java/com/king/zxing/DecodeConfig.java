@@ -301,7 +301,7 @@ public class DecodeConfig {
     }
 
     /**
-     * 识别区域垂直方向偏移量
+     * 识别区域垂直方向偏移量，支持负数，大于0时，居中心向下偏移，小于0时，居中心向上偏移
      * @return
      */
     public int getAreaRectVerticalOffset() {
@@ -309,7 +309,7 @@ public class DecodeConfig {
     }
 
     /**
-     * 设置识别区域垂直方向偏移量
+     * 设置识别区域垂直方向偏移量，支持负数，大于0时，居中心向下偏移，小于0时，居中心向上偏移
      * @param areaRectVerticalOffset
      * @return
      */
@@ -319,7 +319,7 @@ public class DecodeConfig {
     }
 
     /**
-     * 识别区域水平方向偏移量
+     * 识别区域水平方向偏移量，支持负数，大于0时，居中心向右偏移，小于0时，居中心向左偏移
      * @return
      */
     public int getAreaRectHorizontalOffset() {
@@ -327,7 +327,7 @@ public class DecodeConfig {
     }
 
     /**
-     * 设置识别区域水平方向偏移量
+     * 设置识别区域水平方向偏移量，支持负数，大于0时，居中心向右偏移，小于0时，居中心向左偏移
      * @param areaRectHorizontalOffset
      * @return
      */

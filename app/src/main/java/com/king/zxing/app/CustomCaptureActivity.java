@@ -97,7 +97,16 @@ public class CustomCaptureActivity extends CaptureActivity {
         if(isContinuousScan){
             showToast(result.getText());
         }
-        //如果支持连扫，返回true即可
+        /*
+         * 因为setAnalyzeImage方法能动态控制是否继续分析图像。
+         *
+         * 1. 因为分析图像默认为true，如果想支持连扫，返回true即可。
+         * 当连扫的处理逻辑比较复杂时，请在处理逻辑前调用getCameraScan().setAnalyzeImage(false)，
+         * 来停止分析图像，等逻辑处理完后再调用getCameraScan().setAnalyzeImage(true)来继续分析图像。
+         *
+         * 2. 如果只是想拦截扫码结果回调自己处理逻辑，但并不想继续分析图像（即不想连扫），可通过
+         * 调用getCameraScan().setAnalyzeImage(false)来停止分析图像。
+         */
         return isContinuousScan;
     }
 

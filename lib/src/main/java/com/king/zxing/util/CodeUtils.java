@@ -185,7 +185,7 @@ public final class CodeUtils {
             }
 
             return bitmap;
-        } catch (WriterException e) {
+        } catch (Exception e) {
             LogUtils.w(e.getMessage());
         }
 
@@ -224,8 +224,9 @@ public final class CodeUtils {
 
         //logo大小为二维码整体大小
         float scaleFactor = srcWidth * ratio / logoWidth;
-        Bitmap bitmap = Bitmap.createBitmap(srcWidth, srcHeight, Bitmap.Config.ARGB_8888);
+        Bitmap bitmap;
         try {
+            bitmap = Bitmap.createBitmap(srcWidth, srcHeight, Bitmap.Config.ARGB_8888);
             Canvas canvas = new Canvas(bitmap);
             canvas.drawBitmap(src, 0, 0, null);
             canvas.scale(scaleFactor, scaleFactor, srcWidth / 2, srcHeight / 2);
