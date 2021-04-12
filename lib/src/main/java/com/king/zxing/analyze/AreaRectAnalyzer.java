@@ -41,7 +41,6 @@ public abstract class AreaRectAnalyzer extends ImageAnalyzer {
     @Nullable
     @Override
     public Result analyze(byte[] data, int width, int height) {
-        LogUtils.d(String.format("width:%d, height:%d",width,height));
         if(mDecodeConfig != null){
             if(mDecodeConfig.isFullAreaScan()){
                 //mDecodeConfig为空或者支持全区域扫码识别时，直接使用全区域进行扫码识别
