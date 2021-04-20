@@ -641,8 +641,9 @@ public final class CodeUtils {
             return null;
         }
 
-        Bitmap bitmap = Bitmap.createBitmap(srcWidth, srcHeight + textSize + offset * 2, Bitmap.Config.ARGB_8888);
+        Bitmap bitmap;
         try {
+            bitmap = Bitmap.createBitmap(srcWidth, srcHeight + textSize + offset * 2, Bitmap.Config.ARGB_8888);
             Canvas canvas = new Canvas(bitmap);
             canvas.drawBitmap(src, 0, 0, null);
             TextPaint paint = new TextPaint();
