@@ -104,7 +104,7 @@ public class AmbientLightManager implements SensorEventListener {
      * @param lightLux
      */
     public void setBrightLightLux(float lightLux){
-        this.darkLightLux = lightLux;
+        this.brightLightLux = lightLux;
     }
 
     @Override
