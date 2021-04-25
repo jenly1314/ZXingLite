@@ -38,7 +38,7 @@ public class AmbientLightManager implements SensorEventListener {
      */
     private float darkLightLux = DARK_LUX;
     /**
-     * 光线足够亮时，默认：照度450 lux
+     * 光线足够亮时，默认：照度100 lux
      */
     private float brightLightLux = BRIGHT_LUX;
 

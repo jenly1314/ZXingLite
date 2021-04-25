@@ -103,7 +103,7 @@ public class LogUtils {
         String tag = TAG_FORMAT;
         String callerClazzName = caller.getClassName();
         callerClazzName = callerClazzName.substring(callerClazzName.lastIndexOf(".") + 1);
-        tag = String.format(tag,new Object[] { callerClazzName, caller.getMethodName(),caller.getFileName(),Integer.valueOf(caller.getLineNumber()) });
+        tag = String.format(tag,callerClazzName, caller.getMethodName(),caller.getFileName(),caller.getLineNumber());
         return new StringBuilder().append(TAG).append(VERTICAL).append(tag).toString();
     }
 
