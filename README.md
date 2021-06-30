@@ -3,6 +3,7 @@
 ![Image](app/src/main/ic_launcher-web.png)
 
 [![Download](https://img.shields.io/badge/download-App-blue.svg)](https://raw.githubusercontent.com/jenly1314/ZXingLite/master/app/release/app-release.apk)
+[![MavenCentral](https://img.shields.io/maven-central/v/com.github.jenly1314/zxing-lite)](https://repo1.maven.org/maven2/com/github/jenly1314/zxing-lite)
 [![JCenter](https://img.shields.io/badge/JCenter-2.0.3-46C018.svg)](https://bintray.com/beta/#/jenly/maven/zxing-lite)
 [![JitPack](https://jitpack.io/v/jenly1314/ZXingLite.svg)](https://jitpack.io/#jenly1314/ZXingLite)
 [![CI](https://travis-ci.org/jenly1314/ZXingLite.svg?branch=master)](https://travis-ci.org/jenly1314/ZXingLite)
@@ -54,9 +55,31 @@ ZXingLite for Android 是ZXing的精简版，基于ZXing库优化扫码和生成
 
 ## 引入
 
+> 由于2021年2月3日 **JFrog宣布将关闭Bintray和JCenter，计划在2022年2月完全关闭。** 所以后续版本不再发布至 **JCenter**
+
 ### Gradle:
 
-最新版本
+1. 在Project的 **build.gradle** 里面添加远程仓库  
+          
+```gradle
+allprojects {
+    repositories {
+        //...
+        mavenCentral()
+    }
+}
+```
+
+2. 在Module的 **build.gradle** 里面添加引入依赖项
+
+```gradle
+//AndroidX 版本
+implementation 'com.github.jenly1314:zxing-lite:2.1.0'
+
+```
+
+
+以前发布至JCenter的版本
 ```gradle
 //AndroidX 版本
 implementation 'com.king.zxing:zxing-lite:2.0.3'
@@ -70,17 +93,6 @@ implementation 'com.king.zxing:zxing-lite:1.1.9-androidx'
 
 //Android Support 版本
 implementation 'com.king.zxing:zxing-lite:1.1.9'
-```
-
-
-###### 如果Gradle出现compile失败的情况，可以在Project的build.gradle里面添加如下：（也可以使用上面的JitPack来compile）
-```gradle
-allprojects {
-    repositories {
-        //...
-        maven { url 'https://dl.bintray.com/jenly/maven' }
-    }
-}
 ```
 
 ## 版本说明
@@ -243,6 +255,10 @@ compileOptions {
 [MLKit](https://github.com/jenly1314/MLKit) 一个强大易用的工具包。通过ML Kit您可以很轻松的实现文字识别、条码识别、图像标记、人脸检测、对象检测等功能。
 
 ## 版本记录
+
+#### v2.1.0：2021-6-30 (从v2.1.0开始不再发布至JCenter)
+* 更新CameraX至v1.0.0
+* 优化细节
 
 #### v2.0.3：2021-3-26
 * 更新CameraX至v1.0.0-rc03

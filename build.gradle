@@ -8,7 +8,8 @@ buildscript {
     dependencies {
         classpath "com.android.tools.build:gradle:$versions.gralde"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin"
-        classpath "com.novoda:bintray-release:$versions.bintray_release"
+//        classpath "com.novoda:bintray-release:$versions.bintray_release"
+        classpath "com.vanniktech:gradle-maven-publish-plugin:$versions.mavenPublish"
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
