@@ -59,7 +59,7 @@ ZXingLite for Android 是ZXing的精简版，基于ZXing库优化扫码和生成
 
 ### Gradle:
 
-1. 在Project的 **build.gradle** 里面添加远程仓库  
+ 1. 在Project的 **build.gradle** 里面添加远程仓库  
           
 ```gradle
 allprojects {
@@ -70,7 +70,7 @@ allprojects {
 }
 ```
 
-2. 在Module的 **build.gradle** 里面添加引入依赖项
+ 2. 在Module的 **build.gradle** 里面添加引入依赖项
 
 ```gradle
 //AndroidX 版本
@@ -79,14 +79,14 @@ implementation 'com.github.jenly1314:zxing-lite:2.1.0'
 ```
 
 
-以前发布至JCenter的版本
+ 以前发布至JCenter的版本
 ```gradle
 //AndroidX 版本
 implementation 'com.king.zxing:zxing-lite:2.0.3'
 
 ```
 
-**v1.x** 旧版本
+ **v1.x** 旧版本
 ```gradle
 //AndroidX 版本
 implementation 'com.king.zxing:zxing-lite:1.1.9-androidx'
