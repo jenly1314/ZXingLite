@@ -10,6 +10,8 @@ import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.util.Log;
 
+import com.king.zxing.util.LogUtils;
+
 /**
  * @author Jenly <a href="mailto:jenly1314@gmail.com">Jenly</a>
  */
@@ -28,7 +30,7 @@ public final class UriUtils {
         //获取系統版本
         int currentapiVersion = Build.VERSION.SDK_INT;
         if(currentapiVersion> Build.VERSION_CODES.KITKAT){
-            Log.d("uri=intent.getData :", "" + uri);
+            LogUtils.d("uri=intent.getData :" + uri);
             if (DocumentsContract.isDocumentUri(context, uri)) {
                 String docId = DocumentsContract.getDocumentId(uri);
                 Log.d("getDocumentId(uri) :", "" + docId);

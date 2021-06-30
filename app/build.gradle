@@ -50,5 +50,5 @@ dependencies {
 
     implementation deps.easypermissions
 
-    implementation project(':lib')
+    implementation project(':zxing-lite')
 }

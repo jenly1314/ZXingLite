@@ -18,21 +18,20 @@ package com.king.zxing.app;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.provider.MediaStore;
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
 import com.king.zxing.CameraScan;
 import com.king.zxing.CaptureActivity;
-import com.king.zxing.app.util.UriUtils;
 import com.king.zxing.util.CodeUtils;
 import com.king.zxing.util.LogUtils;
 
 
+import java.io.IOException;
 import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -50,9 +49,9 @@ import pub.devrel.easypermissions.EasyPermissions;
  *
  * 2、通过继承CaptureActivity或者CaptureFragment并自定义布局。（适用于大多场景，并无需关心扫码相关逻辑，自定义布局时需覆写getLayoutId方法）
  *
- * 3、在你项目的Activity或者Fragment中创建一个CaptureHelper并在相应的生命周期中调用CaptureHelper的周期。（适用于想在扫码界面写交互逻辑，又因为项目架构或其它原因，无法直接或间接继承CaptureActivity或CaptureFragment时使用）
+ * 3、在你项目的Activity或者Fragment中实例化一个CameraScan即可。（适用于想在扫码界面写交互逻辑，又因为项目架构或其它原因，无法直接或间接继承CaptureActivity或CaptureFragment时使用）
  *
- * 4、参照CaptureHelper写一个自定义的扫码帮助类，其它步骤同方式3。（扩展高级用法，谨慎使用）
+ * 4、继承CameraScan自己实现一个，可参照默认实现类DefaultCameraScan，其它步骤同方式3。（扩展高级用法，谨慎使用）
  *
  */
 public class MainActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks{
@@ -109,26 +108,28 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
     }
 
     private void parsePhoto(Intent data){
-        final String path = UriUtils.getImagePath(this,data);
-        LogUtils.d("path:" + path);
-        if(TextUtils.isEmpty(path)){
-            return;
-        }
-        //异步解析
-        asyncThread(new Runnable() {
-            @Override
-            public void run() {
-                final String result = CodeUtils.parseCode(path);
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Log.d("Jenly","result:" + result);
-                        Toast.makeText(getContext(),result,Toast.LENGTH_SHORT).show();
-                    }
+
+//            final String path = UriUtils.getImagePath(this,data);
+//            LogUtils.d("path:" + path);
+//            if(TextUtils.isEmpty(path)){
+//                return;
+//            }
+
+        try {
+            Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(),data.getData());
+            //异步解析
+            asyncThread(() -> {
+                final String result = CodeUtils.parseCode(bitmap);
+                runOnUiThread(() -> {
+                    LogUtils.d("result:" + result);
+                    Toast.makeText(getContext(),result,Toast.LENGTH_SHORT).show();
                 });
 
-            }
-        });
+            });
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 

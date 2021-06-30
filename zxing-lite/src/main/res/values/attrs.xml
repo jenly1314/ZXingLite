@@ -1,0 +1,46 @@
+<resources>
+    <declare-styleable name="ViewfinderView">
+        <attr name="maskColor" format="color" />
+        <attr name="frameColor" format="color" />
+        <attr name="cornerColor" format="color"/>
+        <attr name="laserColor" format="color"/>
+        <attr name="labelText" format="string"/>
+        <attr name="labelTextColor" format="color"/>
+        <attr name="labelTextSize" format="dimension"/>
+        <attr name="labelTextPadding" format="dimension"/>
+        <attr name="labelTextWidth" format="dimension"/>
+        <attr name="labelTextLocation" format="enum">
+            <enum name="top" value="0"/>
+            <enum name="bottom" value="1"/>
+        </attr>
+        <attr name="frameWidth" format="dimension"/>
+        <attr name="frameHeight" format="dimension"/>
+        <attr name="gridColumn" format="integer"/>
+        <attr name="gridHeight" format="dimension"/>
+        <attr name="laserStyle" format="enum">
+            <enum name="none" value="0"/>
+            <enum name="line" value="1"/>
+            <enum name="grid" value="2"/>
+        </attr>
+        <attr name="cornerRectWidth" format="dimension"/>
+        <attr name="cornerRectHeight" format="dimension"/>
+        <attr name="scannerLineMoveDistance" format="dimension"/>
+        <attr name="scannerLineHeight" format="dimension"/>
+        <attr name="frameLineWidth" format="dimension"/>
+        <attr name="scannerAnimationDelay" format="integer"/>
+        <attr name="frameRatio" format="float"/>
+        <attr name="framePaddingLeft" format="dimension"/>
+        <attr name="framePaddingTop" format="dimension"/>
+        <attr name="framePaddingRight" format="dimension"/>
+        <attr name="framePaddingBottom" format="dimension"/>
+        <attr name="frameGravity" format="enum">
+            <enum name="center" value="0"/>
+            <enum name="left" value="1"/>
+            <enum name="top" value="2"/>
+            <enum name="right" value="3"/>
+            <enum name="bottom" value="4"/>
+        </attr>
+    </declare-styleable>
+
+
+</resources>
