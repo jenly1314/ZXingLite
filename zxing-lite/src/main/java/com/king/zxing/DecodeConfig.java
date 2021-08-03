@@ -6,6 +6,7 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.common.GlobalHistogramBinarizer;
 import com.google.zxing.common.HybridBinarizer;
+import com.king.zxing.config.CameraConfig;
 
 import java.util.Map;
 

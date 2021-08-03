@@ -10,6 +10,7 @@ import com.king.zxing.analyze.AreaRectAnalyzer;
 import com.king.zxing.analyze.BarcodeFormatAnalyzer;
 import com.king.zxing.analyze.ImageAnalyzer;
 import com.king.zxing.analyze.MultiFormatAnalyzer;
+import com.king.zxing.config.CameraConfig;
 
 import androidx.annotation.Nullable;
 import androidx.camera.core.CameraSelector;

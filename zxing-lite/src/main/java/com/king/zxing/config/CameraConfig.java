@@ -1,4 +1,4 @@
-package com.king.zxing;
+package com.king.zxing.config;
 
 import androidx.annotation.NonNull;
 import androidx.camera.core.CameraSelector;

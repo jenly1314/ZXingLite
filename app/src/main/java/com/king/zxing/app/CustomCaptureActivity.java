@@ -21,7 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.zxing.Result;
-import com.king.zxing.CameraConfig;
+import com.king.zxing.config.CameraConfig;
 import com.king.zxing.CaptureActivity;
 import com.king.zxing.DecodeConfig;
 import com.king.zxing.DecodeFormatManager;
