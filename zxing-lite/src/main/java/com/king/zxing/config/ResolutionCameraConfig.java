@@ -13,7 +13,7 @@ import androidx.camera.core.ImageAnalysis;
 import androidx.camera.core.Preview;
 
 /**
- * 相机配置：根据尺寸配置相机的目标图像，使预览和输出的图像尽可能的接近屏幕尺寸
+ * 相机配置：根据尺寸配置相机的目标图像，使输出分析的图像尽可能的接近屏幕尺寸
  * @author <a href="mailto:jenly1314@gmail.com">Jenly</a>
  */
 public class ResolutionCameraConfig extends CameraConfig {
@@ -54,7 +54,6 @@ public class ResolutionCameraConfig extends CameraConfig {
     @NonNull
     @Override
     public Preview options(@NonNull Preview.Builder builder) {
-        builder.setTargetResolution(mTargetSize);
         return super.options(builder);
     }
 

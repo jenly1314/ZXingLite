@@ -74,7 +74,7 @@ allprojects {
 
 ```gradle
 //AndroidX 版本
-implementation 'com.github.jenly1314:zxing-lite:2.1.0'
+implementation 'com.github.jenly1314:zxing-lite:2.1.1'
 
 ```
 
@@ -256,6 +256,10 @@ compileOptions {
 #### [WeChatQRCode](https://github.com/jenly1314/WeChatQRCode) 基于OpenCV开源的微信二维码引擎移植的扫码识别库。
 
 ## 版本记录
+
+#### v2.1.1：2021-8-4 
+* 更新CameraX至v1.0.1
+* 优化CameraConfig的一些默认配置
 
 #### v2.1.0：2021-6-30 (从v2.1.0开始不再发布至JCenter)
 * 更新CameraX至v1.0.0

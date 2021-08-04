@@ -1,7 +1,7 @@
 //App 
 def app_version = [:]
-app_version.versionCode = 31
-app_version.versionName = "2.1.0"
+app_version.versionCode = 32
+app_version.versionName = "2.1.1"
 ext.app_version = app_version
 
 //build version
@@ -36,7 +36,7 @@ versions.coreKtx = "1.3.2"
 //zxing
 versions.zxing = "3.3.3"
 
-versions.camerax = "1.0.0"
+versions.camerax = "1.0.1"
 
 versions.easypermissions = "3.0.0"
 
@@ -69,7 +69,7 @@ deps.zxing = "com.google.zxing:core:$versions.zxing"
 deps.camera_core = "androidx.camera:camera-core:$versions.camerax"
 deps.camera_camera2 = "androidx.camera:camera-camera2:$versions.camerax"
 deps.camera_lifecycle = "androidx.camera:camera-lifecycle:$versions.camerax"
-deps.camera_view = "androidx.camera:camera-view:1.0.0-alpha25"
+deps.camera_view = "androidx.camera:camera-view:1.0.0-alpha27"
 
 
 //permission
