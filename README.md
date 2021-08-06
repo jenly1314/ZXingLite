@@ -175,9 +175,9 @@ implementation 'com.king.zxing:zxing-lite:1.1.9'
     //生成条形码
     CodeUtils.createBarCode(content, BarcodeFormat.CODE_128,800,200);
     //解析条形码/二维码
-    CodeUtils.parseCode(bitmapPath);
+    CodeUtils.parseCode(bitmap);
     //解析二维码
-    CodeUtils.parseQRCode(bitmapPath);
+    CodeUtils.parseQRCode(bitmap);
 ```
 
 CameraScan配置示例
