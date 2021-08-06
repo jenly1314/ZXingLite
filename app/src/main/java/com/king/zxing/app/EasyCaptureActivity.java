@@ -56,7 +56,7 @@ public class EasyCaptureActivity extends CaptureActivity {
     public void onClick(View v){
         switch (v.getId()){
             case R.id.ivLeft:
-                onBackPressed();
+                finish();
                 break;
         }
     }

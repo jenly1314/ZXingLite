@@ -101,7 +101,7 @@ public class CustomActivity extends AppCompatActivity implements CameraScan.OnSc
     public void onClick(View v){
         switch (v.getId()){
             case R.id.ivLeft:
-                onBackPressed();
+                finish();
                 break;
         }
     }

@@ -89,7 +89,7 @@ public class CodeActivity extends AppCompatActivity {
     public void onClick(View v){
         switch (v.getId()){
             case R.id.ivLeft:
-                onBackPressed();
+                finish();
                 break;
         }
     }

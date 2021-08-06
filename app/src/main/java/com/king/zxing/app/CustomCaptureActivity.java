@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.zxing.Result;
+import com.king.zxing.CameraScan;
 import com.king.zxing.config.CameraConfig;
 import com.king.zxing.CaptureActivity;
 import com.king.zxing.DecodeConfig;
@@ -83,14 +84,18 @@ public class CustomCaptureActivity extends CaptureActivity {
                 .bindFlashlightView(ivFlashlight)//绑定手电筒，绑定后可根据光线传感器，动态显示或隐藏手电筒按钮
                 .setOnScanResultCallback(this)//设置扫码结果回调，需要自己处理或者需要连扫时，可设置回调，自己去处理相关逻辑
                 .setAnalyzer(new MultiFormatAnalyzer(decodeConfig))//设置分析器,DecodeConfig可以配置一些解码时的配置信息，如果内置的不满足您的需求，你也可以自定义实现，
-                .setAnalyzeImage(true)//设置是否分析图片，默认为true。如果设置为false，相当于关闭了扫码识别功能
-                .startCamera();//启动预览
+                .setAnalyzeImage(true);//设置是否分析图片，默认为true。如果设置为false，相当于关闭了扫码识别功能
     }
 
     /**
      * 扫码结果回调
-     * @param result 扫码结果
-     * @return
+     * @param result
+     * @return 返回false表示不拦截，将关闭扫码界面并将结果返回给调用界面；
+     *  返回true表示拦截，需自己处理逻辑。当isAnalyze为true时，默认会继续分析图像（也就是连扫）。
+     *  如果只是想拦截扫码结果回调，并不想继续分析图像（不想连扫），请在拦截扫码逻辑处通过调
+     *  用{@link CameraScan#setAnalyzeImage(boolean)}，
+     *  因为{@link CameraScan#setAnalyzeImage(boolean)}方法能动态控制是否继续分析图像。
+     *
      */
     @Override
     public boolean onScanResultCallback(Result result) {
@@ -123,7 +128,7 @@ public class CustomCaptureActivity extends CaptureActivity {
     public void onClick(View v){
         switch (v.getId()){
             case R.id.ivLeft:
-                onBackPressed();
+                finish();
                 break;
         }
     }
