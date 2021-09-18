@@ -1,9 +1,14 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
+
     apply from: 'versions.gradle'
 
-    addRepos(repositories)
+    repositories {
+        google()
+        mavenCentral()
+    }
+
 
     dependencies {
         classpath "com.android.tools.build:gradle:$versions.gralde"
@@ -16,7 +21,11 @@ buildscript {
 }
 
 allprojects {
-    addRepos(repositories)
+    repositories {
+        google()
+        mavenCentral()
+        jcenter() // Warning: this repository is going to shut down soon
+    }
 }
 
 task clean(type: Delete) {

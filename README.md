@@ -20,6 +20,8 @@ ZXingLite for Android 是ZXing的精简版，基于ZXing库优化扫码和生成
 ## Gif 展示
 ![Image](GIF.gif)
 
+> 你也可以直接下载 [演示App](https://raw.githubusercontent.com/jenly1314/ZXingLite/master/app/release/app-release.apk) 体验效果
+
 
 ## ViewfinderView属性说明
 | 属性 | 值类型 | 默认值 | 说明 |
@@ -319,7 +321,7 @@ compileOptions {
 * 更新CameraX至v1.0.1
 * 优化CameraConfig的一些默认配置
 
-#### v2.1.0：2021-6-30 (从v2.1.0开始不再发布至JCenter)
+#### v2.1.0：2021-6-30 (从v2.1.0开始发布至 MavenCentral)
 * 更新CameraX至v1.0.0
 * 优化细节
 

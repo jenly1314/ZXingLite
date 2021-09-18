@@ -77,8 +77,3 @@ deps.easypermissions = "pub.devrel:easypermissions:$versions.easypermissions"
 
 ext.deps = deps
 
-def addRepos(RepositoryHandler handler) {
-    handler.google()
-    handler.jcenter()
-}
-ext.addRepos = this.&addRepos

@@ -28,6 +28,7 @@ import com.king.zxing.DecodeConfig;
 import com.king.zxing.DecodeFormatManager;
 import com.king.zxing.analyze.MultiFormatAnalyzer;
 import com.king.zxing.app.util.StatusBarUtils;
+import com.king.zxing.config.ResolutionCameraConfig;
 
 
 import androidx.appcompat.widget.Toolbar;
@@ -76,7 +77,8 @@ public class CustomCaptureActivity extends CaptureActivity {
         //获取CameraScan，里面有扫码相关的配置设置。CameraScan里面包含部分支持链式调用的方法，即调用返回是CameraScan本身的一些配置建议在startCamera之前调用。
         getCameraScan().setPlayBeep(true)//设置是否播放音效，默认为false
                 .setVibrate(true)//设置是否震动，默认为false
-                .setCameraConfig(new CameraConfig())//设置相机配置信息，CameraConfig可覆写options方法自定义配置
+//                .setCameraConfig(new CameraConfig())//设置相机配置信息，CameraConfig可覆写options方法自定义配置
+                .setCameraConfig(new ResolutionCameraConfig(this))//设置CameraConfig，可以根据自己的需求去自定义配置
                 .setNeedAutoZoom(false)//二维码太小时可自动缩放，默认为false
                 .setNeedTouchZoom(true)//支持多指触摸捏合缩放，默认为true
                 .setDarkLightLux(45f)//设置光线足够暗的阈值（单位：lux），需要通过{@link #bindFlashlightView(View)}绑定手电筒才有效
