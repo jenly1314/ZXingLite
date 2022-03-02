@@ -117,7 +117,7 @@ implementation 'com.king.zxing:zxing-lite:1.1.9'
 
 #### v1.x 说明
 
-[【v1.1.9】](https://github.com/jenly1314/ZXingLite/tree/androidx) 如果您正在使用 **1.x** 版本请点击下面的链接查看分支版本，当前 **2.x** 版本已经基于 **Camerx** 进行重构，不支持升级，请在新项目中使用。
+[【v1.1.9】](https://github.com/jenly1314/ZXingLite/tree/androidx) 如果您正在使用 **1.x** 版本请点击下面的链接查看分支版本，当前 **2.x** 版本已经基于 **CameraX** 进行重构，不支持升级，请在新项目中使用。
 
 查看AndroidX版 **1.x** 分支 [请戳此处](https://github.com/jenly1314/ZXingLite/tree/androidx)
 

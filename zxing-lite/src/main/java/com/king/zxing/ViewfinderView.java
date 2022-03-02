@@ -34,6 +34,8 @@ import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.View;
 
+import com.king.zxing.util.LogUtils;
+
 import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
 import androidx.annotation.Nullable;
@@ -112,6 +114,15 @@ public class ViewfinderView extends View {
      * 扫描线结束位置
      */
     public int scannerEnd = 0;
+
+    /**
+     * 扫码初始框宽
+     */
+    private int initFrameWidth;
+    /**
+     * 扫码初始框高
+     */
+    private int initFrameHeight;
 
     /**
      * 扫码框宽
@@ -278,8 +289,8 @@ public class ViewfinderView extends View {
         labelTextWidth = array.getDimensionPixelSize(R.styleable.ViewfinderView_labelTextWidth,0);
         labelTextLocation = TextLocation.getFromInt(array.getInt(R.styleable.ViewfinderView_labelTextLocation,0));
 
-        frameWidth = array.getDimensionPixelSize(R.styleable.ViewfinderView_frameWidth,0);
-        frameHeight = array.getDimensionPixelSize(R.styleable.ViewfinderView_frameHeight,0);
+        initFrameWidth = array.getDimensionPixelSize(R.styleable.ViewfinderView_frameWidth,0);
+        initFrameHeight = array.getDimensionPixelSize(R.styleable.ViewfinderView_frameHeight,0);
 
         laserStyle = LaserStyle.getFromInt(array.getInt(R.styleable.ViewfinderView_laserStyle,LaserStyle.LINE.mValue));
         gridColumn = array.getInt(R.styleable.ViewfinderView_gridColumn,20);
@@ -328,22 +339,30 @@ public class ViewfinderView extends View {
         this.labelTextSize = textSize;
     }
 
+    @Override
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        super.onLayout(changed, left, top, right, bottom);
+        LogUtils.d("onLayout" + getWidth() + "," + getHeight());
+        initFrame(getWidth(),getHeight());
+    }
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        initFrame(w,h);
+        LogUtils.d("onSizeChanged" + w + "," + h);
+
     }
+
 
     private void initFrame(int width,int height){
 
         int size = (int)(Math.min(width,height) * frameRatio);
 
-        if(frameWidth <= 0 || frameWidth > width){
+        if(initFrameWidth <= 0 || initFrameWidth > width){
             frameWidth = size;
         }
 
-        if(frameHeight <= 0 || frameHeight > height){
+        if(initFrameHeight <= 0 || initFrameHeight > height){
             frameHeight = size;
         }
 

@@ -1,6 +1,7 @@
 package com.king.zxing.app;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 import com.google.zxing.Result;
@@ -78,5 +79,13 @@ public class QRCodeActivity extends CaptureActivity {
          * 调用getCameraScan().setAnalyzeImage(false)来停止分析图像。
          */
         return super.onScanResultCallback(result);
+    }
+
+    public void onClick(View v){
+        switch (v.getId()){
+            case R.id.ivLeft:
+                finish();
+                break;
+        }
     }
 }
