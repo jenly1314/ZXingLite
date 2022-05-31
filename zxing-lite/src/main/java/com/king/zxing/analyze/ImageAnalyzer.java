@@ -47,8 +47,9 @@ public abstract class ImageAnalyzer implements Analyzer {
                 return analyze(rotatedData,height,width);
             }
             return analyze(data,width,height);
+        }else{
+            LogUtils.w("imageFormat: " + image.getFormat());
         }
-        LogUtils.w("imageFormat: " + image.getFormat());
         return null;
     }
 

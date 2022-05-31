@@ -20,12 +20,15 @@ import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.os.Build;
+import android.os.VibrationEffect;
 import android.os.Vibrator;
 
 import com.king.zxing.R;
 import com.king.zxing.util.LogUtils;
 
 import java.io.Closeable;
+import java.lang.annotation.ElementType;
 
 /**
  * @author <a href="mailto:jenly1314@gmail.com">Jenly</a>
@@ -67,8 +70,12 @@ public final class BeepManager implements MediaPlayer.OnErrorListener, Closeable
         if (playBeep && mediaPlayer != null) {
             mediaPlayer.start();
         }
-        if (vibrate) {
-            vibrator.vibrate(VIBRATE_DURATION);
+        if (vibrate && vibrator.hasVibrator()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                vibrator.vibrate(VibrationEffect.createOneShot(VIBRATE_DURATION, VibrationEffect.DEFAULT_AMPLITUDE));
+            } else {
+                vibrator.vibrate(VIBRATE_DURATION);
+            }
         }
     }
 

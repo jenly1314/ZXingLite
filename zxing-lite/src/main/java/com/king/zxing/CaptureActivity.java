@@ -23,7 +23,6 @@ import com.google.zxing.Result;
 import com.king.zxing.util.LogUtils;
 import com.king.zxing.util.PermissionUtils;
 
-import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -45,9 +44,8 @@ public class CaptureActivity extends AppCompatActivity implements CameraScan.OnS
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        int layoutId = getLayoutId();
-        if(isContentView(layoutId)){
-            setContentView(layoutId);
+        if(isContentView()){
+            setContentView(getLayoutId());
         }
         initUI();
     }
@@ -154,10 +152,9 @@ public class CaptureActivity extends AppCompatActivity implements CameraScan.OnS
 
     /**
      * 返回true时会自动初始化{@link #setContentView(int)}，返回为false是需自己去初始化{@link #setContentView(int)}
-     * @param layoutId
      * @return 默认返回true
      */
-    public boolean isContentView(@LayoutRes int layoutId){
+    public boolean isContentView(){
         return true;
     }
 

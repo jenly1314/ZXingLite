@@ -25,7 +25,6 @@ import com.google.zxing.Result;
 import com.king.zxing.util.LogUtils;
 import com.king.zxing.util.PermissionUtils;
 
-import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.camera.view.PreviewView;
 import androidx.fragment.app.Fragment;
@@ -57,8 +56,7 @@ public class CaptureFragment extends Fragment implements CameraScan.OnScanResult
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        int layoutId = getLayoutId();
-        if(isContentView(layoutId)){
+        if(isContentView()){
             mRootView = createRootView(inflater,container);
         }
         initUI();
@@ -165,10 +163,9 @@ public class CaptureFragment extends Fragment implements CameraScan.OnScanResult
 
     /**
      * 返回true时会自动初始化{@link #createRootView(LayoutInflater, ViewGroup)}，返回为false是需自己去初始化{@link #createRootView(LayoutInflater, ViewGroup)}
-     * @param layoutId
      * @return 默认返回true
      */
-    public boolean isContentView(@LayoutRes int layoutId){
+    public boolean isContentView(){
         return true;
     }
 

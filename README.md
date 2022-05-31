@@ -13,7 +13,7 @@
 [![Blog](https://img.shields.io/badge/blog-Jenly-9933CC.svg)](https://jenly1314.github.io/)
 [![QQGroup](https://img.shields.io/badge/QQGroup-20867961-blue.svg)](http://shang.qq.com/wpa/qunwpa?idkey=8fcc6a2f88552ea44b1.1.982c94fd124f7bb3ec227e2a400dbbfaad3dc2f5ad)
 
-ZXingLite for Android 是ZXing的精简版，基于ZXing库优化扫码和生成二维码/条形码功能，扫码界面完全支持自定义，也可一行代码使用默认实现的扫码功能。总之你想要的都在这里。
+ZXingLite for Android 是ZXing的精简极速版，基于ZXing库优化扫码和生成二维码/条形码功能，扫码界面完全支持自定义，也可一行代码使用默认实现的扫码功能。总之你想要的都在这里。
 >简单如斯，你不试试？ Come on~
 
 
@@ -57,8 +57,6 @@ ZXingLite for Android 是ZXing的精简版，基于ZXing库优化扫码和生成
 
 ## 引入
 
-> 由于2021年2月3日 **JFrog宣布将关闭Bintray和JCenter，计划在2022年2月完全关闭。** 所以后续版本不再发布至 **JCenter**
-
 ### Gradle:
 
 1. 在Project的 **build.gradle** 里面添加远程仓库  
@@ -76,7 +74,7 @@ allprojects {
 
 ```gradle
 //AndroidX 版本
-implementation 'com.github.jenly1314:zxing-lite:2.1.1'
+implementation 'com.github.jenly1314:zxing-lite:2.2.0'
 
 ```
 
@@ -88,7 +86,7 @@ implementation 'com.king.zxing:zxing-lite:2.0.3'
 
 ```
 
-**v1.x** 旧版本
+**v1.x** 旧版本 [v1.1.9](https://github.com/jenly1314/ZXingLite/tree/androidx)
 ```gradle
 //AndroidX 版本
 implementation 'com.king.zxing:zxing-lite:1.1.9-androidx'
@@ -97,35 +95,17 @@ implementation 'com.king.zxing:zxing-lite:1.1.9-androidx'
 implementation 'com.king.zxing:zxing-lite:1.1.9'
 ```
 
-## 版本说明
 
-### v2.x 基于CameraX重构震撼发布
+### 快速实现扫码有以下几种方式：
 
-#### v2.x 相对于 v1.x 的优势
+> 1、直接使用CaptureActivity或者CaptureFragment。(纯洁的扫码，无任何添加剂)
 
-* v2.x基于CameraX，抽象整体流程，可扩展性更高。
-* v2.x基于CameraX通过预览裁剪的方式确保预览界面不变形，无需铺满屏幕，就能适配（v1.x通过遍历Camera支持预览的尺寸，找到与屏幕最接近的比例，减少变形的可能性（需铺满屏幕，才能适配）)
+> 2、通过继承CaptureActivity或者CaptureFragment并自定义布局。（适用于大多场景，并无需关心扫码相关逻辑，自定义布局时需覆写getLayoutId方法）实现示例：[CustomCaptureActivity](app/src/main/java/com/king/zxing/app/CustomCaptureActivity.java) 和 [QRCodeActivity](app/src/main/java/com/king/zxing/app/QRCodeActivity.java)
 
-#### v2.x 特别说明
+> 3、在你项目的Activity或者Fragment中实例化一个CameraScan即可。（适用于想在扫码界面写交互逻辑，又因为项目架构或其它原因，无法直接或间接继承CaptureActivity或CaptureFragment时使用）实现示例：[CustomActivity](app/src/main/java/com/king/zxing/app/CustomActivity.java)
 
-* v2.x如果您是通过继承CaptureActivity或CaptureFragment实现扫码功能，那么动态权限申请相关都已经在CaptureActivity或CaptureFragment处理好了。
-* v2.x如果您是通过继承CaptureActivity或CaptureFragment实现扫码功能，如果有想要修改默认配置，可重写**initCameraScan**方法，修改CameraScan的配置即可，如果无需修改配置，直接在跳转原界面的**onActivityResult** 接收扫码结果即可（更多具体详情可参见[app](app)中的使用示例）。
+> 4、继承CameraScan自己实现一个，可参照默认实现类DefaultCameraScan，其它步骤同方式3。（扩展高级用法，谨慎使用）
 
-##### 关于CameraX
-
-* CameraX暂时还是Beta版，可能会存在一定的稳定性，如果您有这个考量，可以继续使用 **ZXingLite** 以前的 **v1.x** 版本。相信不久之后CameraX就会发布稳定版。
-
-#### v1.x 说明
-
-[【v1.1.9】](https://github.com/jenly1314/ZXingLite/tree/androidx) 如果您正在使用 **1.x** 版本请点击下面的链接查看分支版本，当前 **2.x** 版本已经基于 **CameraX** 进行重构，不支持升级，请在新项目中使用。
-
-查看AndroidX版 **1.x** 分支 [请戳此处](https://github.com/jenly1314/ZXingLite/tree/androidx)
-
-查看Android Support版 **1.x** 分支 [请戳此处](https://github.com/jenly1314/ZXingLite/tree/android)
-
-查看 [ **1.x** API帮助文档](https://jenly1314.github.io/projects/ZXingLite/doc/)
-
-使用 **v1.x** 版本的无需往下看了，下面的示例和相关说明都是针对于当前最新版本。
 
 ## 示例
 
@@ -286,15 +266,6 @@ public class QRCodeActivity extends CaptureActivity {
         android:theme="@style/CaptureTheme"/>
 ```
 
-### 快速实现扫码有以下几种方式：
-
-> 1、直接使用CaptureActivity或者CaptureFragment。(纯洁的扫码，无任何添加剂)
-
-> 2、通过继承CaptureActivity或者CaptureFragment并自定义布局。（适用于大多场景，并无需关心扫码相关逻辑，自定义布局时需覆写getLayoutId方法）
-
-> 3、在你项目的Activity或者Fragment中实例化一个CameraScan即可。（适用于想在扫码界面写交互逻辑，又因为项目架构或其它原因，无法直接或间接继承CaptureActivity或CaptureFragment时使用）
-
-> 4、继承CameraScan自己实现一个，可参照默认实现类DefaultCameraScan，其它步骤同方式3。（扩展高级用法，谨慎使用）
 
 ### 其他
 
@@ -315,7 +286,40 @@ compileOptions {
 #### [MLKit](https://github.com/jenly1314/MLKit) 一个强大易用的工具包。通过ML Kit您可以很轻松的实现文字识别、条码识别、图像标记、人脸检测、对象检测等功能。    
 #### [WeChatQRCode](https://github.com/jenly1314/WeChatQRCode) 基于OpenCV开源的微信二维码引擎移植的扫码识别库。
 
+
+## 版本说明
+
+### v2.x 基于CameraX重构震撼发布
+
+#### v2.x 相对于 v1.x 的优势
+
+* v2.x基于CameraX，抽象整体流程，可扩展性更高。
+* v2.x基于CameraX通过预览裁剪的方式确保预览界面不变形，无需铺满屏幕，就能适配（v1.x通过遍历Camera支持预览的尺寸，找到与屏幕最接近的比例，减少变形的可能性（需铺满屏幕，才能适配）)
+
+#### v2.x 特别说明
+
+* v2.x如果您是通过继承CaptureActivity或CaptureFragment实现扫码功能，那么动态权限申请相关都已经在CaptureActivity或CaptureFragment处理好了。
+* v2.x如果您是通过继承CaptureActivity或CaptureFragment实现扫码功能，如果有想要修改默认配置，可重写**initCameraScan**方法，修改CameraScan的配置即可，如果无需修改配置，直接在跳转原界面的**onActivityResult** 接收扫码结果即可（更多具体详情可参见[app](app)中的使用示例）。
+
+##### 关于CameraX
+
+* CameraX暂时还是Beta版，可能会存在一定的稳定性，如果您有这个考量，可以继续使用 **ZXingLite** 以前的 **v1.x** 版本。相信不久之后CameraX就会发布稳定版。
+
+#### v1.x 说明
+
+[【v1.1.9】](https://github.com/jenly1314/ZXingLite/tree/androidx) 如果您正在使用 **1.x** 版本请点击下面的链接查看分支版本，当前 **2.x** 版本已经基于 **CameraX** 进行重构，不支持升级，请在新项目中使用。
+
+查看AndroidX版 **1.x** 分支 [请戳此处](https://github.com/jenly1314/ZXingLite/tree/androidx)
+
+查看Android Support版 **1.x** 分支 [请戳此处](https://github.com/jenly1314/ZXingLite/tree/android)
+
+查看 [ **1.x** API帮助文档](https://jenly1314.github.io/projects/ZXingLite/doc/)
+
 ## 版本记录
+
+#### v2.2.0：2022-5-31
+* 更新CameraX至v1.1.0-rc01
+* 更新targetSdkVersion至31
 
 #### v2.1.1：2021-8-4 
 * 更新CameraX至v1.0.1
