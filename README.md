@@ -320,6 +320,7 @@ compileOptions {
 #### v2.2.0：2022-5-31
 * 更新CameraX至v1.1.0-rc01
 * 更新targetSdkVersion至31
+* 更新Gradle至v7.2
 
 #### v2.1.1：2021-8-4 
 * 更新CameraX至v1.0.1
