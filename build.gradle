@@ -6,13 +6,14 @@ buildscript {
 
     repositories {
         google()
+        maven { url 'https://maven.aliyun.com/repository/public/' }
         mavenCentral()
     }
 
 
     dependencies {
         classpath "com.android.tools.build:gradle:$versions.gralde"
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin"
+//        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin"
 //        classpath "com.novoda:bintray-release:$versions.bintray_release"
         classpath "com.vanniktech:gradle-maven-publish-plugin:$versions.mavenPublish"
         // NOTE: Do not place your application dependencies here; they belong
@@ -23,6 +24,7 @@ buildscript {
 allprojects {
     repositories {
         google()
+        maven { url 'https://maven.aliyun.com/repository/public/' }
         mavenCentral()
 //        jcenter() // Warning: this repository is going to shut down soon
     }
