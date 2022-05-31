@@ -72,9 +72,19 @@ allprojects {
 
 2. 在Module的 **build.gradle** 里面添加引入依赖项
 
+
 ```gradle
 //AndroidX 版本
 implementation 'com.github.jenly1314:zxing-lite:2.2.0'
+
+```
+
+> 使用 **v2.2.x** 以上版本需要 **targetSdkVersion >= 31**
+> 如果 **targetSdkVersion < 31** 请使用 **v2.2.x** 以前的版本
+
+```gradle
+//AndroidX 版本
+implementation 'com.github.jenly1314:zxing-lite:2.1.1'
 
 ```
 
