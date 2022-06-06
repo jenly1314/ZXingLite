@@ -116,15 +116,6 @@ public class ViewfinderView extends View {
     public int scannerEnd = 0;
 
     /**
-     * 扫码初始框宽
-     */
-    private int initFrameWidth;
-    /**
-     * 扫码初始框高
-     */
-    private int initFrameHeight;
-
-    /**
      * 扫码框宽
      */
     private int frameWidth;
@@ -289,8 +280,8 @@ public class ViewfinderView extends View {
         labelTextWidth = array.getDimensionPixelSize(R.styleable.ViewfinderView_labelTextWidth,0);
         labelTextLocation = TextLocation.getFromInt(array.getInt(R.styleable.ViewfinderView_labelTextLocation,0));
 
-        initFrameWidth = array.getDimensionPixelSize(R.styleable.ViewfinderView_frameWidth,0);
-        initFrameHeight = array.getDimensionPixelSize(R.styleable.ViewfinderView_frameHeight,0);
+        frameWidth = array.getDimensionPixelSize(R.styleable.ViewfinderView_frameWidth,0);
+        frameHeight = array.getDimensionPixelSize(R.styleable.ViewfinderView_frameHeight,0);
 
         laserStyle = LaserStyle.getFromInt(array.getInt(R.styleable.ViewfinderView_laserStyle,LaserStyle.LINE.mValue));
         gridColumn = array.getInt(R.styleable.ViewfinderView_gridColumn,20);
@@ -358,11 +349,11 @@ public class ViewfinderView extends View {
 
         int size = (int)(Math.min(width,height) * frameRatio);
 
-        if(initFrameWidth <= 0 || initFrameWidth > width){
+        if(frameWidth <= 0 || frameWidth > width){
             frameWidth = size;
         }
 
-        if(initFrameHeight <= 0 || initFrameHeight > height){
+        if(frameHeight <= 0 || frameHeight > height){
             frameHeight = size;
         }
 
