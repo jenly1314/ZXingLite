@@ -343,26 +343,7 @@ compileOptions {
 * 更新CameraX至v1.0.0
 * 优化细节
 
-#### v2.0.3：2021-3-26
-* 更新CameraX至v1.0.0-rc03
-* 优化一些默认配置
-
-#### v2.0.2：2021-1-14
-* **ViewfinderView** 新增 **labelTextWidth** 属性
-
-#### v2.0.1：2020-12-30
-* 更新CameraX至v1.0.0-rc01
-* 新增支持点击预览区域对焦目标
-* 修改一些默认配置
-* 优化细节
-
-#### v2.0.0：2020-12-24
-* 基于CameraX进行重构
-* 抽象整体流程，可扩展性更高
-* 从2.x开始只支持AndroidX
-* minSdk要求从 **16+** 改为 **21+**
-
-#### [查看更多版本记录](update_log.md)
+#### [查看更多版本记录](change_log.md)
 
 ## 赞赏
 如果您喜欢ZXingLite，或感觉ZXingLite帮助到了您，可以点右上角“Star”支持一下，您的支持就是我的动力，谢谢 :smiley:<p>
