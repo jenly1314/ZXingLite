@@ -1,7 +1,7 @@
 //App 
 def app_version = [:]
-app_version.versionCode = 33
-app_version.versionName = "2.2.0"
+app_version.versionCode = 34
+app_version.versionName = "2.2.1"
 ext.app_version = app_version
 
 //build version
@@ -36,7 +36,7 @@ versions.coreKtx = "1.6.0"
 //zxing
 versions.zxing = "3.3.3"
 
-versions.camerax = "1.1.0-rc01"
+versions.camerax = "1.1.0-rc02"
 
 versions.easypermissions = "3.0.0"
 

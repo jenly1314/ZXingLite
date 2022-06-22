@@ -75,7 +75,7 @@ allprojects {
 
 ```gradle
 //AndroidX 版本
-implementation 'com.github.jenly1314:zxing-lite:2.2.0'
+implementation 'com.github.jenly1314:zxing-lite:2.2.1'
 
 ```
 
@@ -326,6 +326,9 @@ compileOptions {
 查看 [ **1.x** API帮助文档](https://jenly1314.github.io/projects/ZXingLite/doc/)
 
 ## 版本记录
+
+#### v2.2.1：2022-6-22
+* 更新CameraX至v1.1.0-rc02
 
 #### v2.2.0：2022-5-31
 * 更新CameraX至v1.1.0-rc01
