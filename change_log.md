@@ -1,11 +1,16 @@
 ## 版本记录
 
+#### v2.3.0：2022-12-11
+* 更新CameraX至v1.2.0
+* 更新zxing至v3.5.1
+* 更新compileSdkVersion至33
+
 #### v2.2.1：2022-6-22
 * 更新CameraX至v1.1.0-rc02
 
 #### v2.2.0：2022-5-31
 * 更新CameraX至v1.1.0-rc01
-* 更新targetSdkVersion至31
+* 更新compileSdkVersion至31
 * 更新Gradle至v7.2
 
 #### v2.1.1：2021-8-4 

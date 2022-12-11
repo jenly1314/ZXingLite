@@ -200,9 +200,12 @@ public class DefaultCameraScan extends CameraScan {
 
     private void startFocusAndMetering(float x, float y){
         if(mCamera != null){
-            LogUtils.d("startFocusAndMetering:" + x + "," + y);
             MeteringPoint point = mPreviewView.getMeteringPointFactory().createPoint(x,y);
-            mCamera.getCameraControl().startFocusAndMetering(new FocusMeteringAction.Builder(point).build());
+            FocusMeteringAction focusMeteringAction = new FocusMeteringAction.Builder(point).build();
+            if(mCamera.getCameraInfo().isFocusMeteringSupported(focusMeteringAction)){
+                mCamera.getCameraControl().startFocusAndMetering(focusMeteringAction);
+                LogUtils.d("startFocusAndMetering:" + x + "," + y);
+            }
         }
     }
 
@@ -489,6 +492,7 @@ public class DefaultCameraScan extends CameraScan {
         return this;
     }
 
+    @Override
     public CameraScan setDarkLightLux(float lightLux){
         if(mAmbientLightManager != null){
             mAmbientLightManager.setDarkLightLux(lightLux);
@@ -496,6 +500,7 @@ public class DefaultCameraScan extends CameraScan {
         return this;
     }
 
+    @Override
     public CameraScan setBrightLightLux(float lightLux){
         if(mAmbientLightManager != null){
             mAmbientLightManager.setBrightLightLux(lightLux);

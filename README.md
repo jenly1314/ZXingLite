@@ -72,29 +72,20 @@ allprojects {
 
 2. 在Module的 **build.gradle** 里面添加引入依赖项
 
-
 ```gradle
 //AndroidX 版本
-implementation 'com.github.jenly1314:zxing-lite:2.2.1'
+implementation 'com.github.jenly1314:zxing-lite:2.3.0'
 
 ```
 
-> 使用 **v2.2.x** 以上版本需要 **targetSdkVersion >= 31**
-> 如果 **targetSdkVersion < 31** 请使用 **v2.2.x** 以前的版本
+### 温馨提示（关于ZXingLite版本与编译的SDK版本要求）
 
-```gradle
-//AndroidX 版本
-implementation 'com.github.jenly1314:zxing-lite:2.1.1'
+> 使用 **v2.3.x** 以上版本时，要求 **compileSdkVersion >= 33**
 
-```
+> 使用 **v2.2.x** 以上版本时，要求 **compileSdkVersion >= 31**
 
+> 如果 **compileSdkVersion < 31** 请使用 **v2.2.x** 以前的版本
 
-以前发布至JCenter的版本
-```gradle
-//AndroidX 版本
-implementation 'com.king.zxing:zxing-lite:2.0.3'
-
-```
 
 **v1.x** 旧版本 [v1.1.9](https://github.com/jenly1314/ZXingLite/tree/androidx)
 ```gradle
@@ -186,7 +177,7 @@ CameraScan配置示例
             .setOnScanResultCallback(this)//设置扫码结果回调，需要自己处理或者需要连扫时，可设置回调，自己去处理相关逻辑
             .setAnalyzer(new MultiFormatAnalyzer(new DecodeConfig()))//设置分析器,DecodeConfig可以配置一些解码时的配置信息，如果内置的不满足您的需求，你也可以自定义实现，
             .setAnalyzeImage(true)//设置是否分析图片，默认为true。如果设置为false，相当于关闭了扫码识别功能
-            .startCamera();//启动预览（如果是通过继承CaptureActivity或CaptureFragment实现扫码无需调用这句。）
+            .startCamera();//启动预览（如果是通过继承CaptureActivity或CaptureFragment实现扫码无需调用这句startCamera）
 
 
     //设置闪光灯（手电筒）是否开启,需在startCamera之后调用才有效
@@ -311,10 +302,6 @@ compileOptions {
 * v2.x如果您是通过继承CaptureActivity或CaptureFragment实现扫码功能，那么动态权限申请相关都已经在CaptureActivity或CaptureFragment处理好了。
 * v2.x如果您是通过继承CaptureActivity或CaptureFragment实现扫码功能，如果有想要修改默认配置，可重写**initCameraScan**方法，修改CameraScan的配置即可，如果无需修改配置，直接在跳转原界面的**onActivityResult** 接收扫码结果即可（更多具体详情可参见[app](app)中的使用示例）。
 
-##### 关于CameraX
-
-* CameraX暂时还是Beta版，可能会存在一定的稳定性，如果您有这个考量，可以继续使用 **ZXingLite** 以前的 **v1.x** 版本。相信不久之后CameraX就会发布稳定版。
-
 #### v1.x 说明
 
 [【v1.1.9】](https://github.com/jenly1314/ZXingLite/tree/androidx) 如果您正在使用 **1.x** 版本请点击下面的链接查看分支版本，当前 **2.x** 版本已经基于 **CameraX** 进行重构，不支持升级，请在新项目中使用。
@@ -327,48 +314,34 @@ compileOptions {
 
 ## 版本记录
 
-#### v2.2.1：2022-6-22
-* 更新CameraX至v1.1.0-rc02
-
-#### v2.2.0：2022-5-31
-* 更新CameraX至v1.1.0-rc01
-* 更新targetSdkVersion至31
-* 更新Gradle至v7.2
-
-#### v2.1.1：2021-8-4 
-* 更新CameraX至v1.0.1
-* 优化CameraConfig的一些默认配置
-
-#### v2.1.0：2021-6-30 (从v2.1.0开始发布至 MavenCentral)
-* 更新CameraX至v1.0.0
-* 优化细节
+#### v2.3.0：2022-12-11
+* 更新CameraX至v1.2.0
+* 更新zxing至v3.5.1
+* 更新compileSdkVersion至33
 
 #### [查看更多版本记录](change_log.md)
 
 ## 赞赏
 如果您喜欢ZXingLite，或感觉ZXingLite帮助到了您，可以点右上角“Star”支持一下，您的支持就是我的动力，谢谢 :smiley:<p>
 您也可以扫描下面的二维码，请作者喝杯咖啡 :coffee:
-    <div>
-        <img src="https://jenly1314.github.io/image/pay/wxpay.png" width="280" heght="350">
-        <img src="https://jenly1314.github.io/image/pay/alipay.png" width="280" heght="350">
-        <img src="https://jenly1314.github.io/image/pay/qqpay.png" width="280" heght="350">
-        <img src="https://jenly1314.github.io/image/alipay_red_envelopes.jpg" width="233" heght="350">
-    </div>
+<div>
+<img src="https://jenly1314.github.io/image/pay/sponsor.png" width="98%">
+</div>
 
 ## 关于我
-   Name: <a title="关于作者" href="https://about.me/jenly1314" target="_blank">Jenly</a>
+Name: <a title="关于作者" href="https://jenly1314.github.io" target="_blank">Jenly</a>
 
-   Email: <a title="欢迎邮件与我交流" href="mailto:jenly1314@gmail.com" target="_blank">jenly1314#gmail.com</a> / <a title="给我发邮件" href="mailto:jenly1314@vip.qq.com" target="_blank">jenly1314#vip.qq.com</a>
+Email: <a title="欢迎邮件与我交流" href="mailto:jenly1314@gmail.com" target="_blank">jenly1314#gmail.com</a> / <a title="给我发邮件" href="mailto:jenly1314@vip.qq.com" target="_blank">jenly1314#vip.qq.com</a>
 
-   CSDN: <a title="CSDN博客" href="http://blog.csdn.net/jenly121" target="_blank">jenly121</a>
+CSDN: <a title="CSDN博客" href="http://blog.csdn.net/jenly121" target="_blank">jenly121</a>
 
-   CNBlogs: <a title="博客园" href="https://www.cnblogs.com/jenly" target="_blank">jenly</a>
+CNBlogs: <a title="博客园" href="https://www.cnblogs.com/jenly" target="_blank">jenly</a>
 
-   GitHub: <a title="GitHub开源项目" href="https://github.com/jenly1314" target="_blank">jenly1314</a>
+GitHub: <a title="GitHub开源项目" href="https://github.com/jenly1314" target="_blank">jenly1314</a>
 
-   Gitee: <a title="Gitee开源项目" href="https://gitee.com/jenly1314" target="_blank">jenly1314</a>
+Gitee: <a title="Gitee开源项目" href="https://gitee.com/jenly1314" target="_blank">jenly1314</a>
 
-   加入QQ群: <a title="点击加入QQ群" href="http://shang.qq.com/wpa/qunwpa?idkey=8fcc6a2f88552ea44b1411582c94fd124f7bb3ec227e2a400dbbfaad3dc2f5ad" target="_blank">20867961</a>
+加入QQ群: <a title="点击加入QQ群" href="http://shang.qq.com/wpa/qunwpa?idkey=8fcc6a2f88552ea44b1411582c94fd124f7bb3ec227e2a400dbbfaad3dc2f5ad" target="_blank">20867961</a>
    <div>
        <img src="https://jenly1314.github.io/image/jenly666.png">
        <img src="https://jenly1314.github.io/image/qqgourp.png">

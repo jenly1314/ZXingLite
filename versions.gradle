@@ -1,15 +1,15 @@
 //App 
 def app_version = [:]
-app_version.versionCode = 34
-app_version.versionName = "2.2.1"
+app_version.versionCode = 35
+app_version.versionName = "2.3.0"
 ext.app_version = app_version
 
 //build version
 def build_versions = [:]
 build_versions.minSdk = 21
-build_versions.targetSdk = 31
-build_versions.compileSdk = 31
-build_versions.buildTools = "31.0.0"
+build_versions.targetSdk = 33
+build_versions.compileSdk = 33
+build_versions.buildTools = "33.0.0"
 ext.build_versions = build_versions
 
 ext.deps = [:]
@@ -34,9 +34,9 @@ versions.kotlin = "1.6.0"
 versions.coreKtx = "1.6.0"
 
 //zxing
-versions.zxing = "3.3.3"
+versions.zxing = "3.5.1"
 
-versions.camerax = "1.1.0-rc02"
+versions.camerax = "1.2.0"
 
 versions.easypermissions = "3.0.0"
 
