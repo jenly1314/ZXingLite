@@ -87,7 +87,9 @@ implementation 'com.github.jenly1314:zxing-lite:2.3.1'
 
 ```
 
-### 温馨提示（关于ZXingLite版本与编译的SDK版本要求）
+### 温馨提示
+
+#### 关于ZXingLite版本与编译的SDK版本要求
 
 > 使用 **v2.3.x** 以上版本时，要求 **compileSdkVersion >= 33**
 
@@ -95,6 +97,7 @@ implementation 'com.github.jenly1314:zxing-lite:2.3.1'
 
 > 如果 **compileSdkVersion < 31** 请使用 **v2.2.x** 以前的版本
 
+#### 对于需兼容 Android 5 以下版本的老项目（即：minSdk<21），可使用1.x旧版本
 
 **v1.x** 旧版本 [v1.1.9](https://github.com/jenly1314/ZXingLite/tree/androidx)
 ```gradle
@@ -104,6 +107,7 @@ implementation 'com.king.zxing:zxing-lite:1.1.9-androidx'
 // Android Support 版本
 implementation 'com.king.zxing:zxing-lite:1.1.9'
 ```
+> 对于 **v1.x** 版本，如果 **JCenter** 已关闭, 可使用 **JitPack**
 
 ## 使用说明
 
