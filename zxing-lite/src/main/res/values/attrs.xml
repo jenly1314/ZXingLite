@@ -40,6 +40,17 @@
             <enum name="right" value="3"/>
             <enum name="bottom" value="4"/>
         </attr>
+        <attr name="pointColor" format="color"/>
+        <attr name="pointStrokeColor" format="color"/>
+        <attr name="pointRadius" format="dimension"/>
+        <attr name="pointStrokeRatio" format="float"/>
+        <attr name="pointDrawable" format="reference"/>
+        <attr name="showPointAnim" format="boolean"/>
+        <attr name="laserDrawable" format="reference"/>
+        <attr name="viewfinderStyle" format="enum">
+            <enum name="classic" value="0"/>
+            <enum name="popular" value="1"/>
+        </attr>
     </declare-styleable>
 
 

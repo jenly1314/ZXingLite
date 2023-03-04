@@ -31,7 +31,6 @@ import com.king.zxing.util.CodeUtils;
 import com.king.zxing.util.LogUtils;
 
 
-import java.io.IOException;
 import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -43,9 +42,9 @@ import pub.devrel.easypermissions.EasyPermissions;
 /**
  * 扫码Demo示例说明
  *
- * 快速实现扫码有以下几种方式：
+ * 快速实现扫码识别有以下几种方式：
  *
- * 1、直接使用CaptureActivity或者CaptureFragment。(纯洁的扫码，无任何添加剂)
+ * 1、直接使用CaptureActivity或者CaptureFragment。(默认的扫码实现)
  *
  * 2、通过继承CaptureActivity或者CaptureFragment并自定义布局。（适用于大多场景，并无需关心扫码相关逻辑，自定义布局时需覆写getLayoutId方法）
  *
@@ -108,13 +107,6 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
     }
 
     private void parsePhoto(Intent data){
-
-//            final String path = UriUtils.getImagePath(this,data);
-//            LogUtils.d("path:" + path);
-//            if(TextUtils.isEmpty(path)){
-//                return;
-//            }
-
         try {
             Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(),data.getData());
             //异步解析
@@ -243,7 +235,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                 checkCameraPermissions();
                 break;
             case R.id.btn4:
-                this.cls = CustomActivity.class;
+                this.cls = CustomFullScanActivity.class;
                 this.title = ((Button)v).getText().toString();
                 checkCameraPermissions();
                 break;

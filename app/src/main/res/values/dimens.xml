@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="status_bar_height">0dp</dimen>
+    <dimen name="status_bar_height">25dp</dimen>
 
     <dimen name="title_height">50dp</dimen>
 

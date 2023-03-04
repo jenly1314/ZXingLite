@@ -8,9 +8,13 @@ import android.widget.Toast;
 
 import com.google.zxing.Result;
 import com.king.zxing.CameraScan;
+import com.king.zxing.DecodeConfig;
+import com.king.zxing.DecodeFormatManager;
 import com.king.zxing.DefaultCameraScan;
 import com.king.zxing.ViewfinderView;
+import com.king.zxing.analyze.MultiFormatAnalyzer;
 import com.king.zxing.app.util.StatusBarUtils;
+import com.king.zxing.config.ResolutionCameraConfig;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -22,7 +26,7 @@ import androidx.fragment.app.Fragment;
  * 自定义扫码，切记自定义扫码需在{@link Activity}或者{@link Fragment}相对应的生命周期里面调用{@link #mCameraScan}对应的生命周期
  * @author <a href="mailto:jenly1314@gmail.com">Jenly</a>
  */
-public class CustomActivity extends AppCompatActivity implements CameraScan.OnScanResultCallback {
+public class CustomFullScanActivity extends AppCompatActivity implements CameraScan.OnScanResultCallback {
 
     private boolean isContinuousScan;
 
@@ -59,9 +63,16 @@ public class CustomActivity extends AppCompatActivity implements CameraScan.OnSc
 
         isContinuousScan = getIntent().getBooleanExtra(MainActivity.KEY_IS_CONTINUOUS,false);
 
+        //初始化解码配置
+        DecodeConfig decodeConfig = new DecodeConfig();
+        decodeConfig.setHints(DecodeFormatManager.QR_CODE_HINTS)//如果只有识别二维码的需求，这样设置效率会更高，不设置默认为DecodeFormatManager.DEFAULT_HINTS
+                .setFullAreaScan(true);//设置是否全区域识别，默认false
+
         mCameraScan = new DefaultCameraScan(this,previewView);
         mCameraScan.setOnScanResultCallback(this)
+                .setAnalyzer(new MultiFormatAnalyzer(decodeConfig))
                 .setVibrate(true)
+                .setCameraConfig(new ResolutionCameraConfig(this, ResolutionCameraConfig.IMAGE_QUALITY_720P))
                 .startCamera();
 
     }

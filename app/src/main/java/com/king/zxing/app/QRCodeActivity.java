@@ -11,6 +11,7 @@ import com.king.zxing.DecodeConfig;
 import com.king.zxing.DecodeFormatManager;
 import com.king.zxing.analyze.MultiFormatAnalyzer;
 import com.king.zxing.app.util.StatusBarUtils;
+import com.king.zxing.config.AspectRatioCameraConfig;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
@@ -50,8 +51,8 @@ public class QRCodeActivity extends CaptureActivity {
 
         //在启动预览之前，设置分析器，只识别二维码
         getCameraScan()
+                .setCameraConfig(new AspectRatioCameraConfig(this))//设置相机配置，使用 AspectRatioCameraConfig
                 .setVibrate(true)//设置是否震动，默认为false
-                .setNeedAutoZoom(true)//二维码太小时可自动缩放，默认为false
                 .setAnalyzer(new MultiFormatAnalyzer(decodeConfig));//设置分析器,如果内置实现的一些分析器不满足您的需求，你也可以自定义去实现
     }
 

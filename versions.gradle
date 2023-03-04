@@ -1,7 +1,7 @@
 //App 
 def app_version = [:]
-app_version.versionCode = 35
-app_version.versionName = "2.3.0"
+app_version.versionCode = 36
+app_version.versionName = "2.3.1"
 ext.app_version = app_version
 
 //build version
@@ -29,14 +29,14 @@ versions.espresso = "3.2.0"
 
 versions.bintray_release = "0.9.2"
 versions.mavenPublish = '0.18.0'
-versions.gralde = "7.1.1"
+versions.gralde = "7.4.1"
 versions.kotlin = "1.6.0"
 versions.coreKtx = "1.6.0"
 
 //zxing
 versions.zxing = "3.5.1"
 
-versions.camerax = "1.2.0"
+versions.camerax = "1.2.1"
 
 versions.easypermissions = "3.0.0"
 

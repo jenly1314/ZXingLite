@@ -22,7 +22,6 @@ import android.widget.Toast;
 
 import com.google.zxing.Result;
 import com.king.zxing.CameraScan;
-import com.king.zxing.config.CameraConfig;
 import com.king.zxing.CaptureActivity;
 import com.king.zxing.DecodeConfig;
 import com.king.zxing.DecodeFormatManager;
@@ -121,8 +120,8 @@ public class CustomCaptureActivity extends CaptureActivity {
         if(toast == null){
             toast = Toast.makeText(this,text,Toast.LENGTH_SHORT);
         }else{
-            toast.setDuration(Toast.LENGTH_SHORT);
             toast.setText(text);
+            toast.setDuration(Toast.LENGTH_SHORT);
         }
         toast.show();
     }

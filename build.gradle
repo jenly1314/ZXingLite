@@ -6,7 +6,6 @@ buildscript {
 
     repositories {
         google()
-        maven { url 'https://maven.aliyun.com/repository/public/' }
         mavenCentral()
     }
 
@@ -24,9 +23,7 @@ buildscript {
 allprojects {
     repositories {
         google()
-        maven { url 'https://maven.aliyun.com/repository/public/' }
         mavenCentral()
-//        jcenter() // Warning: this repository is going to shut down soon
     }
 }
 
