@@ -217,7 +217,7 @@ getCameraScan()
 
 **ivFlashlight** 是布局内置的手电筒，如果是继承 **CaptureActivity** 或 **CaptureFragment**，控件id可复写`getFlashlightId`方法自定义，默认为 **ivFlashlight**。返回0表示无需内置手电筒。您也可以自己去定义
 
->  可自定义布局（覆写`getLayoutId方法`），布局内至少要保证有 **PreviewView**。
+>  可自定义布局（覆写`getLayoutId`方法），布局内至少要保证有 **PreviewView**。
 
 ```Xml
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
