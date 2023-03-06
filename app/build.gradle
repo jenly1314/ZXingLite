@@ -26,6 +26,7 @@ android {
 
 
     compileOptions {
+        coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
     }
@@ -44,6 +45,8 @@ dependencies {
     implementation deps.androidx.design
     implementation deps.androidx.appcompat
     implementation deps.androidx.constraintlayout
+
+    coreLibraryDesugaring deps.desugar_jdk
 
 //    implementation deps.kotlin
 //    implementation deps.corektx

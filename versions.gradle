@@ -38,6 +38,8 @@ versions.zxing = "3.5.1"
 
 versions.camerax = "1.2.1"
 
+versions.desugar_jdk_libs = "1.2.2"
+
 versions.easypermissions = "3.0.0"
 
 ext.versions = versions
@@ -57,7 +59,6 @@ test.runner = "androidx.test:runner:$versions.runner"
 test.espresso = "androidx.test.espresso:espresso-core:$versions.espresso"
 deps.test = test
 
-
 //deps.kotlin = "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin"
 //
 //deps.corektx = "androidx.core:core-ktx:$versions.coreKtx"
@@ -71,6 +72,8 @@ deps.camera_camera2 = "androidx.camera:camera-camera2:$versions.camerax"
 deps.camera_lifecycle = "androidx.camera:camera-lifecycle:$versions.camerax"
 deps.camera_view = "androidx.camera:camera-view:$versions.camerax"
 
+//desugar_jdk
+deps.desugar_jdk = "com.android.tools:desugar_jdk_libs:$versions.desugar_jdk_libs"
 
 //permission
 deps.easypermissions = "pub.devrel:easypermissions:$versions.easypermissions"

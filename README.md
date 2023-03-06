@@ -349,6 +349,25 @@ compileOptions {
 
 ```
 
+> 当使用的ZXingLite为 **v2.3.x** 以上版本时，即更新zxing至v3.5.1后；如果要兼容Android 7.0（N）以下版本（即：minSdk<24），需通过脱糖获得 Java 8 及更高版本 API。
+
+```gradle
+compileOptions {
+    // Flag to enable support for the new language APIs
+    coreLibraryDesugaringEnabled true
+    // Sets Java compatibility to Java 8
+    targetCompatibility JavaVersion.VERSION_1_8
+    sourceCompatibility JavaVersion.VERSION_1_8
+}
+
+```
+
+```gradle
+dependencies {
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.2.2'
+}
+```
+
 更多使用详情，请查看[app](app)中的源码使用示例或直接查看[API帮助文档](https://jenly1314.github.io/projects/ZXingLite/doc/)
 
 ### 相关推荐

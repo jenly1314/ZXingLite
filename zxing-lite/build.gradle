@@ -27,6 +27,7 @@ android {
     }
 
     compileOptions {
+        coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
     }
@@ -43,10 +44,13 @@ dependencies {
     androidTestImplementation deps.test.runner
     androidTestImplementation deps.test.espresso
 
+    coreLibraryDesugaring deps.desugar_jdk
+
     compileOnly  deps.androidx.appcompat
     api deps.zxing
     api deps.camera_core
     api deps.camera_camera2
     api deps.camera_lifecycle
     api deps.camera_view
+    
 }
