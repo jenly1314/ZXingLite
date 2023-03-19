@@ -21,6 +21,7 @@
             <enum name="none" value="0"/>
             <enum name="line" value="1"/>
             <enum name="grid" value="2"/>
+            <enum name="image" value="3"/>
         </attr>
         <attr name="cornerRectWidth" format="dimension"/>
         <attr name="cornerRectHeight" format="dimension"/>

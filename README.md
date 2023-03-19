@@ -205,6 +205,7 @@ decodeConfig.setHints(DecodeFormatManager.QR_CODE_HINTS)//如果只有识别二�
 
 // 在启动预览之前，设置分析器，只识别二维码
 getCameraScan()
+        .setCameraConfig(new AspectRatioCameraConfig(this))//设置相机配置，使用 AspectRatioCameraConfig
         .setVibrate(true)//设置是否震动，默认为false
         .setAnalyzer(new MultiFormatAnalyzer(decodeConfig));//设置分析器,如果内置实现的一些分析器不满足您的需求，你也可以自定义去实现
 ```
