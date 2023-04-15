@@ -25,43 +25,44 @@ ZXingLite for Android 是ZXing的精简极速版，基于ZXing库优化扫码和
 
 ## ViewfinderView属性说明
 
-| 属性 | 属性类型      | 默认值 | 属性说明  |
-| :------|:----------| :------ | :------ |
-| maskColor | color     |<font color=#000000>#60000000</font>| 扫描区外遮罩的颜色 |
-| frameColor | color     |<font color=#1FB3E2>#7F1FB3E2</font>| 扫描区边框的颜色 |
-| cornerColor | color     |<font color=#1FB3E2>#FF1FB3E2</font>| 扫描区边角的颜色 |
-| laserColor | color     |<font color=#1FB3E2>#FF1FB3E2</font>| 扫描区激光线的颜色 |
-| labelText | string    |  | 扫描提示文本信息 |
-| labelTextColor | color     |<font color=#C0C0C0>#FFC0C0C0</font>| 提示文本字体颜色 |
-| labelTextSize | dimension |14sp| 提示文本字体大小 |
-| labelTextPadding | dimension |24dp| 提示文本距离扫描区的间距 |
-| labelTextWidth | dimension | | 提示文本的宽度，默认为View的宽度 |
-| labelTextLocation | enum      |bottom| 提示文本显示位置 |
-| frameWidth | dimension |  | 扫码框宽度 |
-| frameHeight | dimension |  | 扫码框高度 |
-| laserStyle | enum      | line | 扫描激光的样式 |
-| gridColumn | integer   | 20 | 网格扫描激光列数 |
-| gridHeight | integer   | 40dp | 网格扫描激光高度，为0dp时，表示动态铺满 |
-| cornerRectWidth | dimension | 4dp | 扫描区边角的宽 |
-| cornerRectHeight | dimension | 16dp | 扫描区边角的高 |
+| 属性                      | 属性类型  | 默认值 | 属性说明  |
+|:------------------------|:----------| :------ | :------ |
+| maskColor               | color     |<font color=#000000>#60000000</font>| 扫描区外遮罩的颜色 |
+| frameColor              | color     |<font color=#1FB3E2>#7F1FB3E2</font>| 扫描区边框的颜色 |
+| cornerColor             | color     |<font color=#1FB3E2>#FF1FB3E2</font>| 扫描区边角的颜色 |
+| laserColor              | color     |<font color=#1FB3E2>#FF1FB3E2</font>| 扫描区激光线的颜色 |
+| labelText               | string    |  | 扫描提示文本信息 |
+| labelTextColor          | color     |<font color=#C0C0C0>#FFC0C0C0</font>| 提示文本字体颜色 |
+| labelTextSize           | dimension |14sp| 提示文本字体大小 |
+| labelTextPadding        | dimension |24dp| 提示文本距离扫描区的间距 |
+| labelTextWidth          | dimension | | 提示文本的宽度，默认为View的宽度 |
+| labelTextLocation       | enum      |bottom| 提示文本显示位置 |
+| frameWidth              | dimension |  | 扫码框宽度 |
+| frameHeight             | dimension |  | 扫码框高度 |
+| laserStyle              | enum      | line | 扫描激光的样式 |
+| gridColumn              | integer   | 20 | 网格扫描激光列数 |
+| gridHeight              | integer   | 40dp | 网格扫描激光高度，为0dp时，表示动态铺满 |
+| cornerRectWidth         | dimension | 4dp | 扫描区边角的宽 |
+| cornerRectHeight        | dimension | 16dp | 扫描区边角的高 |
 | scannerLineMoveDistance | dimension | 2dp | 扫描线每次移动距离 |
-| scannerLineHeight | dimension | 5dp | 扫描线高度 |
-| frameLineWidth | dimension | 1dp | 边框线宽度 |
-| scannerAnimationDelay | integer   | 20 | 扫描动画延迟间隔时间，单位：毫秒 |
-| frameRatio | float     | 0.625f | 扫码框与屏幕占比 |
-| framePaddingLeft | dimension | 0 | 扫码框左边的内间距 |
-| framePaddingTop | dimension | 0 | 扫码框上边的内间距 |
-| framePaddingRight | dimension | 0 | 扫码框右边的内间距 |
-| framePaddingBottom | dimension | 0 | 扫码框下边的内间距 |
-| frameGravity | enum      | center | 扫码框对齐方式 |
-| pointColor | color     | <font color=#1FB3E2>#FF1FB3E2</font> | 结果点的颜色 |
-| pointStrokeColor | color     | <font color=#FFFFFF>#FFFFFFFF</font> | 结果点描边的颜色 |
-| pointRadius | dimension | 15dp | 结果点的半径 |
-| pointStrokeRatio | float     | 1.2 | 结果点描边半径与结果点半径的比例 |
-| pointDrawable | reference |  | 结果点自定义图片 |
-| showPointAnim | boolean   | true | 是否显示结果点的动画 |
-| laserDrawable | reference | | 扫描激光自定义图片 |
-| viewfinderStyle | enum      | classic | 取景框样式；支持：classic：经典样式（带扫码框那种）、popular：流行样式（不带扫码框） |
+| scannerLineHeight       | dimension | 5dp | 扫描线高度 |
+| frameLineWidth          | dimension | 1dp | 边框线宽度 |
+| scannerAnimationDelay   | integer   | 20 | 扫描动画延迟间隔时间，单位：毫秒 |
+| frameRatio              | float     | 0.625f | 扫码框与屏幕占比 |
+| framePaddingLeft        | dimension | 0 | 扫码框左边的内间距 |
+| framePaddingTop         | dimension | 0 | 扫码框上边的内间距 |
+| framePaddingRight       | dimension | 0 | 扫码框右边的内间距 |
+| framePaddingBottom      | dimension | 0 | 扫码框下边的内间距 |
+| frameGravity            | enum      | center | 扫码框对齐方式 |
+| pointColor              | color     | <font color=#1FB3E2>#FF1FB3E2</font> | 结果点的颜色 |
+| pointStrokeColor        | color     | <font color=#FFFFFF>#FFFFFFFF</font> | 结果点描边的颜色 |
+| pointRadius             | dimension | 15dp | 结果点的半径 |
+| pointStrokeRatio        | float     | 1.2 | 结果点描边半径与结果点半径的比例 |
+| pointDrawable           | reference |  | 结果点自定义图片 |
+| showPointAnim           | boolean   | true | 是否显示结果点的动画 |
+| laserDrawable           | reference | | 扫描激光自定义图片 |
+| laserDrawableRatio      | float | 0.625f | 激光扫描图片与屏幕占比  |
+| viewfinderStyle         | enum      | classic | 取景框样式；支持：classic：经典样式（带扫码框那种）、popular：流行样式（不带扫码框） |
 
 
 ## 引入
@@ -83,7 +84,7 @@ allprojects {
 
 ```gradle
 // AndroidX 版本
-implementation 'com.github.jenly1314:zxing-lite:2.3.1'
+implementation 'com.github.jenly1314:zxing-lite:2.4.0'
 
 ```
 
@@ -175,7 +176,7 @@ implementation 'com.king.zxing:zxing-lite:1.1.9'
 // 获取CameraScan，扫码相关的配置设置。CameraScan里面包含部分支持链式调用的方法，即调用返回是CameraScan本身的一些配置建议在startCamera之前调用。
 getCameraScan().setPlayBeep(true)//设置是否播放音效，默认为false
         .setVibrate(true)//设置是否震动，默认为false
-        .setCameraConfig(new CameraConfig())//设置相机配置信息，CameraConfig可覆写options方法自定义配置
+        .setCameraConfig(new ResolutionCameraConfig(this))//设置相机配置信息，CameraConfig可覆写options方法自定义配置
         .setNeedAutoZoom(false)//二维码太小时可自动缩放，默认为false
         .setNeedTouchZoom(true)//支持多指触摸捏合缩放，默认为true
         .setDarkLightLux(45f)//设置光线足够暗的阈值（单位：lux），需要通过{@link #bindFlashlightView(View)}绑定手电筒才有效
@@ -403,6 +404,12 @@ dependencies {
 查看 [ **1.x** API帮助文档](https://jenly1314.github.io/projects/ZXingLite/doc/)
 
 ## 版本记录
+
+#### v2.4.0：2023-4-15
+* 优化CameraScan的缺省配置（CameraConfig相关配置）
+* 优化ViewfinderView自定义属性（新增laserDrawableRatio）
+* 优化ImageAnalyzer中YUV数据的处理
+* 更新CameraX至v1.2.2
 
 #### v2.3.1：2023-3-4
 * 更新CameraX至v1.2.1

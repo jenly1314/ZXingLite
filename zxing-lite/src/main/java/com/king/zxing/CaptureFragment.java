@@ -26,6 +26,7 @@ import com.king.zxing.util.LogUtils;
 import com.king.zxing.util.PermissionUtils;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.camera.view.PreviewView;
 import androidx.fragment.app.Fragment;
 
@@ -46,14 +47,29 @@ import androidx.fragment.app.Fragment;
  */
 public class CaptureFragment extends Fragment implements CameraScan.OnScanResultCallback {
 
+    /**
+     * 相机权限请求代码
+     */
     private static final int CAMERA_PERMISSION_REQUEST_CODE = 0X86;
-
+    /**
+     * 根视图
+     */
     private View mRootView;
-
+    /**
+     * 预览视图
+     */
     protected PreviewView previewView;
+    /**
+     * 取景视图
+     */
     protected ViewfinderView viewfinderView;
+    /**
+     * 手电筒视图
+     */
     protected View ivFlashlight;
-
+    /**
+     * CameraScan
+     */
     private CameraScan mCameraScan;
 
     public static CaptureFragment newInstance() {
@@ -70,8 +86,13 @@ public class CaptureFragment extends Fragment implements CameraScan.OnScanResult
         if (isContentView()) {
             mRootView = createRootView(inflater, container);
         }
-        initUI();
         return mRootView;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        initUI();
     }
 
     /**
@@ -80,11 +101,11 @@ public class CaptureFragment extends Fragment implements CameraScan.OnScanResult
     public void initUI() {
         previewView = mRootView.findViewById(getPreviewViewId());
         int viewfinderViewId = getViewfinderViewId();
-        if (viewfinderViewId != 0) {
+        if (viewfinderViewId != 0 && viewfinderViewId != View.NO_ID) {
             viewfinderView = mRootView.findViewById(viewfinderViewId);
         }
         int ivFlashlightId = getFlashlightId();
-        if (ivFlashlightId != 0) {
+        if (ivFlashlightId != 0 && ivFlashlightId != View.NO_ID) {
             ivFlashlight = mRootView.findViewById(ivFlashlightId);
             if (ivFlashlight != null) {
                 ivFlashlight.setOnClickListener(v -> onClickFlashlight());
@@ -156,8 +177,8 @@ public class CaptureFragment extends Fragment implements CameraScan.OnScanResult
     /**
      * 请求Camera权限回调结果
      *
-     * @param permissions
-     * @param grantResults
+     * @param permissions  权限
+     * @param grantResults 授权结果
      */
     public void requestCameraPermissionResult(@NonNull String[] permissions, @NonNull int[] grantResults) {
         if (PermissionUtils.requestPermissionsResult(Manifest.permission.CAMERA, permissions, grantResults)) {
@@ -168,9 +189,9 @@ public class CaptureFragment extends Fragment implements CameraScan.OnScanResult
     }
 
     @Override
-    public void onDestroy() {
+    public void onDestroyView() {
         releaseCamera();
-        super.onDestroy();
+        super.onDestroyView();
     }
 
     /**
@@ -197,7 +218,7 @@ public class CaptureFragment extends Fragment implements CameraScan.OnScanResult
     /**
      * 布局ID；通过覆写此方法可以自定义布局
      *
-     * @return
+     * @return 布局ID
      */
     public int getLayoutId() {
         return R.layout.zxl_capture;
@@ -213,9 +234,9 @@ public class CaptureFragment extends Fragment implements CameraScan.OnScanResult
     }
 
     /**
-     * 预览界面{@link #previewView} 的ID
+     * 预览界面{@link #previewView} 的ID；可通过覆写此方法自定义ID
      *
-     * @return
+     * @return 默认返回{@code R.id.previewView}
      */
     public int getPreviewViewId() {
         return R.id.previewView;
@@ -231,7 +252,7 @@ public class CaptureFragment extends Fragment implements CameraScan.OnScanResult
     }
 
     /**
-     * Get {@link CameraScan}
+     * 获取 {@link CameraScan}
      *
      * @return {@link #mCameraScan}
      */
@@ -252,6 +273,11 @@ public class CaptureFragment extends Fragment implements CameraScan.OnScanResult
 
     //--------------------------------------------
 
+    /**
+     * 获取根视图
+     *
+     * @return {@link #mRootView}
+     */
     public View getRootView() {
         return mRootView;
     }

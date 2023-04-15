@@ -11,15 +11,17 @@ import androidx.annotation.Nullable;
 
 
 /**
+ * 二维码分析器
+ *
  * @author <a href="mailto:jenly1314@gmail.com">Jenly</a>
  */
 public class QRCodeAnalyzer extends BarcodeFormatAnalyzer {
 
     public QRCodeAnalyzer() {
-        this((DecodeConfig)null);
+        this((DecodeConfig) null);
     }
 
-    public QRCodeAnalyzer(@Nullable Map<DecodeHintType,Object> hints){
+    public QRCodeAnalyzer(@Nullable Map<DecodeHintType, Object> hints) {
         this(new DecodeConfig().setHints(hints));
     }
 

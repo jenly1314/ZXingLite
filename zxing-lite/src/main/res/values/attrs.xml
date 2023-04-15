@@ -48,6 +48,7 @@
         <attr name="pointDrawable" format="reference"/>
         <attr name="showPointAnim" format="boolean"/>
         <attr name="laserDrawable" format="reference"/>
+        <attr name="laserDrawableRatio" format="float"/>
         <attr name="viewfinderStyle" format="enum">
             <enum name="classic" value="0"/>
             <enum name="popular" value="1"/>

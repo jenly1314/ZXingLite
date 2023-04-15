@@ -95,6 +95,12 @@ public class DecodeConfig {
 
     }
 
+    /**
+     * 获取配置的解码支持类型 {@link DecodeHintType}
+     *
+     * @return
+     * @see {@link DecodeFormatManager}
+     */
     public Map<DecodeHintType, Object> getHints() {
         return hints;
     }
@@ -105,7 +111,7 @@ public class DecodeConfig {
      * @param hints {@link DecodeFormatManager}
      *              <p>
      *              内置的一些解码可参见如下：
-     * @return
+     * @return {@link DecodeConfig}
      * @see {@link DecodeFormatManager#DEFAULT_HINTS}
      * @see {@link DecodeFormatManager#ALL_HINTS}
      * @see {@link DecodeFormatManager#CODE_128_HINTS}
@@ -124,7 +130,7 @@ public class DecodeConfig {
     /**
      * 是否支持识别反色码，黑白颜色反转
      *
-     * @return
+     * @return 是否支持识别反色码
      */
     public boolean isSupportLuminanceInvert() {
         return isSupportLuminanceInvert;
@@ -134,7 +140,7 @@ public class DecodeConfig {
      * 设置是否支持识别反色码，黑白颜色反转
      *
      * @param supportLuminanceInvert 默认为{@code false}，想要增强支持扫码识别反色码时可使用，相应的也会增加性能消耗。
-     * @return
+     * @return {@link DecodeConfig}
      */
     public DecodeConfig setSupportLuminanceInvert(boolean supportLuminanceInvert) {
         isSupportLuminanceInvert = supportLuminanceInvert;
@@ -144,7 +150,7 @@ public class DecodeConfig {
     /**
      * 是否支持扫垂直的条码
      *
-     * @return
+     * @return 是否支持扫垂直的条码
      */
     public boolean isSupportVerticalCode() {
         return isSupportVerticalCode;
@@ -154,7 +160,7 @@ public class DecodeConfig {
      * 设置是否支持扫垂直的条码
      *
      * @param supportVerticalCode 默认为{@code false}，想要增强支持扫码识别垂直的条码时可使用，相应的也会增加性能消耗。
-     * @return
+     * @return {@link DecodeConfig}
      */
     public DecodeConfig setSupportVerticalCode(boolean supportVerticalCode) {
         isSupportVerticalCode = supportVerticalCode;
@@ -164,7 +170,7 @@ public class DecodeConfig {
     /**
      * 是否支持使用多解码
      *
-     * @return
+     * @return 是否支持使用多解码
      */
     public boolean isMultiDecode() {
         return isMultiDecode;
@@ -185,7 +191,7 @@ public class DecodeConfig {
     /**
      * 是否支持识别反色码（条码黑白颜色反转的码）使用多解码
      *
-     * @return
+     * @return 是否支持识别反色码
      */
     public boolean isSupportLuminanceInvertMultiDecode() {
         return isSupportLuminanceInvertMultiDecode;
@@ -195,7 +201,7 @@ public class DecodeConfig {
      * 设置是否支持识别反色码（条码黑白颜色反转的码）使用多解码
      *
      * @param supportLuminanceInvertMultiDecode 默认为{@code false}，想要增强支持扫码识别反色码时可使用，相应的也会增加性能消耗。
-     * @return
+     * @return {@link DecodeConfig}
      * @see {@link HybridBinarizer} , {@link GlobalHistogramBinarizer}
      */
     public DecodeConfig setSupportLuminanceInvertMultiDecode(boolean supportLuminanceInvertMultiDecode) {
@@ -206,7 +212,7 @@ public class DecodeConfig {
     /**
      * 是否支持垂直的条码，使用多解码
      *
-     * @return
+     * @return 是否支持垂直的条码，使用多解码
      */
     public boolean isSupportVerticalCodeMultiDecode() {
         return isSupportVerticalCodeMultiDecode;
@@ -216,7 +222,7 @@ public class DecodeConfig {
      * 设置是否支持垂直的条码，使用多解码；解码时，对应的二值化的实现： {@link HybridBinarizer} , {@link GlobalHistogramBinarizer}
      *
      * @param supportVerticalCodeMultiDecode 默认为{@code false}，想要增强支持扫码识别垂直的条码时可使用，相应的也会增加性能消耗。
-     * @return
+     * @return {@link DecodeConfig}
      */
     public DecodeConfig setSupportVerticalCodeMultiDecode(boolean supportVerticalCodeMultiDecode) {
         isSupportVerticalCodeMultiDecode = supportVerticalCodeMultiDecode;
@@ -226,7 +232,7 @@ public class DecodeConfig {
     /**
      * 需要分析识别区域
      *
-     * @return
+     * @return 分析识别区域
      */
     public Rect getAnalyzeAreaRect() {
         return analyzeAreaRect;
@@ -244,7 +250,7 @@ public class DecodeConfig {
      *                        您还可以通过{@link CameraScan#setCameraConfig(CameraConfig)}去自定义配置{@link CameraConfig}的配置信息控制预览相关配置信息
      *                        <p>
      *                        即判定区域分析的优先级顺序为:{@link #setFullAreaScan(boolean)} -> {@link #setAnalyzeAreaRect(Rect)} -> {@link #setAreaRectRatio(float)}
-     * @return
+     * @return {@link DecodeConfig}
      */
     public DecodeConfig setAnalyzeAreaRect(Rect analyzeAreaRect) {
         this.analyzeAreaRect = analyzeAreaRect;
@@ -254,7 +260,7 @@ public class DecodeConfig {
     /**
      * 是否支持全区域扫码识别
      *
-     * @return
+     * @return 是否支持全区域扫码识别
      */
     public boolean isFullAreaScan() {
         return isFullAreaScan;
@@ -274,7 +280,7 @@ public class DecodeConfig {
      *                     您还可以通过{@link CameraScan#setCameraConfig(CameraConfig)}去自定义配置{@link CameraConfig}的配置信息控制预览相关配置信息
      *                     <p>
      *                     即判定区域分析的优先级顺序为:{@link #setFullAreaScan(boolean)} -> {@link #setAnalyzeAreaRect(Rect)} -> {@link #setAreaRectRatio(float)}
-     * @return
+     * @return {@link DecodeConfig}
      */
     public DecodeConfig setFullAreaScan(boolean fullAreaScan) {
         isFullAreaScan = fullAreaScan;
@@ -284,7 +290,7 @@ public class DecodeConfig {
     /**
      * 识别区域比例，默认{@link #DEFAULT_AREA_RECT_RATIO}，设置的比例最终会在预览区域裁剪基于此比例的一个矩形进行扫码识别
      *
-     * @return
+     * @return 识别区域比例，默认{@link #DEFAULT_AREA_RECT_RATIO}
      */
     public float getAreaRectRatio() {
         return areaRectRatio;
@@ -302,7 +308,7 @@ public class DecodeConfig {
      *                      您还可以通过{@link CameraScan#setCameraConfig(CameraConfig)}去自定义配置{@link CameraConfig}的配置信息控制预览相关配置信息
      *                      <p>
      *                      即判定区域分析的优先级顺序为:{@link #setFullAreaScan(boolean)} -> {@link #setAnalyzeAreaRect(Rect)} -> {@link #setAreaRectRatio(float)}
-     * @return
+     * @return {@link DecodeConfig}
      */
     public DecodeConfig setAreaRectRatio(@FloatRange(from = 0.5, to = 1.0) float areaRectRatio) {
         this.areaRectRatio = areaRectRatio;
@@ -312,7 +318,7 @@ public class DecodeConfig {
     /**
      * 识别区域垂直方向偏移量，支持负数，大于0时，居中心向下偏移，小于0时，居中心向上偏移
      *
-     * @return
+     * @return 识别区域垂直方向偏移量
      */
     public int getAreaRectVerticalOffset() {
         return areaRectVerticalOffset;
@@ -322,7 +328,7 @@ public class DecodeConfig {
      * 设置识别区域垂直方向偏移量，支持负数，大于0时，居中心向下偏移，小于0时，居中心向上偏移
      *
      * @param areaRectVerticalOffset
-     * @return
+     * @return {@link DecodeConfig}
      */
     public DecodeConfig setAreaRectVerticalOffset(int areaRectVerticalOffset) {
         this.areaRectVerticalOffset = areaRectVerticalOffset;
@@ -332,7 +338,7 @@ public class DecodeConfig {
     /**
      * 识别区域水平方向偏移量，支持负数，大于0时，居中心向右偏移，小于0时，居中心向左偏移
      *
-     * @return
+     * @return 识别区域水平方向偏移量
      */
     public int getAreaRectHorizontalOffset() {
         return areaRectHorizontalOffset;
@@ -342,7 +348,7 @@ public class DecodeConfig {
      * 设置识别区域水平方向偏移量，支持负数，大于0时，居中心向右偏移，小于0时，居中心向左偏移
      *
      * @param areaRectHorizontalOffset
-     * @return
+     * @return {@link DecodeConfig}
      */
     public DecodeConfig setAreaRectHorizontalOffset(int areaRectHorizontalOffset) {
         this.areaRectHorizontalOffset = areaRectHorizontalOffset;

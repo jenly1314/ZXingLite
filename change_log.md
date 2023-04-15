@@ -1,5 +1,11 @@
 ## 版本记录
 
+#### v2.4.0：2023-4-15
+* 优化CameraScan的缺省配置（CameraConfig相关配置）
+* 优化ViewfinderView自定义属性（新增laserDrawableRatio）
+* 优化ImageAnalyzer中YUV数据的处理
+* 更新CameraX至v1.2.2
+
 #### v2.3.1：2023-3-4
 * 更新CameraX至v1.2.1
 * 更新Gradle至v7.5

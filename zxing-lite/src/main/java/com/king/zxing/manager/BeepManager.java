@@ -13,6 +13,8 @@ import com.king.zxing.util.LogUtils;
 import java.io.Closeable;
 
 /**
+ * 蜂鸣音效管理器：主要用于播放蜂鸣提示音和振动效果
+ *
  * @author <a href="mailto:jenly1314@gmail.com">Jenly</a>
  */
 public final class BeepManager implements MediaPlayer.OnErrorListener, Closeable {

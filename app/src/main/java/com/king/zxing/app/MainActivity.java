@@ -32,6 +32,8 @@ import com.king.zxing.util.LogUtils;
 
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -72,6 +74,8 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
 
     private Toast toast;
 
+    private ExecutorService executor = Executors.newSingleThreadExecutor();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,12 +101,10 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
     }
 
     private void showToast(String text){
-        if(toast == null){
-            toast = Toast.makeText(this,text,Toast.LENGTH_SHORT);
-        }else{
-            toast.setDuration(Toast.LENGTH_SHORT);
-            toast.setText(text);
+        if(toast != null){
+            toast.cancel();
         }
+        toast = Toast.makeText(this,text,Toast.LENGTH_SHORT);
         toast.show();
     }
 
@@ -165,7 +167,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
     }
 
     private void asyncThread(Runnable runnable){
-        new Thread(runnable).start();
+        executor.execute(runnable);
     }
 
     /**

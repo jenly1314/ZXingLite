@@ -1,18 +1,22 @@
-apply plugin: 'com.android.application'
-//apply plugin: 'kotlin-android'
-//apply plugin: 'kotlin-android-extensions'
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+}
 
 android {
-    compileSdkVersion build_versions.compileSdk
-    buildToolsVersion build_versions.buildTools
+    namespace 'com.king.zxing.app'
+    compileSdk build_versions.compileSdk
+
     defaultConfig {
         applicationId "com.king.zxing.app"
-        minSdkVersion build_versions.minSdk
-        targetSdkVersion build_versions.targetSdk
+        minSdk build_versions.minSdk
+        targetSdk build_versions.targetSdk
         versionCode app_version.versionCode
         versionName app_version.versionName
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -24,22 +28,16 @@ android {
         abortOnError false
     }
 
-
     compileOptions {
         coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
     }
-
-//    kotlinOptions {
-//        jvmTarget = '1.8'
-//    }
 }
 
 dependencies {
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
     testImplementation deps.test.junit
-    androidTestImplementation deps.test.runner
+    androidTestImplementation deps.test.android_ext_junit
     androidTestImplementation deps.test.espresso
 
     implementation deps.androidx.design

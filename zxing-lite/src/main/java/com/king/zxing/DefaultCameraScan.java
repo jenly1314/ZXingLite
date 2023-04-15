@@ -17,7 +17,9 @@ import com.google.zxing.ResultPoint;
 import com.google.zxing.common.detector.MathUtils;
 import com.king.zxing.analyze.Analyzer;
 import com.king.zxing.analyze.MultiFormatAnalyzer;
+import com.king.zxing.config.AspectRatioCameraConfig;
 import com.king.zxing.config.CameraConfig;
+import com.king.zxing.config.ResolutionCameraConfig;
 import com.king.zxing.manager.AmbientLightManager;
 import com.king.zxing.manager.BeepManager;
 import com.king.zxing.util.LogUtils;
@@ -67,14 +69,12 @@ public class DefaultCameraScan extends CameraScan {
      * opposed to a hover movement gesture.
      */
     private static final int HOVER_TAP_TIMEOUT = 150;
-
     /**
      * Defines the maximum distance in pixels that a touch pad touch can move
      * before being released for it to be considered a tap (click) as opposed
      * to a hover movement gesture.
      */
     private static final int HOVER_TAP_SLOP = 20;
-
     /**
      * 每次缩放改变的步长
      */
@@ -83,40 +83,73 @@ public class DefaultCameraScan extends CameraScan {
     private FragmentActivity mFragmentActivity;
     private Context mContext;
     private LifecycleOwner mLifecycleOwner;
+    /**
+     * 预览视图
+     */
     private PreviewView mPreviewView;
 
     private ListenableFuture<ProcessCameraProvider> mCameraProviderFuture;
+    /**
+     * 相机
+     */
     private Camera mCamera;
-
+    /**
+     * 相机配置
+     */
     private CameraConfig mCameraConfig;
+    /**
+     * 分析器
+     */
     private Analyzer mAnalyzer;
-
     /**
      * 是否分析
      */
     private volatile boolean isAnalyze = true;
-
     /**
      * 是否已经分析出结果
      */
     private volatile boolean isAnalyzeResult;
-
+    /**
+     * 闪光灯（手电筒）视图
+     */
     private View flashlightView;
 
     private MutableLiveData<Result> mResultLiveData;
-
+    /**
+     * 扫描结果回调
+     */
     private OnScanResultCallback mOnScanResultCallback;
-
+    /**
+     * 蜂鸣音效管理器：主要用于播放蜂鸣提示音和振动效果
+     */
     private BeepManager mBeepManager;
+    /**
+     * 环境光线管理器：主要通过传感器来监听光线的亮度变化
+     */
     private AmbientLightManager mAmbientLightManager;
 
     private int mOrientation;
     private int mImageWidth;
     private int mImageHeight;
+    /**
+     * 最后自动缩放时间
+     */
     private long mLastAutoZoomTime;
+    /**
+     * 最后点击时间，根据两次点击时间间隔用于区分单机和触摸缩放事件
+     */
     private long mLastHoveTapTime;
+    /**
+     * 是否是点击事件
+     */
     private boolean isClickTap;
+    /**
+     * 按下时X坐标
+     */
     private float mDownX;
+    /**
+     * 按下时Y坐标
+     */
     private float mDownY;
 
     public DefaultCameraScan(@NonNull FragmentActivity activity, @NonNull PreviewView previewView) {
@@ -199,7 +232,7 @@ public class DefaultCameraScan extends CameraScan {
     /**
      * 处理预览视图点击事件；如果触发的点击事件被判定对焦操作，则开始自动对焦
      *
-     * @param event
+     * @param event 事件
      */
     private void handlePreviewViewClickTap(MotionEvent event) {
         if (event.getPointerCount() == 1) {
@@ -226,8 +259,8 @@ public class DefaultCameraScan extends CameraScan {
     /**
      * 开始对焦和测光
      *
-     * @param x
-     * @param y
+     * @param x X轴坐标
+     * @param y Y轴坐标
      */
     private void startFocusAndMetering(float x, float y) {
         if (mCamera != null) {
@@ -240,19 +273,6 @@ public class DefaultCameraScan extends CameraScan {
         }
     }
 
-    /**
-     * 初始化配置
-     */
-    private void initConfig() {
-        if (mCameraConfig == null) {
-            mCameraConfig = new CameraConfig();
-        }
-        if (mAnalyzer == null) {
-            mAnalyzer = new MultiFormatAnalyzer();
-        }
-    }
-
-
     @Override
     public CameraScan setCameraConfig(CameraConfig cameraConfig) {
         if (cameraConfig != null) {
@@ -261,12 +281,35 @@ public class DefaultCameraScan extends CameraScan {
         return this;
     }
 
+    /**
+     * 初始化相机配置
+     */
+    /**
+     * 初始化相机配置
+     */
+    private void initCameraConfig(Context context) {
+        if (mCameraConfig == null) {
+            DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+            int size = Math.min(displayMetrics.widthPixels, displayMetrics.heightPixels);
+            // 根据分辨率初始化缺省配置CameraConfig；在此前提下尽可能的找到比屏幕分辨率小一级的配置；在适配、性能与体验之间得有所取舍，找到平衡点。
+            if (size > ResolutionCameraConfig.IMAGE_QUALITY_1080P) {
+                mCameraConfig = new ResolutionCameraConfig(context);
+            } else if (size > ResolutionCameraConfig.IMAGE_QUALITY_720P) {
+                mCameraConfig = new ResolutionCameraConfig(context, ResolutionCameraConfig.IMAGE_QUALITY_720P);
+            } else {
+                mCameraConfig = new AspectRatioCameraConfig(context);
+            }
+        }
+    }
+
     @Override
     public void startCamera() {
-        initConfig();
+        initCameraConfig(mContext);
+        if (mAnalyzer == null) {
+            mAnalyzer = new MultiFormatAnalyzer();
+        }
         mCameraProviderFuture = ProcessCameraProvider.getInstance(mContext);
         mCameraProviderFuture.addListener(() -> {
-
             try {
                 Preview preview = mCameraConfig.options(new Preview.Builder());
 
@@ -336,6 +379,7 @@ public class DefaultCameraScan extends CameraScan {
 
     /**
      * 处理自动缩放
+     *
      * @param distance
      * @param result
      * @return
@@ -353,7 +397,8 @@ public class DefaultCameraScan extends CameraScan {
 
     /**
      * 扫描结果回调
-     * @param result
+     *
+     * @param result 扫描结果
      */
     private void scanResultCallback(Result result) {
         if (mOnScanResultCallback != null && mOnScanResultCallback.onScanResultCallback(result)) {
@@ -473,11 +518,6 @@ public class DefaultCameraScan extends CameraScan {
         return false;
     }
 
-    /**
-     * 是否支持闪光灯
-     *
-     * @return
-     */
     @Override
     public boolean hasFlashUnit() {
         if (mCamera != null) {

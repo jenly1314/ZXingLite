@@ -21,9 +21,9 @@ public interface ICamera {
     void stopCamera();
 
     /**
-     * 获取{@link Camera}
+     * 获取 {@link Camera}
      *
-     * @return
+     * @return {@link Camera}
      */
     @Nullable
     Camera getCamera();

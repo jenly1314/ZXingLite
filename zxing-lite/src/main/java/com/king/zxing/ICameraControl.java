@@ -22,7 +22,7 @@ public interface ICameraControl {
     /**
      * 缩放到指定比例
      *
-     * @param ratio
+     * @param ratio 缩放比例
      */
     void zoomTo(float ratio);
 
@@ -39,28 +39,28 @@ public interface ICameraControl {
     /**
      * 线性缩放到指定比例
      *
-     * @param linearZoom
+     * @param linearZoom 线性缩放比例；范围在：0.0 ~ 1.0之间
      */
     void lineZoomTo(@FloatRange(from = 0.0, to = 1.0) float linearZoom);
 
     /**
      * 设置闪光灯（手电筒）是否开启
      *
-     * @param torch
+     * @param torch 是否开启闪光灯（手电筒）
      */
     void enableTorch(boolean torch);
 
     /**
      * 闪光灯（手电筒）是否开启
      *
-     * @return
+     * @return 闪光灯（手电筒）是否开启
      */
     boolean isTorchEnabled();
 
     /**
      * 是否支持闪光灯
      *
-     * @return
+     * @return 是否支持闪光灯
      */
     boolean hasFlashUnit();
 }

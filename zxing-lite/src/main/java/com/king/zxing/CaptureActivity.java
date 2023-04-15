@@ -45,12 +45,25 @@ import androidx.camera.view.PreviewView;
  */
 public class CaptureActivity extends AppCompatActivity implements CameraScan.OnScanResultCallback {
 
+    /**
+     * 相机权限请求代码
+     */
     private static final int CAMERA_PERMISSION_REQUEST_CODE = 0X86;
-
+    /**
+     * 预览视图
+     */
     protected PreviewView previewView;
+    /**
+     * 取景视图
+     */
     protected ViewfinderView viewfinderView;
+    /**
+     * 手电筒视图
+     */
     protected View ivFlashlight;
-
+    /**
+     * CameraScan
+     */
     private CameraScan mCameraScan;
 
     @Override
@@ -68,11 +81,11 @@ public class CaptureActivity extends AppCompatActivity implements CameraScan.OnS
     public void initUI() {
         previewView = findViewById(getPreviewViewId());
         int viewfinderViewId = getViewfinderViewId();
-        if (viewfinderViewId != 0) {
+        if (viewfinderViewId != 0 && viewfinderViewId != View.NO_ID) {
             viewfinderView = findViewById(viewfinderViewId);
         }
         int ivFlashlightId = getFlashlightId();
-        if (ivFlashlightId != 0) {
+        if (ivFlashlightId != 0 && ivFlashlightId != View.NO_ID) {
             ivFlashlight = findViewById(ivFlashlightId);
             if (ivFlashlight != null) {
                 ivFlashlight.setOnClickListener(v -> onClickFlashlight());
@@ -144,8 +157,8 @@ public class CaptureActivity extends AppCompatActivity implements CameraScan.OnS
     /**
      * 请求Camera权限回调结果
      *
-     * @param permissions
-     * @param grantResults
+     * @param permissions  权限
+     * @param grantResults 授权结果
      */
     public void requestCameraPermissionResult(@NonNull String[] permissions, @NonNull int[] grantResults) {
         if (PermissionUtils.requestPermissionsResult(Manifest.permission.CAMERA, permissions, grantResults)) {
@@ -173,7 +186,7 @@ public class CaptureActivity extends AppCompatActivity implements CameraScan.OnS
     /**
      * 布局ID；通过覆写此方法可以自定义布局
      *
-     * @return
+     * @return 布局ID
      */
     public int getLayoutId() {
         return R.layout.zxl_capture;
@@ -188,11 +201,10 @@ public class CaptureActivity extends AppCompatActivity implements CameraScan.OnS
         return R.id.viewfinderView;
     }
 
-
     /**
-     * 预览界面{@link #previewView} 的ID
+     * 预览界面{@link #previewView} 的ID；可通过覆写此方法自定义ID
      *
-     * @return
+     * @return 默认返回{@code R.id.previewView}
      */
     public int getPreviewViewId() {
         return R.id.previewView;
@@ -208,7 +220,7 @@ public class CaptureActivity extends AppCompatActivity implements CameraScan.OnS
     }
 
     /**
-     * Get {@link CameraScan}
+     * 获取 {@link CameraScan}
      *
      * @return {@link #mCameraScan}
      */

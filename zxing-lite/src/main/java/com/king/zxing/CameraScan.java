@@ -47,6 +47,15 @@ public abstract class CameraScan implements ICamera, ICameraControl {
     public static int LENS_FACING_BACK = CameraSelector.LENS_FACING_BACK;
 
     /**
+     * 纵横比：4:3
+     */
+    public static final float ASPECT_RATIO_4_3 = 4.0F / 3.0F;
+    /**
+     * 纵横比：16:9
+     */
+    public static final float ASPECT_RATIO_16_9 = 16.0F / 9.0F;
+
+    /**
      * 是否需要支持自动缩放
      */
     private boolean isNeedAutoZoom = false;
@@ -59,7 +68,7 @@ public abstract class CameraScan implements ICamera, ICameraControl {
     /**
      * 是否需要支持触摸缩放
      *
-     * @return
+     * @return 返回是否需要支持触摸缩放
      */
     protected boolean isNeedTouchZoom() {
         return isNeedTouchZoom;
@@ -68,8 +77,8 @@ public abstract class CameraScan implements ICamera, ICameraControl {
     /**
      * 设置是否需要支持触摸缩放
      *
-     * @param needTouchZoom
-     * @return
+     * @param needTouchZoom 是否需要支持触摸缩放
+     * @return {@link CameraScan}
      */
     public CameraScan setNeedTouchZoom(boolean needTouchZoom) {
         isNeedTouchZoom = needTouchZoom;
@@ -79,7 +88,7 @@ public abstract class CameraScan implements ICamera, ICameraControl {
     /**
      * 是否需要支持自动缩放
      *
-     * @return
+     * @return 是否需要支持自动缩放
      */
     protected boolean isNeedAutoZoom() {
         return isNeedAutoZoom;
@@ -88,8 +97,8 @@ public abstract class CameraScan implements ICamera, ICameraControl {
     /**
      * 设置是否需要支持自动缩放
      *
-     * @param needAutoZoom
-     * @return
+     * @param needAutoZoom 是否需要支持自动缩放
+     * @return {@link CameraScan}
      */
     public CameraScan setNeedAutoZoom(boolean needAutoZoom) {
         isNeedAutoZoom = needAutoZoom;
@@ -99,7 +108,8 @@ public abstract class CameraScan implements ICamera, ICameraControl {
     /**
      * 设置相机配置，请在{@link #startCamera()}之前调用
      *
-     * @param cameraConfig
+     * @param cameraConfig 相机配置
+     * @return {@link CameraScan}
      */
     public abstract CameraScan setCameraConfig(CameraConfig cameraConfig);
 
@@ -113,7 +123,8 @@ public abstract class CameraScan implements ICamera, ICameraControl {
      * 2. 如果只是想拦截扫码结果回调自己处理逻辑，但并不想继续分析图像（即不想连扫），可通过
      * 调用getCameraScan().setAnalyzeImage(false)来停止分析图像。
      *
-     * @param analyze
+     * @param analyze 是否分析图像
+     * @return {@link CameraScan}
      */
     public abstract CameraScan setAnalyzeImage(boolean analyze);
 
@@ -123,7 +134,8 @@ public abstract class CameraScan implements ICamera, ICameraControl {
      * <p>
      * 内置了一些{@link Analyzer}的实现类如下：
      *
-     * @param analyzer
+     * @param analyzer 分析器
+     * @return {@link CameraScan}
      * @see {@link MultiFormatAnalyzer}
      * @see {@link AreaRectAnalyzer}
      * @see {@link ImageAnalyzer}
@@ -133,47 +145,56 @@ public abstract class CameraScan implements ICamera, ICameraControl {
     public abstract CameraScan setAnalyzer(Analyzer analyzer);
 
     /**
-     * 设置是否震动
+     * 设置是否振动
      *
-     * @param vibrate
+     * @param vibrate 是否振动
+     * @return {@link CameraScan}
      */
     public abstract CameraScan setVibrate(boolean vibrate);
 
     /**
      * 设置是否播放提示音
      *
-     * @param playBeep
+     * @param playBeep 是否播放蜂鸣提示音
+     * @return {@link CameraScan}
      */
     public abstract CameraScan setPlayBeep(boolean playBeep);
 
     /**
      * 设置扫码结果回调
      *
-     * @param callback
+     * @param callback 扫码结果回调
+     * @return {@link CameraScan}
      */
     public abstract CameraScan setOnScanResultCallback(OnScanResultCallback callback);
 
     /**
      * 绑定手电筒，绑定后可根据光线传感器，动态显示或隐藏手电筒
      *
-     * @param v
+     * @param v 手电筒视图
+     * @return {@link CameraScan}
      */
     public abstract CameraScan bindFlashlightView(@Nullable View v);
 
     /**
      * 设置光线足够暗的阈值（单位：lux），需要通过{@link #bindFlashlightView(View)}绑定手电筒才有效
      *
-     * @param lightLux
+     * @param lightLux 光线亮度阈值
+     * @return {@link CameraScan}
      */
     public abstract CameraScan setDarkLightLux(float lightLux);
 
     /**
      * 设置光线足够明亮的阈值（单位：lux），需要通过{@link #bindFlashlightView(View)}绑定手电筒才有效
      *
-     * @param lightLux
+     * @param lightLux 光线亮度阈值
+     * @return {@link CameraScan}
      */
     public abstract CameraScan setBrightLightLux(float lightLux);
 
+    /**
+     * 扫描结果回调
+     */
     public interface OnScanResultCallback {
         /**
          * 扫码结果回调
@@ -193,14 +214,13 @@ public abstract class CameraScan implements ICamera, ICameraControl {
         default void onScanResultFailure() {
 
         }
-
     }
 
     /**
-     * 解析扫码结果
+     * 解析扫描结果
      *
-     * @param data
-     * @return
+     * @param data 需解析的意图数据
+     * @return 返回解析结果
      */
     @Nullable
     public static String parseScanResult(Intent data) {

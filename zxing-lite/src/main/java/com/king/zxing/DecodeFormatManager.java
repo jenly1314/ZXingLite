@@ -41,7 +41,6 @@ public final class DecodeFormatManager {
      * 二维码
      */
     public static final Map<DecodeHintType, Object> TWO_DIMENSIONAL_HINTS = new EnumMap<>(DecodeHintType.class);
-
     /**
      * 默认
      */
@@ -86,7 +85,7 @@ public final class DecodeFormatManager {
     }
 
     /**
-     * 二维码
+     * 一维码
      * 包括如下几种格式：
      * {@link BarcodeFormat#CODABAR}
      * {@link BarcodeFormat#CODE_39}

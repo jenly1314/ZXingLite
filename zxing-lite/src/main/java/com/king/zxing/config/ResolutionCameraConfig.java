@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.DisplayMetrics;
 import android.util.Size;
 
+import com.king.zxing.CameraScan;
 import com.king.zxing.util.LogUtils;
 
 import java.util.Locale;
@@ -29,7 +30,9 @@ public class ResolutionCameraConfig extends CameraConfig {
      */
     public static final int IMAGE_QUALITY_720P = 720;
 
-
+    /**
+     * 目标尺寸
+     */
     private Size mTargetSize;
 
     /**
@@ -62,29 +65,27 @@ public class ResolutionCameraConfig extends CameraConfig {
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
         int width = displayMetrics.widthPixels;
         int height = displayMetrics.heightPixels;
+        LogUtils.d(String.format(Locale.getDefault(), "displayMetrics: %dx%d", width, height));
 
-        LogUtils.d(String.format(Locale.getDefault(), "displayMetrics:%d x %d", width, height));
         // 因为为了保持流畅性和性能，尽可能的限制在imageQuality（默认：1080p），在此前提下尽可能的找到屏幕接近的分辨率
         if (width < height) {
+            float ratio = height / (float) width;
             int size = Math.min(width, imageQuality);
-            float ratio = width / (float) height;
-            if (ratio > 0.7F) {
-                // 一般应用于平板
-                mTargetSize = new Size(size, (int) (size / 3.0F * 4.0F));
+            if (Math.abs(ratio - CameraScan.ASPECT_RATIO_4_3) < Math.abs(ratio - CameraScan.ASPECT_RATIO_16_9)) {
+                mTargetSize = new Size(size, Math.round(size * CameraScan.ASPECT_RATIO_4_3));
             } else {
-                mTargetSize = new Size(size, (int) (size / 9.0F * 16.0F));
+                mTargetSize = new Size(size, Math.round(size * CameraScan.ASPECT_RATIO_16_9));
             }
         } else {
             int size = Math.min(height, imageQuality);
-            float ratio = height / (float) width;
-            if (ratio > 0.7F) {
-                // 一般应用于平板
-                mTargetSize = new Size((int) (size / 3.0F * 4.0F), size);
+            float ratio = width / (float) height;
+            if (Math.abs(ratio - CameraScan.ASPECT_RATIO_4_3) < Math.abs(ratio - CameraScan.ASPECT_RATIO_16_9)) {
+                mTargetSize = new Size(Math.round(size * CameraScan.ASPECT_RATIO_4_3), size);
             } else {
-                mTargetSize = new Size((int) (size / 9.0F * 16.0F), size);
+                mTargetSize = new Size(Math.round(size * CameraScan.ASPECT_RATIO_16_9), size);
             }
         }
-        LogUtils.d("targetSize:" + mTargetSize);
+        LogUtils.d("targetSize: " + mTargetSize);
     }
 
     @NonNull

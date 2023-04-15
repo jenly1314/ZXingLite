@@ -7,6 +7,8 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
 /**
+ * 环境光线管理器：主要通过传感器来监听光线的亮度变化
+ *
  * @author <a href="mailto:jenly1314@gmail.com">Jenly</a>
  */
 public class AmbientLightManager implements SensorEventListener {
