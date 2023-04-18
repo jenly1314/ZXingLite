@@ -101,9 +101,7 @@ implementation 'com.github.jenly1314:zxing-lite:2.4.0'
 
 **v1.x** 旧版本 [v1.1.9](https://github.com/jenly1314/ZXingLite/tree/androidx)
 
-> 对于 **v1.x** 版本，当你看到这里，此时的 **JCenter** 仓库如果已关闭, 可使用 **JitPack** 仓库
-
-**JCenter**
+**Gradle**
 
 1. 在Project的 **build.gradle** 里面添加远程仓库
 ```gradle
@@ -122,6 +120,7 @@ implementation 'com.king.zxing:zxing-lite:1.1.9-androidx'
 // Android Support 版本
 implementation 'com.king.zxing:zxing-lite:1.1.9'
 ```
+> 对于 **v1.x** 版本，当你看到这里，此时的 **JCenter** 仓库如果已关闭, 可使用 **JitPack** 仓库
 
 ## 使用说明
 
