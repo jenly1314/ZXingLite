@@ -14,8 +14,7 @@
 [![QQGroup](https://img.shields.io/badge/QQGroup-20867961-blue.svg)](http://shang.qq.com/wpa/qunwpa?idkey=8fcc6a2f88552ea44b1.1.982c94fd124f7bb3ec227e2a400dbbfaad3dc2f5ad)
 
 ZXingLite for Android 是ZXing的精简极速版，基于ZXing库优化扫码和生成二维码/条形码功能，扫码界面完全支持自定义，也可一行代码使用默认实现的扫码功能。总之你想要的都在这里。
->简单如斯，你不试试？ Come on~
-
+> 简单如斯，你不试试？ 
 
 ## Gif 展示
 ![Image](GIF.gif)
@@ -25,44 +24,44 @@ ZXingLite for Android 是ZXing的精简极速版，基于ZXing库优化扫码和
 
 ## ViewfinderView属性说明
 
-| 属性                      | 属性类型  | 默认值 | 属性说明  |
-|:------------------------|:----------| :------ | :------ |
-| maskColor               | color     |<font color=#000000>#60000000</font>| 扫描区外遮罩的颜色 |
-| frameColor              | color     |<font color=#1FB3E2>#7F1FB3E2</font>| 扫描区边框的颜色 |
-| cornerColor             | color     |<font color=#1FB3E2>#FF1FB3E2</font>| 扫描区边角的颜色 |
-| laserColor              | color     |<font color=#1FB3E2>#FF1FB3E2</font>| 扫描区激光线的颜色 |
-| labelText               | string    |  | 扫描提示文本信息 |
-| labelTextColor          | color     |<font color=#C0C0C0>#FFC0C0C0</font>| 提示文本字体颜色 |
-| labelTextSize           | dimension |14sp| 提示文本字体大小 |
-| labelTextPadding        | dimension |24dp| 提示文本距离扫描区的间距 |
-| labelTextWidth          | dimension | | 提示文本的宽度，默认为View的宽度 |
-| labelTextLocation       | enum      |bottom| 提示文本显示位置 |
-| frameWidth              | dimension |  | 扫码框宽度 |
-| frameHeight             | dimension |  | 扫码框高度 |
-| laserStyle              | enum      | line | 扫描激光的样式 |
-| gridColumn              | integer   | 20 | 网格扫描激光列数 |
-| gridHeight              | integer   | 40dp | 网格扫描激光高度，为0dp时，表示动态铺满 |
-| cornerRectWidth         | dimension | 4dp | 扫描区边角的宽 |
-| cornerRectHeight        | dimension | 16dp | 扫描区边角的高 |
-| scannerLineMoveDistance | dimension | 2dp | 扫描线每次移动距离 |
-| scannerLineHeight       | dimension | 5dp | 扫描线高度 |
-| frameLineWidth          | dimension | 1dp | 边框线宽度 |
-| scannerAnimationDelay   | integer   | 20 | 扫描动画延迟间隔时间，单位：毫秒 |
-| frameRatio              | float     | 0.625f | 扫码框与屏幕占比 |
-| framePaddingLeft        | dimension | 0 | 扫码框左边的内间距 |
-| framePaddingTop         | dimension | 0 | 扫码框上边的内间距 |
-| framePaddingRight       | dimension | 0 | 扫码框右边的内间距 |
-| framePaddingBottom      | dimension | 0 | 扫码框下边的内间距 |
-| frameGravity            | enum      | center | 扫码框对齐方式 |
-| pointColor              | color     | <font color=#1FB3E2>#FF1FB3E2</font> | 结果点的颜色 |
-| pointStrokeColor        | color     | <font color=#FFFFFF>#FFFFFFFF</font> | 结果点描边的颜色 |
-| pointRadius             | dimension | 15dp | 结果点的半径 |
-| pointStrokeRatio        | float     | 1.2 | 结果点描边半径与结果点半径的比例 |
-| pointDrawable           | reference |  | 结果点自定义图片 |
-| showPointAnim           | boolean   | true | 是否显示结果点的动画 |
-| laserDrawable           | reference | | 扫描激光自定义图片 |
-| laserDrawableRatio      | float | 0.625f | 激光扫描图片与屏幕占比  |
-| viewfinderStyle         | enum      | classic | 取景框样式；支持：classic：经典样式（带扫码框那种）、popular：流行样式（不带扫码框） |
+| 属性                     | 属性类型   | 默认值                                | 属性说明                                              |
+|:------------------------|:----------|:-------------------------------------|:--------------------------------------------------|
+| maskColor               | color     | <font color=#000000>#60000000</font> | 扫描区外遮罩的颜色                                         |
+| frameColor              | color     | <font color=#1FB3E2>#7F1FB3E2</font> | 扫描区边框的颜色                                          |
+| cornerColor             | color     | <font color=#1FB3E2>#FF1FB3E2</font> | 扫描区边角的颜色                                          |
+| laserColor              | color     | <font color=#1FB3E2>#FF1FB3E2</font> | 扫描区激光线的颜色                                         |
+| labelText               | string    |                                      | 扫描提示文本信息                                          |
+| labelTextColor          | color     | <font color=#C0C0C0>#FFC0C0C0</font> | 提示文本字体颜色                                          |
+| labelTextSize           | dimension | 14sp                                 | 提示文本字体大小                                          |
+| labelTextPadding        | dimension | 24dp                                 | 提示文本距离扫描区的间距                                      |
+| labelTextWidth          | dimension |                                      | 提示文本的宽度，默认为View的宽度                                |
+| labelTextLocation       | enum      | bottom                               | 提示文本显示位置                                          |
+| frameWidth              | dimension |                                      | 扫码框宽度                                             |
+| frameHeight             | dimension |                                      | 扫码框高度                                             |
+| laserStyle              | enum      | line                                 | 扫描激光的样式                                           |
+| gridColumn              | integer   | 20                                   | 网格扫描激光列数                                          |
+| gridHeight              | integer   | 40dp                                 | 网格扫描激光高度，为0dp时，表示动态铺满                             |
+| cornerRectWidth         | dimension | 4dp                                  | 扫描区边角的宽                                           |
+| cornerRectHeight        | dimension | 16dp                                 | 扫描区边角的高                                           |
+| scannerLineMoveDistance | dimension | 2dp                                  | 扫描线每次移动距离                                         |
+| scannerLineHeight       | dimension | 5dp                                  | 扫描线高度                                             |
+| frameLineWidth          | dimension | 1dp                                  | 边框线宽度                                             |
+| scannerAnimationDelay   | integer   | 20                                   | 扫描动画延迟间隔时间，单位：毫秒                                  |
+| frameRatio              | float     | 0.625f                               | 扫码框与屏幕占比                                          |
+| framePaddingLeft        | dimension | 0                                    | 扫码框左边的内间距                                         |
+| framePaddingTop         | dimension | 0                                    | 扫码框上边的内间距                                         |
+| framePaddingRight       | dimension | 0                                    | 扫码框右边的内间距                                         |
+| framePaddingBottom      | dimension | 0                                    | 扫码框下边的内间距                                         |
+| frameGravity            | enum      | center                               | 扫码框对齐方式                                           |
+| pointColor              | color     | <font color=#1FB3E2>#FF1FB3E2</font> | 结果点的颜色                                            |
+| pointStrokeColor        | color     | <font color=#FFFFFF>#FFFFFFFF</font> | 结果点描边的颜色                                          |
+| pointRadius             | dimension | 15dp                                 | 结果点的半径                                            |
+| pointStrokeRatio        | float     | 1.2                                  | 结果点描边半径与结果点半径的比例                                  |
+| pointDrawable           | reference |                                      | 结果点自定义图片                                          |
+| showPointAnim           | boolean   | true                                 | 是否显示结果点的动画                                        |
+| laserDrawable           | reference |                                      | 扫描激光自定义图片                                         |
+| laserDrawableRatio      | float     | 0.625f                               | 激光扫描图片与屏幕占比                                       |
+| viewfinderStyle         | enum      | classic                              | 取景框样式；支持：classic：经典样式（带扫码框那种）、popular：流行样式（不带扫码框） |
 
 
 ## 引入
@@ -101,6 +100,21 @@ implementation 'com.github.jenly1314:zxing-lite:2.4.0'
 #### 对于需兼容 Android 5.0 (N) 以下版本的老项目（即：minSdk<21），可使用1.x旧版本
 
 **v1.x** 旧版本 [v1.1.9](https://github.com/jenly1314/ZXingLite/tree/androidx)
+
+> 对于 **v1.x** 版本，当你看到这里，此时的 **JCenter** 仓库如果已关闭, 可使用 **JitPack** 仓库
+
+**JCenter**
+
+1. 在Project的 **build.gradle** 里面添加远程仓库
+```gradle
+allprojects {
+    repositories {
+        //...
+        jcenter()
+    }
+}
+```
+2. 在Module的 **build.gradle** 里面添加引入依赖项
 ```gradle
 // AndroidX 版本
 implementation 'com.king.zxing:zxing-lite:1.1.9-androidx'
@@ -108,7 +122,6 @@ implementation 'com.king.zxing:zxing-lite:1.1.9-androidx'
 // Android Support 版本
 implementation 'com.king.zxing:zxing-lite:1.1.9'
 ```
-> 对于 **v1.x** 版本，如果 **JCenter** 已关闭, 可使用 **JitPack**
 
 ## 使用说明
 
