@@ -47,7 +47,7 @@ implementation 'com.github.jenly1314:zxing-lite:3.0.0'
 
 #### 关于ZXingLite版本与编译的SDK版本要求
 
-> 使用 **v3.x.x** 以上版本时，要求 **compileSdkVersion >= 33**
+> 使用 **v3.x** 以上版本时，要求 **compileSdkVersion >= 33**
 
 > 如果 **compileSdkVersion < 33** 请使用 [**v2.x版本**](https://github.com/jenly1314/ZXingLite/tree/2.x/)
 
