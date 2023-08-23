@@ -57,6 +57,10 @@ public final class DecodeFormatManager {
         addDecodeHintTypes(DEFAULT_HINTS, getDefaultFormats());
     }
 
+    private DecodeFormatManager() {
+        throw new AssertionError();
+    }
+
     /**
      * 所有支持的{@link BarcodeFormat}
      *

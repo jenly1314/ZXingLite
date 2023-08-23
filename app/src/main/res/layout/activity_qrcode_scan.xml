@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.camera.view.PreviewView
+        android:id="@+id/previewView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <com.king.view.viewfinderview.ViewfinderView
+        android:id="@+id/viewfinderView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:vvLaserStyle="grid"
+        app:vvLabelTextLocation="bottom"
+        app:vvLabelText="@string/tips_scan_qr_code"/>
+
+    <ImageView
+        android:id="@+id/ivFlashlight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/camera_scan_flashlight_margin_top"
+        android:contentDescription="@null"
+        android:src="@drawable/camera_scan_flashlight_selector" />
+</FrameLayout>

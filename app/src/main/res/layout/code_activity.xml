@@ -6,6 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <include android:id="@+id/toolbar"
         layout="@layout/toolbar"/>
+
     <ImageView
         android:id="@+id/ivCode"
         android:layout_width="wrap_content"
@@ -15,4 +16,13 @@
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
+    <TextView
+        android:id="@+id/tvBarcodeFormat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/ivCode"
+        android:layout_marginBottom="20dp"
+        android:gravity="center_horizontal"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

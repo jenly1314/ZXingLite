@@ -6,7 +6,6 @@ import com.google.zxing.DecodeHintType;
 import com.google.zxing.Result;
 import com.king.zxing.DecodeFormatManager;
 import com.king.zxing.DecodeConfig;
-import com.king.zxing.util.LogUtils;
 
 import java.util.Map;
 

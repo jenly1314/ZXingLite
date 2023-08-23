@@ -43,6 +43,7 @@ import com.google.zxing.common.GlobalHistogramBinarizer;
 import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import com.king.camera.scan.util.LogUtils;
 import com.king.zxing.DecodeFormatManager;
 
 import java.util.HashMap;

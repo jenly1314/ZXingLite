@@ -4,11 +4,11 @@ import com.google.zxing.DecodeHintType;
 import com.google.zxing.Reader;
 import com.google.zxing.qrcode.QRCodeReader;
 import com.king.zxing.DecodeConfig;
+import com.king.zxing.DecodeFormatManager;
 
 import java.util.Map;
 
 import androidx.annotation.Nullable;
-
 
 /**
  * 二维码分析器
@@ -18,7 +18,7 @@ import androidx.annotation.Nullable;
 public class QRCodeAnalyzer extends BarcodeFormatAnalyzer {
 
     public QRCodeAnalyzer() {
-        this((DecodeConfig) null);
+        this(new DecodeConfig().setHints(DecodeFormatManager.QR_CODE_HINTS));
     }
 
     public QRCodeAnalyzer(@Nullable Map<DecodeHintType, Object> hints) {

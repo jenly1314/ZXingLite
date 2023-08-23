@@ -1,5 +1,12 @@
 ## 版本记录
 
+#### v3.0.0：2023-8-23
+* 将通用基础类拆分移除并进行重构，后续维护更便捷
+* 移除 **CameraScan** 相关核心类，改为依赖[CameraScan](https://github.com/jenly1314/CameraScan)
+* 移除扫码取景视图 **ViewfinderView**，改为依赖[ViewfinderView](https://github.com/jenly1314/ViewfinderView)
+* 移除**CaptureActivity**和****CaptureFragment**，新增**BarcodeCameraScanActivity**和****BarcodeCameraScanFragment**来替代
+* 优化扫描分析过程的性能体验（优化帧数据分析过程）
+
 #### v2.4.0：2023-4-15
 * 优化CameraScan的缺省配置（CameraConfig相关配置）
 * 优化ViewfinderView自定义属性（新增laserDrawableRatio）

@@ -24,34 +24,21 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity
-            android:name="com.king.zxing.CaptureActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/CaptureTheme"/>
 
         <activity
-            android:name=".EasyCaptureActivity"
+            android:name=".FullScreenQRCodeScanActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/CaptureTheme"/>
-        <activity
-            android:name=".CustomCaptureActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/CaptureTheme"/>
+            android:theme="@style/CameraScanTheme"/>
 
         <activity
-            android:name=".CaptureFragmentActivity"
+            android:name=".MultiFormatScanActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/CaptureTheme"/>
+            android:theme="@style/CameraScanTheme"/>
 
         <activity
-            android:name=".CustomFullScanActivity"
+            android:name=".QRCodeScanActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/CaptureTheme"/>
-
-        <activity
-            android:name=".QRCodeActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/CaptureTheme"/>
+            android:theme="@style/CameraScanTheme"/>
 
         <activity
             android:name=".CodeActivity"

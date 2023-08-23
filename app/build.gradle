@@ -46,10 +46,5 @@ dependencies {
 
     coreLibraryDesugaring deps.desugar_jdk
 
-//    implementation deps.kotlin
-//    implementation deps.corektx
-
-    implementation deps.easypermissions
-
     implementation project(':zxing-lite')
 }

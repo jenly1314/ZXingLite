@@ -1,7 +1,7 @@
 //App 
 def app_version = [:]
-app_version.versionCode = 37
-app_version.versionName = "2.4.0"
+app_version.versionCode = 38
+app_version.versionName = "3.0.0"
 ext.app_version = app_version
 
 //build version
@@ -31,17 +31,11 @@ versions.espresso = "3.4.0"
 versions.bintray_release = "0.9.2"
 versions.mavenPublish = '0.22.0'
 versions.gralde = "7.4.2"
-versions.kotlin = "1.8.0"
-versions.coreKtx = "1.7.0"
 
 //zxing
 versions.zxing = "3.5.1"
-
-versions.camerax = "1.2.1"
-
 versions.desugar_jdk_libs = "1.2.2"
 
-versions.easypermissions = "3.0.0"
 
 ext.versions = versions
 
@@ -61,24 +55,14 @@ test.runner = "androidx.test:runner:$versions.runner"
 test.espresso = "androidx.test.espresso:espresso-core:$versions.espresso"
 deps.test = test
 
-//deps.kotlin = "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin"
-//
-//deps.corektx = "androidx.core:core-ktx:$versions.coreKtx"
-
 //zxing
 deps.zxing = "com.google.zxing:core:$versions.zxing"
 
-//CameraX
-deps.camera_core = "androidx.camera:camera-core:$versions.camerax"
-deps.camera_camera2 = "androidx.camera:camera-camera2:$versions.camerax"
-deps.camera_lifecycle = "androidx.camera:camera-lifecycle:$versions.camerax"
-deps.camera_view = "androidx.camera:camera-view:$versions.camerax"
+deps.camera_scan = "com.github.jenly1314:CameraScan:1.0.0"
+deps.viewfinderview = "com.github.jenly1314:viewfinderview:1.0.0"
 
 //desugar_jdk
 deps.desugar_jdk = "com.android.tools:desugar_jdk_libs:$versions.desugar_jdk_libs"
-
-//permission
-deps.easypermissions = "pub.devrel:easypermissions:$versions.easypermissions"
 
 ext.deps = deps
 

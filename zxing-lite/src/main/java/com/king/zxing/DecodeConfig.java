@@ -6,7 +6,6 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.common.GlobalHistogramBinarizer;
 import com.google.zxing.common.HybridBinarizer;
-import com.king.zxing.config.CameraConfig;
 
 import java.util.Map;
 
@@ -35,7 +34,6 @@ import androidx.annotation.FloatRange;
  * {@link #setAreaRectRatio(float)} 设置识别区域比例，默认{@link #DEFAULT_AREA_RECT_RATIO}，设置的比例最终会在预览区域裁剪基于此比例的一个矩形进行扫码识别，优先级最低
  * <p>
  * 因为{@link androidx.camera.view.PreviewView}的预览区域是经过裁剪的，所以这里的区域并不是用户所能预览到的区域，而是指Camera预览的真实区域，
- * 您还可以通过{@link CameraScan#setCameraConfig(CameraConfig)}去自定义配置{@link CameraConfig}的配置信息控制预览相关配置信息
  * <p>
  * 即判定区域分析的优先级顺序为:{@link #setFullAreaScan(boolean)} -> {@link #setAnalyzeAreaRect(Rect)} -> {@link #setAreaRectRatio(float)}
  * <p></>
@@ -247,7 +245,6 @@ public class DecodeConfig {
      *                        {@link #setAreaRectRatio(float)} 设置识别区域比例，默认{@link #DEFAULT_AREA_RECT_RATIO}，设置的比例最终会在预览区域裁剪基于此比例的一个矩形进行扫码识别，优先级最低
      *                        <p>
      *                        因为{@link androidx.camera.view.PreviewView}的预览区域是经过裁剪的，所以这里的区域并不是用户所能预览到的区域，而是指Camera预览的真实区域，
-     *                        您还可以通过{@link CameraScan#setCameraConfig(CameraConfig)}去自定义配置{@link CameraConfig}的配置信息控制预览相关配置信息
      *                        <p>
      *                        即判定区域分析的优先级顺序为:{@link #setFullAreaScan(boolean)} -> {@link #setAnalyzeAreaRect(Rect)} -> {@link #setAreaRectRatio(float)}
      * @return {@link DecodeConfig}
@@ -277,7 +274,6 @@ public class DecodeConfig {
      *                     {@link #setAreaRectRatio(float)} 设置识别区域比例，默认{@link #DEFAULT_AREA_RECT_RATIO}，设置的比例最终会在预览区域裁剪基于此比例的一个矩形进行扫码识别，优先级最低
      *                     <p>
      *                     因为{@link androidx.camera.view.PreviewView}的预览区域是经过裁剪的，所以这里的区域并不是用户所能预览到的区域，而是指Camera预览的真实区域，
-     *                     您还可以通过{@link CameraScan#setCameraConfig(CameraConfig)}去自定义配置{@link CameraConfig}的配置信息控制预览相关配置信息
      *                     <p>
      *                     即判定区域分析的优先级顺序为:{@link #setFullAreaScan(boolean)} -> {@link #setAnalyzeAreaRect(Rect)} -> {@link #setAreaRectRatio(float)}
      * @return {@link DecodeConfig}
@@ -305,7 +301,6 @@ public class DecodeConfig {
      *                      {@link #setAreaRectRatio(float)} 设置识别区域比例，默认{@link #DEFAULT_AREA_RECT_RATIO}，设置的比例最终会在预览区域裁剪基于此比例的一个矩形进行扫码识别，优先级最低
      *                      <p>
      *                      因为{@link androidx.camera.view.PreviewView}的预览区域是经过裁剪的，所以这里的区域并不是用户所能预览到的区域，而是指Camera预览的真实区域，
-     *                      您还可以通过{@link CameraScan#setCameraConfig(CameraConfig)}去自定义配置{@link CameraConfig}的配置信息控制预览相关配置信息
      *                      <p>
      *                      即判定区域分析的优先级顺序为:{@link #setFullAreaScan(boolean)} -> {@link #setAnalyzeAreaRect(Rect)} -> {@link #setAreaRectRatio(float)}
      * @return {@link DecodeConfig}
