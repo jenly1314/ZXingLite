@@ -57,10 +57,10 @@ implementation 'com.github.jenly1314:zxing-lite:3.0.0'
 
 从 **2.x** 到 **3.x** 主要变化如下：
 * 2.x版本中的 **CameraScan** 相关核心类被移除了；
-> 从3.0.0版本开始改为依赖[CameraScan](https://github.com/jenly1314/CameraScan)；（[CameraScan](https://github.com/jenly1314/CameraScan)是一个独立的库，单独进行维护）
+> 从3.0.0版本开始改为依赖 [CameraScan](https://github.com/jenly1314/CameraScan)；（[CameraScan](https://github.com/jenly1314/CameraScan)是一个独立的库，单独进行维护）
 
 * 2.x版本中的 **ViewfinderView** 被移除了；
-> 从3.0.0版本开始改为依赖[ViewfinderView](https://github.com/jenly1314/ViewfinderView)；（[ViewfinderView](https://github.com/jenly1314/ViewfinderView)是一个独立的库，单独进行维护）
+> 从3.0.0版本开始改为依赖 [ViewfinderView](https://github.com/jenly1314/ViewfinderView)；（[ViewfinderView](https://github.com/jenly1314/ViewfinderView)是一个独立的库，单独进行维护）
 
 * 2.x版本中的 **CaptureActivity** 和 **CaptureFragment** 相关基类被移除了；
 > 从3.0.0版本开始改为 **BarcodeCameraActivity** 和 **BarcodeCameraFragment**
@@ -73,7 +73,7 @@ implementation 'com.github.jenly1314:zxing-lite:3.0.0'
 
 ### 3.x版本的使用
 
-3.x的实现主要是以[CameraScan](https://github.com/jenly1314/CameraScan)作为基础库去实现具体的分析检测功能，所以你可以先去看下[CameraScan](https://github.com/jenly1314/CameraScan)的使用说明；在了解了[CameraScan](https://github.com/jenly1314/CameraScan)的基本使用方式后，然后再结合当前的使用说明就可以轻松的集成并使用 **ZXingLite**了。
+3.x的实现主要是以 [CameraScan](https://github.com/jenly1314/CameraScan)作为基础库去实现具体的分析检测功能，所以你可以先去看下 [CameraScan](https://github.com/jenly1314/CameraScan)的使用说明；在了解了 [CameraScan](https://github.com/jenly1314/CameraScan)的基本使用方式后，然后再结合当前的使用说明就可以轻松的集成并使用 **ZXingLite**了。
 
 ### 主要类说明
 
@@ -112,9 +112,9 @@ DecodeConfig：解码格式管理器；主要将多种条码格式进行划分�
     CodeUtils.parseQRCode(bitmap);
 ```
 
-### 关于BarcodeCameraScanActivity
+#### 关于BarcodeCameraScanActivity
 
-**通过继承BarcodeCameraScanActivity实现扫二维码完整示例**
+通过继承BarcodeCameraScanActivity实现扫二维码完整示例
 
 ```java
 public class QRCodeScanActivity extends BarcodeCameraScanActivity {
@@ -202,9 +202,9 @@ dependencies {
 
 #### v3.0.0：2023-8-23
 * 将通用基础类拆分移除并进行重构，后续维护更便捷
-* 移除 **CameraScan** 相关核心类，改为依赖[CameraScan](https://github.com/jenly1314/CameraScan)
-* 移除扫码取景视图 **ViewfinderView**，改为依赖[ViewfinderView](https://github.com/jenly1314/ViewfinderView)
-* 移除**CaptureActivity**和****CaptureFragment**，新增**BarcodeCameraScanActivity**和****BarcodeCameraScanFragment**来替代
+* 移除 **CameraScan** 相关核心类，改为依赖 [CameraScan](https://github.com/jenly1314/CameraScan)
+* 移除扫码取景视图 **ViewfinderView**，改为依赖 [ViewfinderView](https://github.com/jenly1314/ViewfinderView)
+* 移除 **CaptureActivity** 和 **CaptureFragment**，新增 **BarcodeCameraScanActivity** 和 **BarcodeCameraScanFragment** 来替代
 * 优化扫描分析过程的性能体验（优化帧数据分析过程）
 
 #### v2.4.0：2023-4-15
