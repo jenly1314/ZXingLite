@@ -77,7 +77,7 @@ implementation 'com.github.jenly1314:zxing-lite:3.0.0'
 
 ### 主要类说明
 
-#### Analyzer的实现类
+#### 关于Analyzer的实现类
 
 内部提供了Analyzer对应的实现，都是为快速实现扫码识别而提供的分析器。
 
@@ -87,15 +87,15 @@ implementation 'com.github.jenly1314:zxing-lite:3.0.0'
 
 > 本可以不需要 ****QRCodeAnalyzer****，之所以提供一个 **QRCodeAnalyzer** 是因为有很多需求是只需要识别二维码就行；如果你有连续扫码的需求或不知道怎么选时，推荐直接选择 **MultiFormatAnalyzer** 。
 
-#### DecodeConfig
+#### 关于DecodeConfig
 
 DecodeConfig：解码配置；主要用于在扫码识别时，提供一些配置，便于扩展。通过配置可决定内置分析器的能力，从而间接的控制并简化扫码识别的流程。一般在使用 **Analyzer** 的实现类时，你可能会用到。
 
-#### DecodeFormatManager
+#### 关于DecodeFormatManager
 
 DecodeConfig：解码格式管理器；主要将多种条码格式进行划分与归类，便于提供快捷配置。
 
-#### CodeUtils
+#### 关于CodeUtils
 
 工具类 **CodeUtils** 中主要提供；解析条形码/二维码、生成条形码/二维码相关的能力。
 
@@ -112,7 +112,7 @@ DecodeConfig：解码格式管理器；主要将多种条码格式进行划分�
     CodeUtils.parseQRCode(bitmap);
 ```
 
-### BarcodeCameraScanActivity
+### 关于BarcodeCameraScanActivity
 
 **通过继承BarcodeCameraScanActivity实现扫二维码完整示例**
 
