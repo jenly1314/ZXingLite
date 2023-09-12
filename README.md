@@ -27,21 +27,21 @@ ZXingLite for Android 是ZXing的精简极速版，基于ZXing库优化扫码和
 
 1. 在Project的 **build.gradle** 或 **setting.gradle** 中添加远程仓库
 
-```gradle
-repositories {
-    //...
-    mavenCentral()
-    maven { url 'https://jitpack.io' }
-}
-```
+    ```gradle
+    repositories {
+        //...
+        mavenCentral()
+        maven { url 'https://jitpack.io' }
+    }
+    ```
 
 2. 在Module的 **build.gradle** 里面添加引入依赖项
 
-```gradle
-// AndroidX 版本
-implementation 'com.github.jenly1314:zxing-lite:3.0.1'
-
-```
+    ```gradle
+    // AndroidX 版本
+    implementation 'com.github.jenly1314:zxing-lite:3.0.1'
+    
+    ```
 
 ### 温馨提示
 
