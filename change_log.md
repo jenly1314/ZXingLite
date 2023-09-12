@@ -1,5 +1,9 @@
 ## 版本记录
 
+#### v3.0.1：2023-9-13
+* 更新CameraScan至v1.0.1
+* 更新ViewfinderView至v1.1.0
+
 #### v3.0.0：2023-8-23
 * 将通用基础类拆分移除并进行重构，后续维护更便捷
 * 移除 **CameraScan** 相关核心类，改为依赖[CameraScan](https://github.com/jenly1314/CameraScan)

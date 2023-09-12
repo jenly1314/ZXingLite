@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
  *
  * @author <a href="mailto:jenly1314@gmail.com">Jenly</a>
  */
+@SuppressWarnings("unused")
 public class QRCodeAnalyzer extends BarcodeFormatAnalyzer {
 
     public QRCodeAnalyzer() {

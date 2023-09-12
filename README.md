@@ -39,7 +39,7 @@ repositories {
 
 ```gradle
 // AndroidX 版本
-implementation 'com.github.jenly1314:zxing-lite:3.0.0'
+implementation 'com.github.jenly1314:zxing-lite:3.0.1'
 
 ```
 
@@ -200,6 +200,10 @@ dependencies {
 #### [ViewfinderView](https://github.com/jenly1314/ViewfinderView) ViewfinderView一个取景视图：主要用于渲染扫描相关的动画效果。
 
 ## 版本记录
+
+#### v3.0.1：2023-9-13
+* 更新CameraScan至v1.0.1
+* 更新ViewfinderView至v1.1.0
 
 #### v3.0.0：2023-8-23
 * 将通用基础类拆分移除并进行重构，后续维护更便捷

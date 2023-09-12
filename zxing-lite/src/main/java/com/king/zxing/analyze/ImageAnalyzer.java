@@ -84,7 +84,7 @@ public abstract class ImageAnalyzer implements Analyzer<Result> {
 
         } catch (Exception e) {
             queue.add(nv21Data);
-            listener.onSuccess(null);
+            listener.onFailure(null);
         }
 
     }

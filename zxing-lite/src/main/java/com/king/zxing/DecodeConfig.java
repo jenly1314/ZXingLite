@@ -15,15 +15,17 @@ import androidx.annotation.FloatRange;
  * 解码配置：主要用于在扫码识别时，提供一些配置，便于扩展。通过配置可决定内置分析器的能力，从而间接的控制并简化扫码识别的流程
  * <p></>
  * 设置解码 {@link #setHints(Map)}内置的一些解码可参见如下：
+ * <p>
+ * {@link DecodeFormatManager#DEFAULT_HINTS}
+ * {@link DecodeFormatManager#ALL_HINTS}
+ * {@link DecodeFormatManager#CODE_128_HINTS}
+ * {@link DecodeFormatManager#QR_CODE_HINTS}
+ * {@link DecodeFormatManager#ONE_DIMENSIONAL_HINTS}
+ * {@link DecodeFormatManager#TWO_DIMENSIONAL_HINTS}
+ * {@link DecodeFormatManager#DEFAULT_HINTS}
+ * <p>
  *
  * @author <a href="mailto:jenly1314@gmail.com">Jenly</a>
- * @see {@link DecodeFormatManager#DEFAULT_HINTS}
- * @see {@link DecodeFormatManager#ALL_HINTS}
- * @see {@link DecodeFormatManager#CODE_128_HINTS}
- * @see {@link DecodeFormatManager#QR_CODE_HINTS}
- * @see {@link DecodeFormatManager#ONE_DIMENSIONAL_HINTS}
- * @see {@link DecodeFormatManager#TWO_DIMENSIONAL_HINTS}
- * @see {@link DecodeFormatManager#DEFAULT_HINTS}
  * <p>
  * 如果不满足您也可以通过{@link DecodeFormatManager#createDecodeHints(BarcodeFormat...)}自己配置支持的格式
  *
@@ -38,6 +40,7 @@ import androidx.annotation.FloatRange;
  * 即判定区域分析的优先级顺序为:{@link #setFullAreaScan(boolean)} -> {@link #setAnalyzeAreaRect(Rect)} -> {@link #setAreaRectRatio(float)}
  * <p></>
  */
+@SuppressWarnings("unused")
 public class DecodeConfig {
 
     private Map<DecodeHintType, Object> hints = DecodeFormatManager.DEFAULT_HINTS;
@@ -107,16 +110,16 @@ public class DecodeConfig {
      * 设置解码
      *
      * @param hints {@link DecodeFormatManager}
-     *              <p>
-     *              内置的一些解码可参见如下：
      * @return {@link DecodeConfig}
-     * @see {@link DecodeFormatManager#DEFAULT_HINTS}
-     * @see {@link DecodeFormatManager#ALL_HINTS}
-     * @see {@link DecodeFormatManager#CODE_128_HINTS}
-     * @see {@link DecodeFormatManager#QR_CODE_HINTS}
-     * @see {@link DecodeFormatManager#ONE_DIMENSIONAL_HINTS}
-     * @see {@link DecodeFormatManager#TWO_DIMENSIONAL_HINTS}
-     * @see {@link DecodeFormatManager#DEFAULT_HINTS}
+     * <p>
+     * 内置的一些解码可参见如下：
+     * {@link DecodeFormatManager#DEFAULT_HINTS}
+     * {@link DecodeFormatManager#ALL_HINTS}
+     * {@link DecodeFormatManager#CODE_128_HINTS}
+     * {@link DecodeFormatManager#QR_CODE_HINTS}
+     * {@link DecodeFormatManager#ONE_DIMENSIONAL_HINTS}
+     * {@link DecodeFormatManager#TWO_DIMENSIONAL_HINTS}
+     * {@link DecodeFormatManager#DEFAULT_HINTS}
      * <p>
      * 如果不满足您也可以通过{@link DecodeFormatManager#createDecodeHints(BarcodeFormat...)}自己配置支持的格式
      */

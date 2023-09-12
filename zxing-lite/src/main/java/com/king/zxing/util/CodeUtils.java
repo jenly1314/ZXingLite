@@ -54,6 +54,7 @@ import java.util.Map;
  *
  * @author Jenly <a href="mailto:jenly1314@gmail.com">Jenly</a>
  */
+@SuppressWarnings("unused")
 public final class CodeUtils {
 
     public static final int DEFAULT_REQ_WIDTH = 480;

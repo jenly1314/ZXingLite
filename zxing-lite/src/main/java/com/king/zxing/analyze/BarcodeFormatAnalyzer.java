@@ -20,6 +20,7 @@ import androidx.annotation.Nullable;
  *
  * @author <a href="mailto:jenly1314@gmail.com">Jenly</a>
  */
+@SuppressWarnings("unused")
 public abstract class BarcodeFormatAnalyzer extends AreaRectAnalyzer {
 
     private Reader mReader;
@@ -48,7 +49,7 @@ public abstract class BarcodeFormatAnalyzer extends AreaRectAnalyzer {
                 rawResult = decodeInternal(source, isMultiDecode);
 
                 if (rawResult == null && mDecodeConfig != null) {
-                    if (rawResult == null && mDecodeConfig.isSupportVerticalCode()) {
+                    if (mDecodeConfig.isSupportVerticalCode()) {
                         byte[] rotatedData = new byte[data.length];
                         for (int y = 0; y < dataHeight; y++) {
                             for (int x = 0; x < dataWidth; x++) {
