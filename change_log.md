@@ -1,5 +1,11 @@
 ## 版本记录
 
+#### v3.1.0：2023-12-31
+* 更新CameraScan至v1.1.0
+* 更新zxing至v3.5.2
+* 更新compileSdkVersion至34
+* 更新Gradle至v8.0
+
 #### v3.0.1：2023-9-13
 * 更新CameraScan至v1.0.1
 * 更新ViewfinderView至v1.1.0

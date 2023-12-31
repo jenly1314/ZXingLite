@@ -31,7 +31,6 @@ ZXingLite for Android 是ZXing的精简极速版，基于ZXing库优化扫码和
     repositories {
         //...
         mavenCentral()
-        maven { url 'https://jitpack.io' }
     }
     ```
 
@@ -39,7 +38,7 @@ ZXingLite for Android 是ZXing的精简极速版，基于ZXing库优化扫码和
 
     ```gradle
     // AndroidX 版本
-    implementation 'com.github.jenly1314:zxing-lite:3.0.1'
+    implementation 'com.github.jenly1314:zxing-lite:3.1.0'
     
     ```
 
@@ -47,7 +46,9 @@ ZXingLite for Android 是ZXing的精简极速版，基于ZXing库优化扫码和
 
 #### 关于ZXingLite版本与编译的SDK版本要求
 
-> 使用 **v3.x** 以上版本时，要求 **compileSdkVersion >= 33**
+> 使用 **v3.1.x** 以上版本时，要求 **compileSdkVersion >= 34**
+
+> 使用 **v3.0.x** 以上版本时，要求 **compileSdkVersion >= 33**
 
 > 如果 **compileSdkVersion < 33** 请使用 [**v2.x版本**](https://github.com/jenly1314/ZXingLite/tree/2.x/)
 
@@ -167,7 +168,7 @@ public class QRCodeScanActivity extends BarcodeCameraScanActivity {
 
 > **BarcodeCameraScanFragment** 的使用方式与之类似。
 
-更多使用详情，请查看[app](app)中的源码使用示例或直接查看[API帮助文档](https://jenly1314.github.io/projects/ZXingLite/doc/)
+更多使用详情，请查看[app](app)中的源码使用示例或直接查看[API帮助文档](https://jitpack.io/com/github/jenly1314/ZXingLite/latest/javadoc/)
 
 ### 其他
 
@@ -188,7 +189,7 @@ compileOptions {
 
 ```gradle
 dependencies {
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.2.2'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.2.3'
 }
 ```
 
@@ -200,6 +201,12 @@ dependencies {
 #### [ViewfinderView](https://github.com/jenly1314/ViewfinderView) ViewfinderView一个取景视图：主要用于渲染扫描相关的动画效果。
 
 ## 版本记录
+
+#### v3.1.0：2023-12-31
+* 更新CameraScan至v1.1.0
+* 更新zxing至v3.5.2
+* 更新compileSdkVersion至34
+* 更新Gradle至v8.0
 
 #### v3.0.1：2023-9-13
 * 更新CameraScan至v1.0.1

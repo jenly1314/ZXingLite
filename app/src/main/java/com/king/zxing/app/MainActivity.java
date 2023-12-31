@@ -18,6 +18,9 @@ package com.king.zxing.app;
 import android.Manifest;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.ImageDecoder;
+import android.net.Uri;
+import android.os.Build;
 import android.provider.MediaStore;
 import android.os.Bundle;
 import android.view.View;
@@ -29,6 +32,7 @@ import com.king.camera.scan.util.LogUtils;
 import com.king.camera.scan.util.PermissionUtils;
 import com.king.zxing.util.CodeUtils;
 
+import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -78,11 +82,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showToast(String text) {
-        if (toast == null) {
-            toast = Toast.makeText(this, text, Toast.LENGTH_SHORT);
-        }else {
-            toast.setText(text);
+        if(toast != null) {
+            toast.cancel();
         }
+        toast = Toast.makeText(this, text, Toast.LENGTH_SHORT);
         toast.show();
     }
 

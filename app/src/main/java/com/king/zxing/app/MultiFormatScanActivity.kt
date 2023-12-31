@@ -15,7 +15,7 @@ import com.king.zxing.analyze.MultiFormatAnalyzer
  */
 class MultiFormatScanActivity : BarcodeCameraScanActivity() {
 
-    var toast: Toast? = null
+    private var toast: Toast? = null
 
     override fun initCameraScan(cameraScan: CameraScan<Result>) {
         super.initCameraScan(cameraScan)
@@ -54,11 +54,8 @@ class MultiFormatScanActivity : BarcodeCameraScanActivity() {
     }
 
     private fun showToast(text: String) {
-        if(toast == null) {
-            toast = Toast.makeText(this, text, Toast.LENGTH_SHORT)
-        } else {
-            toast?.setText(text)
-        }
+        toast?.cancel()
+        toast = Toast.makeText(this, text, Toast.LENGTH_SHORT)
         toast?.show()
     }
 }
