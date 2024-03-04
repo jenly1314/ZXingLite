@@ -15,30 +15,24 @@
  */
 package com.king.zxing.app;
 
-import android.Manifest;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.ImageDecoder;
-import android.net.Uri;
-import android.os.Build;
-import android.provider.MediaStore;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.king.camera.scan.CameraScan;
-import com.king.camera.scan.util.LogUtils;
-import com.king.camera.scan.util.PermissionUtils;
-import com.king.zxing.util.CodeUtils;
-
-import java.io.IOException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.ActivityOptionsCompat;
+
+import com.king.camera.scan.CameraScan;
+import com.king.camera.scan.util.LogUtils;
+import com.king.zxing.util.CodeUtils;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * 扫码示例
@@ -50,8 +44,6 @@ public class MainActivity extends AppCompatActivity {
 
     public static final int REQUEST_CODE_SCAN = 0x01;
     public static final int REQUEST_CODE_PHOTO = 0x02;
-
-    public static final int REQUEST_CODE_READ_EXTERNAL_STORAGE = 0x99;
 
     private Toast toast;
 
@@ -82,10 +74,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showToast(String text) {
-        if(toast != null) {
+        if (toast != null) {
             toast.cancel();
         }
-        toast = Toast.makeText(this, text, Toast.LENGTH_SHORT);
+
+        toast = Toast.makeText(this, String.valueOf(text), Toast.LENGTH_SHORT);
         toast.show();
     }
 
@@ -108,17 +101,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        if (requestCode == REQUEST_CODE_READ_EXTERNAL_STORAGE && PermissionUtils.requestPermissionsResult(
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                permissions,
-                grantResults)) {
-            startPickPhoto();
-        }
-    }
 
     private void asyncThread(Runnable runnable) {
         executor.execute(runnable);
@@ -148,23 +130,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * 点击选择图片识别 - 进行动态权限校验
-     */
-    private void pickPhotoClicked() {
-        if (PermissionUtils.checkPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
-            startPickPhoto();
-        } else {
-            PermissionUtils.requestPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE, REQUEST_CODE_READ_EXTERNAL_STORAGE);
-        }
-    }
-
-    /**
      * 开始选择图片
      */
     private void startPickPhoto() {
-        Intent pickIntent = new Intent(Intent.ACTION_PICK,
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        pickIntent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+        Intent pickIntent = new Intent(Intent.ACTION_PICK);
+        pickIntent.setType("image/*");
         startActivityForResult(pickIntent, REQUEST_CODE_PHOTO);
     }
 
@@ -181,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
                 startScan(FullScreenQRCodeScanActivity.class);
                 break;
             case R.id.btnPickPhoto:
-                pickPhotoClicked();
+                startPickPhoto();
                 break;
             case R.id.btnGenerateQrCode:
                 startGenerateCodeActivity(true, ((Button) v).getText().toString());
