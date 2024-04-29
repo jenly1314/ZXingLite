@@ -139,7 +139,7 @@ public class QRCodeScanActivity extends BarcodeCameraScanActivity {
                 .setAreaRectVerticalOffset(0)//设置识别区域垂直方向偏移量，默认为0，为0表示居中，可以为负数
                 .setAreaRectHorizontalOffset(0);//设置识别区域水平方向偏移量，默认为0，为0表示居中，可以为负数
         // BarcodeCameraScanActivity默认使用的MultiFormatAnalyzer，这里可以改为使用QRCodeAnalyzer
-        return new QRCodeAnalyzer(decodeConfig);
+        return new MultiFormatAnalyzer(decodeConfig);
     }
 
     /**
@@ -202,6 +202,10 @@ dependencies {
 
 ## 版本记录
 
+#### v3.1.1：2024-04-29
+* 更新CameraScan至v1.1.1
+* 更新zxing至v3.5.3
+
 #### v3.1.0：2023-12-31
 * 更新CameraScan至v1.1.0
 * 更新zxing至v3.5.2
@@ -224,16 +228,6 @@ dependencies {
 * 优化ViewfinderView自定义属性（新增laserDrawableRatio）
 * 优化ImageAnalyzer中YUV数据的处理
 * 更新CameraX至v1.2.2
-
-#### v2.3.1：2023-3-4
-* 更新CameraX至v1.2.1
-* 更新Gradle至v7.5
-* 优化细节
-
-#### v2.3.0：2022-12-11
-* 更新CameraX至v1.2.0
-* 更新zxing至v3.5.1
-* 更新compileSdkVersion至33
 
 #### [查看更多版本记录](change_log.md)
 

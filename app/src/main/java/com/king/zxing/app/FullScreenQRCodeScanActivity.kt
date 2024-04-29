@@ -73,8 +73,8 @@ class FullScreenQRCodeScanActivity : BarcodeCameraScanActivity() {
      * 显示结果点
      */
     private fun displayResultPoint(result: AnalyzeResult<Result>) {
-        var width = result.bitmapWidth
-        var height = result.bitmapHeight
+        var width = result.imageWidth
+        var height = result.imageHeight
 
         val resultPoints = result.result.resultPoints
         val size = resultPoints.size

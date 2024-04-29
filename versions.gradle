@@ -1,7 +1,7 @@
 // App
 def app_version = [:]
-app_version.versionCode = 40
-app_version.versionName = "3.1.0"
+app_version.versionCode = 41
+app_version.versionName = "3.1.1"
 ext.app_version = app_version
 
 // build version
@@ -47,10 +47,10 @@ test.espresso = "androidx.test.espresso:espresso-core:$versions.espresso"
 deps.test = test
 
 // zxing
-deps.zxing = "com.google.zxing:core:3.5.2"
+deps.zxing = "com.google.zxing:core:3.5.3"
 
 // CameraScan
-deps.camera_scan = "com.github.jenly1314:camera-scan:1.1.0"
+deps.camera_scan = "com.github.jenly1314:camera-scan:1.1.1"
 // ViewfinderView
 deps.viewfinderview = "com.github.jenly1314:viewfinderview:1.1.0"
 
