@@ -1,5 +1,7 @@
 package com.king.zxing.analyze;
 
+import androidx.annotation.Nullable;
+
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.LuminanceSource;
@@ -8,17 +10,17 @@ import com.google.zxing.Reader;
 import com.google.zxing.Result;
 import com.google.zxing.common.GlobalHistogramBinarizer;
 import com.google.zxing.common.HybridBinarizer;
-import com.king.camera.scan.util.LogUtils;
+import com.king.logx.LogX;
 import com.king.zxing.DecodeConfig;
 
 import java.util.Map;
-
-import androidx.annotation.Nullable;
 
 /**
  * 条码分析器
  *
  * @author <a href="mailto:jenly1314@gmail.com">Jenly</a>
+ * <p>
+ * <a href="https://github.com/jenly1314">Follow me</a>
  */
 @SuppressWarnings("unused")
 public abstract class BarcodeFormatAnalyzer extends AreaRectAnalyzer {
@@ -65,9 +67,9 @@ public abstract class BarcodeFormatAnalyzer extends AreaRectAnalyzer {
                 }
                 if (rawResult != null) {
                     long end = System.currentTimeMillis();
-                    LogUtils.d("Found barcode in " + (end - start) + " ms");
+                    LogX.d("Found barcode in " + (end - start) + " ms");
                 }
-            } catch (Exception e) {
+            } catch (Exception ignored) {
 
             } finally {
                 mReader.reset();
@@ -82,14 +84,14 @@ public abstract class BarcodeFormatAnalyzer extends AreaRectAnalyzer {
             try {
                 //采用HybridBinarizer解析
                 result = mReader.decode(new BinaryBitmap(new HybridBinarizer(source)), mHints);
-            } catch (Exception e) {
+            } catch (Exception ignored) {
 
             }
             if (isMultiDecode && result == null) {
                 //如果没有解析成功，再采用GlobalHistogramBinarizer解析一次
                 result = mReader.decode(new BinaryBitmap(new GlobalHistogramBinarizer(source)), mHints);
             }
-        } catch (Exception e) {
+        } catch (Exception ignored) {
 
         }
         return result;

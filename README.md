@@ -35,8 +35,7 @@ ZXingLite for Android 是ZXing的精简极速版，基于ZXing库优化扫码和
 2. 在Module的 **build.gradle** 里面添加引入依赖项
 
     ```gradle
-    // AndroidX 版本
-    implementation 'com.github.jenly1314:zxing-lite:3.1.1'
+    implementation 'com.github.jenly1314:zxing-lite:3.2.0'
     
     ```
 
@@ -201,6 +200,11 @@ dependencies {
 #### [ViewfinderView](https://github.com/jenly1314/ViewfinderView) ViewfinderView一个取景视图：主要用于渲染扫描相关的动画效果。
 
 ## 版本记录
+
+#### v3.2.0：2024-07-16
+* 更新CameraScan至v1.2.0
+* 更新ViewfinderView至v1.2.0
+* 优化细节
 
 #### v3.1.1：2024-04-29
 * 更新CameraScan至v1.1.1

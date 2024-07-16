@@ -8,7 +8,7 @@ import com.google.zxing.PlanarYUVLuminanceSource;
 import com.google.zxing.Result;
 import com.google.zxing.common.GlobalHistogramBinarizer;
 import com.google.zxing.common.HybridBinarizer;
-import com.king.camera.scan.util.LogUtils;
+import com.king.logx.LogX;
 import com.king.zxing.DecodeConfig;
 
 import java.util.Map;
@@ -19,6 +19,8 @@ import androidx.annotation.Nullable;
  * 多格式分析器：主要用于分析识别条形码/二维码
  *
  * @author <a href="mailto:jenly1314@gmail.com">Jenly</a>
+ * <p>
+ * <a href="https://github.com/jenly1314">Follow me</a>
  */
 @SuppressWarnings("unused")
 public class MultiFormatAnalyzer extends AreaRectAnalyzer {
@@ -69,9 +71,9 @@ public class MultiFormatAnalyzer extends AreaRectAnalyzer {
             }
             if (rawResult != null) {
                 long end = System.currentTimeMillis();
-                LogUtils.d("Found barcode in " + (end - start) + " ms");
+                LogX.d("Found barcode in " + (end - start) + " ms");
             }
-        } catch (Exception e) {
+        } catch (Exception ignored) {
 
         } finally {
             mReader.reset();
@@ -86,14 +88,14 @@ public class MultiFormatAnalyzer extends AreaRectAnalyzer {
             try {
                 // 采用HybridBinarizer解析
                 result = mReader.decodeWithState(new BinaryBitmap(new HybridBinarizer(source)));
-            } catch (Exception e) {
+            } catch (Exception ignored) {
 
             }
             if (isMultiDecode && result == null) {
                 // 如果没有解析成功，再采用GlobalHistogramBinarizer解析一次
                 result = mReader.decodeWithState(new BinaryBitmap(new GlobalHistogramBinarizer(source)));
             }
-        } catch (Exception e) {
+        } catch (Exception ignored) {
 
         }
         return result;

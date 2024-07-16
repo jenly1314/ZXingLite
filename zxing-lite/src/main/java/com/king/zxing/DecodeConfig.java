@@ -2,14 +2,15 @@ package com.king.zxing;
 
 import android.graphics.Rect;
 
+import androidx.annotation.FloatRange;
+import androidx.annotation.NonNull;
+
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.common.GlobalHistogramBinarizer;
 import com.google.zxing.common.HybridBinarizer;
 
 import java.util.Map;
-
-import androidx.annotation.FloatRange;
 
 /**
  * 解码配置：主要用于在扫码识别时，提供一些配置，便于扩展。通过配置可决定内置分析器的能力，从而间接的控制并简化扫码识别的流程
@@ -25,7 +26,6 @@ import androidx.annotation.FloatRange;
  * {@link DecodeFormatManager#DEFAULT_HINTS}
  * <p>
  *
- * @author <a href="mailto:jenly1314@gmail.com">Jenly</a>
  * <p>
  * 如果不满足您也可以通过{@link DecodeFormatManager#createDecodeHints(BarcodeFormat...)}自己配置支持的格式
  *
@@ -38,7 +38,11 @@ import androidx.annotation.FloatRange;
  * 因为{@link androidx.camera.view.PreviewView}的预览区域是经过裁剪的，所以这里的区域并不是用户所能预览到的区域，而是指Camera预览的真实区域，
  * <p>
  * 即判定区域分析的优先级顺序为:{@link #setFullAreaScan(boolean)} -> {@link #setAnalyzeAreaRect(Rect)} -> {@link #setAreaRectRatio(float)}
- * <p></>
+ * <p>
+ *
+ * @author <a href="mailto:jenly1314@gmail.com">Jenly</a>
+ * <p>
+ * <a href="https://github.com/jenly1314">Follow me</a>
  */
 @SuppressWarnings("unused")
 public class DecodeConfig {
@@ -325,7 +329,7 @@ public class DecodeConfig {
     /**
      * 设置识别区域垂直方向偏移量，支持负数，大于0时，居中心向下偏移，小于0时，居中心向上偏移
      *
-     * @param areaRectVerticalOffset
+     * @param areaRectVerticalOffset 识别区域垂直方向偏移量
      * @return {@link DecodeConfig}
      */
     public DecodeConfig setAreaRectVerticalOffset(int areaRectVerticalOffset) {
@@ -345,7 +349,7 @@ public class DecodeConfig {
     /**
      * 设置识别区域水平方向偏移量，支持负数，大于0时，居中心向右偏移，小于0时，居中心向左偏移
      *
-     * @param areaRectHorizontalOffset
+     * @param areaRectHorizontalOffset 识别区域水平方向偏移量
      * @return {@link DecodeConfig}
      */
     public DecodeConfig setAreaRectHorizontalOffset(int areaRectHorizontalOffset) {
@@ -353,6 +357,7 @@ public class DecodeConfig {
         return this;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "DecodeConfig{" +

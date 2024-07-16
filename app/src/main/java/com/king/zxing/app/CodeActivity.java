@@ -33,7 +33,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * 生成条形码/二维码示例
- * @author Jenly <a href="mailto:jenly1314@gmail.com">Jenly</a>
+ *
+ * @author <a href="mailto:jenly1314@gmail.com">Jenly</a>
+ * <p>
+ * <a href="https://github.com/jenly1314">Follow me</a>
  */
 public class CodeActivity extends AppCompatActivity {
 

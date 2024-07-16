@@ -19,6 +19,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -28,7 +29,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.app.ActivityOptionsCompat;
 
 import com.king.camera.scan.CameraScan;
-import com.king.camera.scan.util.LogUtils;
 import com.king.zxing.util.CodeUtils;
 
 import java.util.concurrent.ExecutorService;
@@ -36,9 +36,14 @@ import java.util.concurrent.Executors;
 
 /**
  * 扫码示例
+ *
+ * @author <a href="mailto:jenly1314@gmail.com">Jenly</a>
+ * <p>
+ * <a href="https://github.com/jenly1314">Follow me</a>
  */
 public class MainActivity extends AppCompatActivity {
 
+    private static final String TAG = "MainActivity";
     public static final String KEY_TITLE = "key_title";
     public static final String KEY_IS_QR_CODE = "key_code";
 
@@ -88,8 +93,10 @@ public class MainActivity extends AppCompatActivity {
             //异步解析
             asyncThread(() -> {
                 final String result = CodeUtils.parseCode(bitmap);
+                // 如果只需识别二维码，建议使用：parseQRCode；（因为识别的格式越明确，误识别率越低。）
+//                final String result = CodeUtils.parseQRCode(bitmap);
                 runOnUiThread(() -> {
-                    LogUtils.d("result:" + result);
+                    Log.d(TAG, "result:" + result);
                     showToast(result);
                 });
 

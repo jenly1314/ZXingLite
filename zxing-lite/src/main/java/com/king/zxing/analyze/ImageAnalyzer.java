@@ -20,6 +20,8 @@ import androidx.camera.core.ImageProxy;
  * 图像分析器
  *
  * @author <a href="mailto:jenly1314@gmail.com">Jenly</a>
+ * <p>
+ * <a href="https://github.com/jenly1314">Follow me</a>
  */
 public abstract class ImageAnalyzer implements Analyzer<Result> {
 
@@ -46,10 +48,11 @@ public abstract class ImageAnalyzer implements Analyzer<Result> {
             queue.add(bytes);
             joinQueue.set(true);
         }
-        if (queue.isEmpty()) {
+
+        final byte[] nv21Data = queue.poll();
+        if(nv21Data == null) {
             return;
         }
-        final byte[] nv21Data = queue.poll();
 
         try {
             int rotation = imageProxy.getImageInfo().getRotationDegrees();

@@ -11,7 +11,10 @@ import com.king.zxing.analyze.MultiFormatAnalyzer
 
 /**
  * 连续扫码（识别多种格式）示例
+ *
  * @author <a href="mailto:jenly1314@gmail.com">Jenly</a>
+ * <p>
+ * <a href="https://github.com/jenly1314">Follow me</a>
  */
 class MultiFormatScanActivity : BarcodeCameraScanActivity() {
 

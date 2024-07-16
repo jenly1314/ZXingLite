@@ -14,6 +14,8 @@ import androidx.annotation.Nullable;
  * 二维码分析器
  *
  * @author <a href="mailto:jenly1314@gmail.com">Jenly</a>
+ * <p>
+ * <a href="https://github.com/jenly1314">Follow me</a>
  */
 @SuppressWarnings("unused")
 public class QRCodeAnalyzer extends BarcodeFormatAnalyzer {

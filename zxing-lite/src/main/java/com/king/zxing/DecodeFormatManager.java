@@ -18,11 +18,13 @@ import androidx.annotation.NonNull;
  * 将常见的一些解码配置已根据条形码类型进行了几大划分，可根据需要找到符合的划分配置类型直接使用。
  *
  * @author <a href="mailto:jenly1314@gmail.com">Jenly</a>
+ * <p>
+ * <a href="https://github.com/jenly1314">Follow me</a>
  */
 public final class DecodeFormatManager {
 
     /**
-     * 所有的
+     * 所有的支持的条码
      */
     public static final Map<DecodeHintType, Object> ALL_HINTS = new EnumMap<>(DecodeHintType.class);
     /**
@@ -62,9 +64,9 @@ public final class DecodeFormatManager {
     }
 
     /**
-     * 所有支持的{@link BarcodeFormat}
+     * 所有支持的条码格式，具体格式可查看：{@link BarcodeFormat}
      *
-     * @return
+     * @return 所有支持的条码格式
      */
     private static List<BarcodeFormat> getAllFormats() {
         List<BarcodeFormat> list = new ArrayList<>();
@@ -90,6 +92,7 @@ public final class DecodeFormatManager {
 
     /**
      * 一维码
+     * <p>
      * 包括如下几种格式：
      * {@link BarcodeFormat#CODABAR}
      * {@link BarcodeFormat#CODE_39}
@@ -104,7 +107,7 @@ public final class DecodeFormatManager {
      * {@link BarcodeFormat#UPC_E}
      * {@link BarcodeFormat#UPC_EAN_EXTENSION}
      *
-     * @return
+     * @return 需要支持的一维码格式
      */
     private static List<BarcodeFormat> getOneDimensionalFormats() {
         List<BarcodeFormat> list = new ArrayList<>();
@@ -124,7 +127,8 @@ public final class DecodeFormatManager {
     }
 
     /**
-     * 二维码
+     * 二维码，具体格式可查看：{@link BarcodeFormat}
+     * <p>
      * 包括如下几种格式：
      * {@link BarcodeFormat#AZTEC}
      * {@link BarcodeFormat#DATA_MATRIX}
@@ -132,7 +136,7 @@ public final class DecodeFormatManager {
      * {@link BarcodeFormat#PDF_417}
      * {@link BarcodeFormat#QR_CODE}
      *
-     * @return
+     * @return 需要支持的二维码格式
      */
     private static List<BarcodeFormat> getTwoDimensionalFormats() {
         List<BarcodeFormat> list = new ArrayList<>();
@@ -146,13 +150,14 @@ public final class DecodeFormatManager {
 
     /**
      * 默认支持的格式
+     * <p>
      * 包括如下几种格式：
      * {@link BarcodeFormat#QR_CODE}
      * {@link BarcodeFormat#UPC_A}
      * {@link BarcodeFormat#EAN_13}
      * {@link BarcodeFormat#CODE_128}
      *
-     * @return
+     * @return 默认支持的格式
      */
     private static List<BarcodeFormat> getDefaultFormats() {
         List<BarcodeFormat> list = new ArrayList<>();
@@ -167,7 +172,7 @@ public final class DecodeFormatManager {
      * 支持解码的格式
      *
      * @param barcodeFormats {@link BarcodeFormat}
-     * @return
+     * @return 返回添加了通用配置后的解码支持类型与配置
      */
     public static Map<DecodeHintType, Object> createDecodeHints(@NonNull BarcodeFormat... barcodeFormats) {
         Map<DecodeHintType, Object> hints = new EnumMap<>(DecodeHintType.class);
@@ -179,7 +184,7 @@ public final class DecodeFormatManager {
      * 支持解码的格式
      *
      * @param barcodeFormat {@link BarcodeFormat}
-     * @return
+     * @return 返回添加了通用配置后的解码支持类型与配置
      */
     public static Map<DecodeHintType, Object> createDecodeHint(@NonNull BarcodeFormat barcodeFormat) {
         Map<DecodeHintType, Object> hints = new EnumMap<>(DecodeHintType.class);
@@ -188,8 +193,9 @@ public final class DecodeFormatManager {
     }
 
     /**
-     * @param hints
-     * @param formats
+     * 为解码配置添加一些通用配置
+     * @param hints 解码支持类型与配置
+     * @param formats 需要支持的解码格式
      */
     private static void addDecodeHintTypes(Map<DecodeHintType, Object> hints, List<BarcodeFormat> formats) {
         // Image is known to be of one of a few possible formats.

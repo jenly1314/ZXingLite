@@ -15,6 +15,8 @@ import androidx.annotation.Nullable;
  * 矩阵区域分析器：主要用于锁定具体的识别区域
  *
  * @author <a href="mailto:jenly1314@gmail.com">Jenly</a>
+ * <p>
+ * <a href="https://github.com/jenly1314">Follow me</a>
  */
 public abstract class AreaRectAnalyzer extends ImageAnalyzer {
 

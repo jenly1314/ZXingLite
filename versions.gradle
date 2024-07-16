@@ -1,7 +1,7 @@
 // App
 def app_version = [:]
-app_version.versionCode = 41
-app_version.versionName = "3.1.1"
+app_version.versionCode = 42
+app_version.versionName = "3.2.0"
 ext.app_version = app_version
 
 // build version
@@ -50,9 +50,9 @@ deps.test = test
 deps.zxing = "com.google.zxing:core:3.5.3"
 
 // CameraScan
-deps.camera_scan = "com.github.jenly1314:camera-scan:1.1.1"
+deps.camera_scan = "com.github.jenly1314:camera-scan:1.2.0"
 // ViewfinderView
-deps.viewfinderview = "com.github.jenly1314:viewfinderview:1.1.0"
+deps.viewfinderview = "com.github.jenly1314:viewfinderview:1.2.0"
 
 // desugar_jdk
 deps.desugar_jdk = "com.android.tools:desugar_jdk_libs:1.2.3"
