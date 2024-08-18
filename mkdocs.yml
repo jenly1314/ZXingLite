@@ -1,7 +1,7 @@
 # Project information
 site_name: ZXingLite
 site_url: https://jenly1314.github.io/ZXingLite/
-site_description: "CameraScan for Android"
+site_description: "ZXingLite for Android"
 site_author: Jenly
 remote_branch: gh-pages
 edit_uri: ""
