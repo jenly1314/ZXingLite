@@ -56,6 +56,7 @@ ZXingLite for Android 是ZXing的精简极速版，基于ZXing库优化扫码和
 #### 3.x版本的变化
 
 从 **2.x** 到 **3.x** 主要变化如下：
+
 * 2.x版本中的 **CameraScan** 相关核心类被移除了；
 > 从3.0.0版本开始改为依赖 [CameraScan](https://github.com/jenly1314/CameraScan)；（[CameraScan](https://github.com/jenly1314/CameraScan)是一个独立的库，单独进行维护）
 
@@ -73,7 +74,7 @@ ZXingLite for Android 是ZXing的精简极速版，基于ZXing库优化扫码和
 
 #### 3.x版本的使用
 
-3.x的实现主要是以 [CameraScan](https://github.com/jenly1314/CameraScan)作为基础库去实现具体的分析检测功能，所以你可以先去看下 [CameraScan](https://github.com/jenly1314/CameraScan)的使用说明；在了解了 [CameraScan](https://github.com/jenly1314/CameraScan)的基本使用方式后，然后再结合当前的使用说明就可以轻松的集成并使用 **ZXingLite**了。
+3.x的实现主要是以 [CameraScan](https://github.com/jenly1314/CameraScan)作为基础库去实现具体的分析检测功能，所以你可以先去看下 [CameraScan](https://github.com/jenly1314/CameraScan)的使用说明；在了解了 [CameraScan](https://github.com/jenly1314/CameraScan)的基本使用方式后，然后再结合当前的使用说明就可以轻松的集成并使用 **ZXingLite** 了。
 
 ### 主要类说明
 
@@ -83,9 +84,9 @@ ZXingLite for Android 是ZXing的精简极速版，基于ZXing库优化扫码和
 
 内部提供的分析器有多个；一般情况下，你只需要知道最终实现的 [**MultiFormatAnalyzer**](zxing-lite/src/main/java/com/king/zxing/analyze/MultiFormatAnalyzer.java) 和 [**QRCodeAnalyzer**](zxing-lite/src/main/java/com/king/zxing/analyze/QRCodeAnalyzer.java) 即可：
 
-**MultiFormatAnalyzer** 和 **QRCodeAnalyzer** 的主要区别，从名字大概就能看的出来；一个是可识别多种格式，一个是只识别二维码（具体需要支持识别哪些格式的条码，其实还要看提供的**DecodeConfig**是怎么配置的）。
+**MultiFormatAnalyzer** 和 **QRCodeAnalyzer** 的主要区别，从名字大概就能看的出来；一个是可识别多种格式，一个是只识别二维码（具体需要支持识别哪些格式的条码，其实还要看提供的 **DecodeConfig** 是怎么配置的）。
 
-> 本可以不需要 ****QRCodeAnalyzer****，之所以提供一个 **QRCodeAnalyzer** 是因为有很多需求是只需要识别二维码就行；如果你有连续扫码的需求或不知道怎么选时，推荐直接选择 **MultiFormatAnalyzer** 。
+> 本可以不需要 **QRCodeAnalyzer**，之所以提供一个 **QRCodeAnalyzer** 是因为有很多需求是只需要识别二维码就行；如果你有连续扫码的需求或不知道怎么选时，推荐直接选择 **MultiFormatAnalyzer** 。
 
 #### 关于DecodeConfig
 
