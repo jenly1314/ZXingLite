@@ -12,7 +12,7 @@
 [![License](https://img.shields.io/badge/license-Apche%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 
 ZXingLite for Android 是ZXing的精简极速版，基于ZXing库优化扫码和生成二维码/条形码功能，扫码界面完全支持自定义；使用ZXingLite可快速实现扫码识别相关功能。
-> 简单如斯，你不试试？ 
+> 简单如斯，你不试试？
 
 ## Gif 展示
 ![Image](GIF.gif)
@@ -36,7 +36,7 @@ ZXingLite for Android 是ZXing的精简极速版，基于ZXing库优化扫码和
 
     ```gradle
     implementation 'com.github.jenly1314:zxing-lite:3.2.0'
-    
+
     ```
 
 ### 温馨提示
@@ -167,7 +167,7 @@ public class QRCodeScanActivity extends BarcodeCameraScanActivity {
 
 > **BarcodeCameraScanFragment** 的使用方式与之类似。
 
-更多使用详情，请查看[app](app)中的源码使用示例或直接查看[API帮助文档](https://jitpack.io/com/github/jenly1314/ZXingLite/latest/javadoc/)
+更多使用详情，请查看[app](app)中的源码使用示例或直接查看[API帮助文档](https://jenly1314.github.io/ZXingLite/api/)
 
 ### 其他
 
@@ -194,12 +194,14 @@ dependencies {
 
 ## 相关推荐
 
-#### [MLKit](https://github.com/jenly1314/MLKit) 一个强大易用的工具包。通过ML Kit您可以很轻松的实现文字识别、条码识别、图像标记、人脸检测、对象检测等功能。    
+#### [MLKit](https://github.com/jenly1314/MLKit) 一个强大易用的工具包。通过ML Kit您可以很轻松的实现文字识别、条码识别、图像标记、人脸检测、对象检测等功能。
 #### [WeChatQRCode](https://github.com/jenly1314/WeChatQRCode) 基于OpenCV开源的微信二维码引擎移植的扫码识别库。
 #### [CameraScan](https://github.com/jenly1314/CameraScan) 一个简化扫描识别流程的通用基础库。
 #### [ViewfinderView](https://github.com/jenly1314/ViewfinderView) ViewfinderView一个取景视图：主要用于渲染扫描相关的动画效果。
 
-## 版本记录
+<!-- end -->
+
+## 版本日志
 
 #### v3.2.0：2024-07-16
 * 更新CameraScan至v1.2.0
@@ -233,7 +235,7 @@ dependencies {
 * 优化ImageAnalyzer中YUV数据的处理
 * 更新CameraX至v1.2.2
 
-#### [查看更多版本记录](change_log.md)
+#### [查看更多版本日志](CHANGELOG.md)
 
 ## 赞赏
 如果您喜欢ZXingLite，或感觉ZXingLite帮助到了您，可以点右上角“Star”支持一下，您的支持就是我的动力，谢谢 :smiley:

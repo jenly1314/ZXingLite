@@ -1,0 +1,12 @@
+root = true
+
+[*]
+indent_style = space
+indent_size = 2
+ij_continuation_indent_size = 2
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+[*.{kt, kts}]
+ij_kotlin_imports_layout = *

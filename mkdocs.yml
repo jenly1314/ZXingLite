@@ -1,0 +1,86 @@
+# Project information
+site_name: ZXingLite
+site_url: https://jenly1314.github.io/ZXingLite/
+site_description: "CameraScan for Android"
+site_author: Jenly
+remote_branch: gh-pages
+edit_uri: ""
+
+# Repository
+repo_name: ZXingLite
+repo_url: https://github.com/jenly1314/ZXingLite
+
+# Copyright
+copyright: 'Copyright &copy; 2018 - 2024 Jenly'
+
+# Configuration
+theme:
+  name: 'material'
+  favicon: https://jenly1314.github.io/favicon.png
+  logo: https://jenly1314.github.io/medias/logo.png
+  icon:
+    repo: fontawesome/brands/github
+  language: zh
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: teal
+      accent: blue
+      toggle:
+        icon: octicons/sun-24
+        name: "切换到深色模式"
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: teal
+      accent: blue
+      toggle:
+        icon: octicons/moon-24
+        name: "切换到浅色模式"
+  features:
+    - navigation.instant
+    - navigation.instant.progress
+    - navigation.tabs
+    - content.code.copy
+
+extra:
+  social:
+    - icon: material/home-circle
+      link: https://jenly1314.github.io/
+    - icon: simple/github
+      link: https://github.com/jenly1314/
+    - icon: simple/gitee
+      link: https://gitee.com/jenly1314/
+    - icon: fontawesome/solid/paper-plane
+      link: mailto:jenly1314@gmail.com
+
+markdown_extensions:
+  - smarty
+  - footnotes
+  - meta
+  - toc:
+      permalink: true
+  - attr_list
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+  - pymdownx.inlinehilite
+  - pymdownx.magiclink
+  - pymdownx.smartsymbols
+  - pymdownx.superfences
+  - pymdownx.tilde
+  - pymdownx.tabbed:
+      alternate_style: true
+  - tables
+
+# Plugins
+plugins:
+  - search
+
+nav:
+  - '概览': index.md
+  - 'API文档': api/index.html
+  - '版本日志': changelog.md
+
