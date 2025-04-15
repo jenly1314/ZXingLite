@@ -4,7 +4,6 @@
 
 [![Download](https://img.shields.io/badge/download-App-blue.svg)](https://raw.githubusercontent.com/jenly1314/ZXingLite/master/app/release/app-release.apk)
 [![MavenCentral](https://img.shields.io/maven-central/v/com.github.jenly1314/zxing-lite)](https://repo1.maven.org/maven2/com/github/jenly1314/zxing-lite)
-[![JCenter](https://img.shields.io/badge/JCenter-2.0.3-46C018.svg)](https://bintray.com/beta/#/jenly/maven/zxing-lite)
 [![JitPack](https://jitpack.io/v/jenly1314/ZXingLite.svg)](https://jitpack.io/#jenly1314/ZXingLite)
 [![CI](https://travis-ci.org/jenly1314/ZXingLite.svg?branch=master)](https://travis-ci.org/jenly1314/ZXingLite)
 [![CircleCI](https://circleci.com/gh/jenly1314/ZXingLite.svg?style=svg)](https://circleci.com/gh/jenly1314/ZXingLite)
@@ -174,7 +173,7 @@ public class QRCodeScanActivity extends BarcodeCameraScanActivity {
 
 #### JDK版本与API脱糖
 
-当使用ZXingLite为 **v2.3.x** 以上版本时，（即：更新zxing至v3.5.1后）；如果要兼容Android 7.0 (N) 以下版本（即：minSdk<24），可通过脱糖获得 Java 8 及更高版本 API。
+当使用ZXingLite为 **v2.3.0 ~ v3.0.1** 之间版本时，（即：使用的zxing为v3.5.1版本时）；如果要兼容Android 7.0 (N) 以下版本（即：minSdk<24），可通过脱糖获得 Java 8 及更高版本 API。
 
 ```gradle
 compileOptions {
@@ -193,12 +192,16 @@ dependencies {
 }
 ```
 
+> ZXingLite **v3.1.0** 以后版本（无需脱糖），因为zxing **v3.5.2** 又恢复了与旧版 JDK 的兼容性；详情见：[zxing-3.5.2](https://github.com/zxing/zxing/releases/tag/zxing-3.5.2)
+
 ## 相关推荐
 
 - [MLKit](https://github.com/jenly1314/MLKit) 一个强大易用的工具包。通过ML Kit您可以很轻松的实现文字识别、条码识别、图像标记、人脸检测、对象检测等功能。
 - [WeChatQRCode](https://github.com/jenly1314/WeChatQRCode) 基于OpenCV开源的微信二维码引擎移植的扫码识别库。
 - [CameraScan](https://github.com/jenly1314/CameraScan) 一个简化扫描识别流程的通用基础库。
 - [ViewfinderView](https://github.com/jenly1314/ViewfinderView) ViewfinderView一个取景视图：主要用于渲染扫描相关的动画效果。
+- [LibYuv](https://github.com/jenly1314/libyuv) 基于Google的libyuv编译封装的YUV转换工具库，主要用途是在各种YUV与RGB之间进行相互转换、裁减、旋转、缩放、镜像等。
+- [LogX](https://github.com/jenly1314/LogX) 一个小而美的日志记录框架；好用不解释。
 
 <!-- end -->
 
@@ -208,33 +211,6 @@ dependencies {
 * 更新CameraScan至v1.2.0
 * 更新ViewfinderView至v1.2.0
 * 优化细节
-
-#### v3.1.1：2024-04-29
-* 更新CameraScan至v1.1.1
-* 更新zxing至v3.5.3
-
-#### v3.1.0：2023-12-31
-* 更新CameraScan至v1.1.0
-* 更新zxing至v3.5.2
-* 更新compileSdkVersion至34
-* 更新Gradle至v8.0
-
-#### v3.0.1：2023-9-13
-* 更新CameraScan至v1.0.1
-* 更新ViewfinderView至v1.1.0
-
-#### v3.0.0：2023-8-23
-* 将通用基础类拆分移除并进行重构，后续维护更便捷
-* 移除 **CameraScan** 相关核心类，改为依赖 [CameraScan](https://github.com/jenly1314/CameraScan)
-* 移除扫码取景视图 **ViewfinderView**，改为依赖 [ViewfinderView](https://github.com/jenly1314/ViewfinderView)
-* 移除 **CaptureActivity** 和 **CaptureFragment**，新增 **BarcodeCameraScanActivity** 和 **BarcodeCameraScanFragment** 来替代
-* 优化扫描分析过程的性能体验（优化帧数据分析过程）
-
-#### v2.4.0：2023-4-15
-* 优化CameraScan的缺省配置（CameraConfig相关配置）
-* 优化ViewfinderView自定义属性（新增laserDrawableRatio）
-* 优化ImageAnalyzer中YUV数据的处理
-* 更新CameraX至v1.2.2
 
 #### [查看更多版本日志](CHANGELOG.md)
 

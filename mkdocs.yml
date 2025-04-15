@@ -43,6 +43,7 @@ theme:
     - content.code.copy
 
 extra:
+  generator: false
   social:
     - icon: material/home-circle
       link: https://jenly1314.github.io/
