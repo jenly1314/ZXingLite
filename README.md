@@ -2,25 +2,79 @@
 
 ![Image](app/src/main/ic_launcher-web.png)
 
-[![Download](https://img.shields.io/badge/download-App-blue.svg)](https://raw.githubusercontent.com/jenly1314/ZXingLite/master/app/release/app-release.apk)
-[![MavenCentral](https://img.shields.io/maven-central/v/com.github.jenly1314/zxing-lite)](https://repo1.maven.org/maven2/com/github/jenly1314/zxing-lite)
-[![JCenter](https://img.shields.io/badge/JCenter-2.0.3-46C018.svg)](https://bintray.com/beta/#/jenly/maven/zxing-lite)
-[![JitPack](https://jitpack.io/v/jenly1314/ZXingLite.svg)](https://jitpack.io/#jenly1314/ZXingLite)
-[![CI](https://travis-ci.org/jenly1314/ZXingLite.svg?branch=master)](https://travis-ci.org/jenly1314/ZXingLite)
-[![CircleCI](https://circleci.com/gh/jenly1314/ZXingLite.svg?style=svg)](https://circleci.com/gh/jenly1314/ZXingLite)
-[![API](https://img.shields.io/badge/API-21%2B-blue.svg?style=flat)](https://android-arsenal.com/api?level=21)
-[![License](https://img.shields.io/badge/license-Apche%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
-[![Blog](https://img.shields.io/badge/blog-Jenly-9933CC.svg)](https://jenly1314.github.io/)
-[![QQGroup](https://img.shields.io/badge/QQGroup-20867961-blue.svg)](http://shang.qq.com/wpa/qunwpa?idkey=8fcc6a2f88552ea44b1.1.982c94fd124f7bb3ec227e2a400dbbfaad3dc2f5ad)
+[![MavenCentral](https://img.shields.io/maven-central/v/com.github.jenly1314/zxing-lite?logo=sonatype)](https://repo1.maven.org/maven2/com/github/jenly1314/ZXingLite)
+[![JitPack](https://img.shields.io/jitpack/v/github/jenly1314/ZXingLite?logo=jitpack)](https://jitpack.io/#jenly1314/ZXingLite)
+[![CI](https://img.shields.io/github/actions/workflow/status/jenly1314/ZXingLite/build.yml?logo=github)](https://github.com/jenly1314/ZXingLite/actions/workflows/build.yml)
+[![Download](https://img.shields.io/badge/download-APK-brightgreen?logo=github)](https://raw.githubusercontent.com/jenly1314/ZXingLite/master/app/release/app-release.apk)
+[![API](https://img.shields.io/badge/API-21%2B-brightgreen?logo=android)](https://developer.android.com/guide/topics/manifest/uses-sdk-element#ApiLevels)
+[![License](https://img.shields.io/github/license/jenly1314/ZXingLite?logo=open-source-initiative)](https://opensource.org/licenses/apache-2-0)
 
-ZXingLite for Android 是ZXing的精简极速版，基于ZXing库优化扫码和生成二维码/条形码功能，扫码界面完全支持自定义，也可一行代码使用默认实现的扫码功能。总之你想要的都在这里。
-> 简单如斯，你不试试？ 
 
-## Gif 展示
+ZXingLite for Android 是ZXing的精简极速版，基于ZXing库优化扫码和生成二维码/条形码功能，扫码界面完全支持自定义；使用ZXingLite可快速实现扫码识别相关功能。
+
+> 简单如斯，你不试试？
+
+## 效果展示
 ![Image](GIF.gif)
 
 > 你也可以直接下载 [演示App](https://raw.githubusercontent.com/jenly1314/ZXingLite/master/app/release/app-release.apk) 体验效果
 
+## 引入
+
+### Gradle:
+
+1. 在Project的 **build.gradle** 或 **setting.gradle** 中添加远程仓库
+
+    ```gradle
+    repositories {
+        //...
+        mavenCentral()
+    }
+    ```
+
+2. 在Module的 **build.gradle** 中添加依赖项
+
+    ```gradle
+    implementation 'com.github.jenly1314:zxing-lite:2.4.0'
+
+    ```
+
+### 温馨提示
+
+#### 关于ZXingLite版本与编译的SDK版本要求
+
+> 使用 **v2.3.x** 以上版本时，要求 **compileSdkVersion >= 33**
+
+> 使用 **v2.2.x** 以上版本时，要求 **compileSdkVersion >= 31**
+
+> 如果 **compileSdkVersion < 31** 请使用 **v2.2.x** 以前的版本
+
+#### 对于需兼容 Android 5.0 (N) 以下版本的老项目（即：minSdk<21），可使用1.x旧版本
+
+**v1.x** 旧版本 [v1.1.9](https://github.com/jenly1314/ZXingLite/tree/androidx)
+
+**Gradle**
+
+1. 在Project的 **build.gradle** 里面添加远程仓库
+```gradle
+allprojects {
+    repositories {
+        //...
+        jcenter()
+    }
+}
+```
+2. 在Module的 **build.gradle** 里面添加引入依赖项
+```gradle
+// AndroidX 版本
+implementation 'com.king.zxing:zxing-lite:1.1.9-androidx'
+
+// Android Support 版本
+implementation 'com.king.zxing:zxing-lite:1.1.9'
+```
+> 对于 **v1.x** 版本，当你看到这里，此时的 **JCenter** 仓库如果已关闭, 可使用 **JitPack** 仓库
+
+## 使用
 
 ## ViewfinderView属性说明
 
@@ -62,67 +116,6 @@ ZXingLite for Android 是ZXing的精简极速版，基于ZXing库优化扫码和
 | laserDrawable           | reference |                                      | 扫描激光自定义图片                                         |
 | laserDrawableRatio      | float     | 0.625f                               | 激光扫描图片与屏幕占比                                       |
 | viewfinderStyle         | enum      | classic                              | 取景框样式；支持：classic：经典样式（带扫码框那种）、popular：流行样式（不带扫码框） |
-
-
-## 引入
-
-### Gradle:
-
-1. 在Project的 **build.gradle** 里面添加远程仓库  
-          
-```gradle
-allprojects {
-    repositories {
-        //...
-        mavenCentral()
-    }
-}
-```
-
-2. 在Module的 **build.gradle** 里面添加引入依赖项
-
-```gradle
-// AndroidX 版本
-implementation 'com.github.jenly1314:zxing-lite:2.4.0'
-
-```
-
-### 温馨提示
-
-#### 关于ZXingLite版本与编译的SDK版本要求
-
-> 使用 **v2.3.x** 以上版本时，要求 **compileSdkVersion >= 33**
-
-> 使用 **v2.2.x** 以上版本时，要求 **compileSdkVersion >= 31**
-
-> 如果 **compileSdkVersion < 31** 请使用 **v2.2.x** 以前的版本
-
-#### 对于需兼容 Android 5.0 (N) 以下版本的老项目（即：minSdk<21），可使用1.x旧版本
-
-**v1.x** 旧版本 [v1.1.9](https://github.com/jenly1314/ZXingLite/tree/androidx)
-
-**Gradle**
-
-1. 在Project的 **build.gradle** 里面添加远程仓库
-```gradle
-allprojects {
-    repositories {
-        //...
-        jcenter()
-    }
-}
-```
-2. 在Module的 **build.gradle** 里面添加引入依赖项
-```gradle
-// AndroidX 版本
-implementation 'com.king.zxing:zxing-lite:1.1.9-androidx'
-
-// Android Support 版本
-implementation 'com.king.zxing:zxing-lite:1.1.9'
-```
-> 对于 **v1.x** 版本，当你看到这里，此时的 **JCenter** 仓库如果已关闭, 可使用 **JitPack** 仓库
-
-## 使用说明
 
 ### 快速实现扫码识别有以下几种方式：
 
@@ -385,11 +378,14 @@ dependencies {
 }
 ```
 
-### 相关推荐
+## 相关推荐
 
-#### [MLKit](https://github.com/jenly1314/MLKit) 一个强大易用的工具包。通过ML Kit您可以很轻松的实现文字识别、条码识别、图像标记、人脸检测、对象检测等功能。    
-#### [WeChatQRCode](https://github.com/jenly1314/WeChatQRCode) 基于OpenCV开源的微信二维码引擎移植的扫码识别库。
-
+- [MLKit](https://github.com/jenly1314/MLKit) 一个强大易用的工具包。通过ML Kit您可以很轻松的实现文字识别、条码识别、图像标记、人脸检测、对象检测等功能。
+- [WeChatQRCode](https://github.com/jenly1314/WeChatQRCode) 基于OpenCV开源的微信二维码引擎移植的扫码识别库。
+- [CameraScan](https://github.com/jenly1314/CameraScan) 一个简化扫描识别流程的通用基础库。
+- [ViewfinderView](https://github.com/jenly1314/ViewfinderView) ViewfinderView一个取景视图：主要用于渲染扫描相关的动画效果。
+- [LibYuv](https://github.com/jenly1314/libyuv) 基于Google的libyuv编译封装的YUV转换工具库，主要用途是在各种YUV与RGB之间进行相互转换、裁减、旋转、缩放、镜像等。
+- [LogX](https://github.com/jenly1314/LogX) 一个轻量而强大的日志框架；好用不解释。
 
 ## 版本说明
 
@@ -415,7 +411,7 @@ dependencies {
 
 查看 [ **1.x** API帮助文档](https://jenly1314.github.io/projects/ZXingLite/doc/)
 
-## 版本记录
+## 版本日志
 
 #### v2.4.0：2023-4-15
 * 优化CameraScan的缺省配置（CameraConfig相关配置）
@@ -433,33 +429,9 @@ dependencies {
 * 更新zxing至v3.5.1
 * 更新compileSdkVersion至33
 
-#### [查看更多版本记录](change_log.md)
-
-## 赞赏
-如果您喜欢ZXingLite，或感觉ZXingLite帮助到了您，可以点右上角“Star”支持一下，您的支持就是我的动力，谢谢 :smiley:<p>
-您也可以扫描下面的二维码，请作者喝杯咖啡 :coffee:
-<div>
-<img src="https://jenly1314.github.io/image/pay/sponsor.png" width="98%">
-</div>
-
-## 关于我
-Name: <a title="关于作者" href="https://jenly1314.github.io" target="_blank">Jenly</a>
-
-Email: <a title="欢迎邮件与我交流" href="mailto:jenly1314@gmail.com" target="_blank">jenly1314#gmail.com</a> / <a title="给我发邮件" href="mailto:jenly1314@vip.qq.com" target="_blank">jenly1314#vip.qq.com</a>
-
-CSDN: <a title="CSDN博客" href="http://blog.csdn.net/jenly121" target="_blank">jenly121</a>
-
-CNBlogs: <a title="博客园" href="https://www.cnblogs.com/jenly" target="_blank">jenly</a>
-
-GitHub: <a title="GitHub开源项目" href="https://github.com/jenly1314" target="_blank">jenly1314</a>
-
-Gitee: <a title="Gitee开源项目" href="https://gitee.com/jenly1314" target="_blank">jenly1314</a>
-
-加入QQ群: <a title="点击加入QQ群" href="http://shang.qq.com/wpa/qunwpa?idkey=8fcc6a2f88552ea44b1411582c94fd124f7bb3ec227e2a400dbbfaad3dc2f5ad" target="_blank">20867961</a>
-   <div>
-       <img src="https://jenly1314.github.io/image/jenly666.png">
-       <img src="https://jenly1314.github.io/image/qqgourp.png">
-   </div>
+#### [查看更多版本日志](change_log.md)
 
 
+---
 
+![footer](https://jenly1314.github.io/page/footer.svg)
