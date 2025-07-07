@@ -35,7 +35,7 @@ ZXingLite for Android 是ZXing的精简极速版，基于ZXing库优化扫码和
 2. 在Module的 **build.gradle** 中添加依赖项
 
     ```gradle
-    implementation 'com.github.jenly1314:zxing-lite:3.2.0'
+    implementation 'com.github.jenly1314:zxing-lite:3.3.0'
 
     ```
 
@@ -208,10 +208,11 @@ dependencies {
 
 ## 版本日志
 
-#### v3.2.0：2024-07-16
-* 更新CameraScan至v1.2.0
-* 更新ViewfinderView至v1.2.0
-* 优化细节
+#### v3.3.0：2025-7-7
+* 迁移发布至 **Central Portal** [相关公告](https://central.sonatype.org/pages/ossrh-eol/#logging-in-to-central-portal)
+* 更新CameraScan至v1.3.1
+* 更新ViewfinderView至v1.4.0
+* 更新Gradle至v8.5
 
 #### [查看更多版本日志](CHANGELOG.md)
 
