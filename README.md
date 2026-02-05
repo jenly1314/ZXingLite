@@ -6,7 +6,7 @@
 [![JitPack](https://img.shields.io/jitpack/v/github/jenly1314/ZXingLite?logo=jitpack)](https://jitpack.io/#jenly1314/ZXingLite)
 [![CI](https://img.shields.io/github/actions/workflow/status/jenly1314/ZXingLite/build.yml?logo=github)](https://github.com/jenly1314/ZXingLite/actions/workflows/build.yml)
 [![Download](https://img.shields.io/badge/download-APK-brightgreen?logo=github)](https://raw.githubusercontent.com/jenly1314/ZXingLite/master/app/release/app-release.apk)
-[![API](https://img.shields.io/badge/API-21%2B-brightgreen?logo=android)](https://developer.android.com/guide/topics/manifest/uses-sdk-element#ApiLevels)
+[![API](https://img.shields.io/badge/API-23%2B-brightgreen?logo=android)](https://developer.android.com/guide/topics/manifest/uses-sdk-element#ApiLevels)
 [![License](https://img.shields.io/github/license/jenly1314/ZXingLite?logo=open-source-initiative)](https://opensource.org/licenses/apache-2-0)
 
 
@@ -35,7 +35,7 @@ ZXingLite for Android 是ZXing的精简极速版，基于ZXing库优化扫码和
 2. 在Module的 **build.gradle** 中添加依赖项
 
     ```gradle
-    implementation 'com.github.jenly1314:zxing-lite:3.3.0'
+    implementation 'com.github.jenly1314:zxing-lite:3.4.0'
 
     ```
 
@@ -43,11 +43,13 @@ ZXingLite for Android 是ZXing的精简极速版，基于ZXing库优化扫码和
 
 #### 关于ZXingLite版本与编译的SDK版本要求
 
-> 使用 **v3.1.x** 以上版本时，要求 **compileSdkVersion >= 34**
+> 使用 **v3.4.0** 及以上版本时，要求 **compileSdk ≥ 35**
 
-> 使用 **v3.0.x** 以上版本时，要求 **compileSdkVersion >= 33**
+> 使用 **v3.1.0** 及以上版本时，要求 **compileSdk ≥ 34**
 
-> 如果 **compileSdkVersion < 33** 请使用 [**v2.x版本**](https://github.com/jenly1314/ZXingLite/tree/2.x/)
+> 使用 **v3.0.0** 及以上版本时，要求 **compileSdk ≥ 33**
+
+> 如果 **compileSdk < 33** 请使用 [**v2.x版本**](https://github.com/jenly1314/ZXingLite/tree/2.x/)
 
 ## 使用
 
@@ -195,6 +197,8 @@ dependencies {
 
 > ZXingLite **v3.1.0** 以后版本（无需脱糖），因为zxing **v3.5.2** 又恢复了与旧版 JDK 的兼容性；详情见：[zxing-3.5.2](https://github.com/zxing/zxing/releases/tag/zxing-3.5.2)
 
+#### [常见问题解答](https://github.com/jenly1314/ZXingLite/issues/69#issue-529829908)
+
 ## 相关推荐
 
 - [MLKit](https://github.com/jenly1314/MLKit) 一个强大易用的工具包。通过ML Kit您可以很轻松的实现文字识别、条码识别、图像标记、人脸检测、对象检测等功能。
@@ -208,11 +212,12 @@ dependencies {
 
 ## 版本日志
 
-#### v3.3.0：2025-7-7
-* 迁移发布至 **Central Portal** [相关公告](https://central.sonatype.org/pages/ossrh-eol/#logging-in-to-central-portal)
-* 更新CameraScan至v1.3.1
-* 更新ViewfinderView至v1.4.0
-* 更新Gradle至v8.5
+#### v3.4.0：2026-2-5
+* 更新minSdk至23
+* 更新compileSdk至35
+* 更新CameraScan至v1.4.0
+* 更新zxing至v3.5.4
+* 更新Gradle至v8.13
 
 #### [查看更多版本日志](CHANGELOG.md)
 

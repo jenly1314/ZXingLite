@@ -24,14 +24,13 @@ android {
         }
     }
     compileOptions {
-        coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
-    lintOptions {
+    lint {
         abortOnError false
     }
 }
@@ -44,8 +43,6 @@ dependencies {
     implementation deps.androidx.design
     implementation deps.androidx.appcompat
     implementation deps.androidx.constraintlayout
-
-    coreLibraryDesugaring deps.desugar_jdk
 
     implementation project(':zxing-lite')
 }

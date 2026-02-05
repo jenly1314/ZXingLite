@@ -6,7 +6,6 @@ on:
       - master
 
 env:
-  JAVA_VERSION: 17
   PYTHON_VERSION: 3.x
   GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx4g -Dorg.gradle.daemon=false -Dkotlin.incremental=false"
 
@@ -25,15 +24,15 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
-      - name: Configure JDK
-        uses: actions/setup-java@v4
+      - name: Setup Java
+        uses: actions/setup-java@v5
         with:
           distribution: 'zulu'
-          java-version: ${{ env.JAVA_VERSION }}
+          java-version-file: .github/workflows/.java-version
 
       - name: Install Python
         uses: actions/setup-python@v5

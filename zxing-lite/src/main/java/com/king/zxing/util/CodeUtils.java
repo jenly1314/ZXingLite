@@ -719,5 +719,4 @@ public final class CodeUtils {
         return bitmap;
     }
 
-
 }
