@@ -1,55 +1,16 @@
-name: docs
+name: Docs
 
 on:
   push:
-    branches:
-      - master
-
-env:
-  PYTHON_VERSION: 3.x
-  GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx4g -Dorg.gradle.daemon=false -Dkotlin.incremental=false"
-
-permissions:
-  contents: write
-  id-token: write
-  pages: write
+    branches: [ master ]
 
 jobs:
   docs:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+      pages: write
     if: github.ref == 'refs/heads/master'
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-
-      - name: Setup Java
-        uses: actions/setup-java@v5
-        with:
-          distribution: 'zulu'
-          java-version-file: .github/workflows/.java-version
-
-      - name: Install Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ env.PYTHON_VERSION }}
-
-      - name: Install MkDocs Material
-        run: pip install mkdocs-material
-
-      - name: Generate Docs
-        run: ./build_docs.sh
-
-      - name: Upload to GitHub Pages
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: site
-
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+    uses: jenly1314/actions/.github/workflows/reusable-docs.yml@v1
+    with:
+      java-version-file: '.github/workflows/.java-version'
