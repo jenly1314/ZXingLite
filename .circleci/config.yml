@@ -6,7 +6,7 @@ orbs:
 jobs:
   build:
     docker:
-      - image: cimg/android:2026.01.1
+      - image: cimg/android:2024.01.1
     steps:
       - checkout
       - run: ./gradlew assembleDebug
