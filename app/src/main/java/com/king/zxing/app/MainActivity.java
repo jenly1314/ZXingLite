@@ -17,6 +17,7 @@ package com.king.zxing.app;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -24,11 +25,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.core.app.ActivityOptionsCompat;
 
 import com.king.camera.scan.CameraScan;
+import com.king.logx.LogX;
 import com.king.zxing.util.CodeUtils;
 
 import java.util.concurrent.ExecutorService;
@@ -54,29 +57,32 @@ public class MainActivity extends AppCompatActivity {
 
     private ExecutorService executor = Executors.newSingleThreadExecutor();
 
+    private ActivityResultLauncher<Intent> scanLauncher;
+
+    private ActivityResultLauncher<String> photoPickerLauncher;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK && data != null) {
-            switch (requestCode) {
-                case REQUEST_CODE_SCAN:
-                    String result = CameraScan.parseScanResult(data);
-                    showToast(result);
-                    break;
-                case REQUEST_CODE_PHOTO:
-                    parsePhoto(data);
-                    break;
+        scanLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK) {
+                    Intent data = result.getData();
+                    String text = CameraScan.parseScanResult(data);
+                    showToast(text);
+                }
             }
+        );
 
-        }
+        photoPickerLauncher = registerForActivityResult(
+            new ActivityResultContracts.GetContent(),
+            this::parsePhoto
+        );
     }
+
 
     private void showToast(String text) {
         if (toast != null) {
@@ -87,9 +93,13 @@ public class MainActivity extends AppCompatActivity {
         toast.show();
     }
 
-    private void parsePhoto(Intent data) {
+    private void parsePhoto(Uri uri) {
+        if(uri == null) {
+            LogX.w("uri is null.");
+            return;
+        }
         try {
-            Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
+            Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
             //异步解析
             asyncThread(() -> {
                 final String result = CodeUtils.parseCode(bitmap);
@@ -103,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
             });
 
         } catch (Exception e) {
-            e.printStackTrace();
+            LogX.w(e);
         }
 
     }
@@ -121,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
     private void startScan(Class<?> cls) {
         ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeCustomAnimation(this, R.anim.in, R.anim.out);
         Intent intent = new Intent(this, cls);
-        ActivityCompat.startActivityForResult(this, intent, REQUEST_CODE_SCAN, optionsCompat.toBundle());
+        scanLauncher.launch(intent, optionsCompat);
     }
 
     /**
@@ -134,15 +144,6 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra(KEY_IS_QR_CODE, isQRCode);
         intent.putExtra(KEY_TITLE, title);
         startActivity(intent);
-    }
-
-    /**
-     * 开始选择图片
-     */
-    private void startPickPhoto() {
-        Intent pickIntent = new Intent(Intent.ACTION_PICK);
-        pickIntent.setType("image/*");
-        startActivityForResult(pickIntent, REQUEST_CODE_PHOTO);
     }
 
 
@@ -158,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
                 startScan(FullScreenQRCodeScanActivity.class);
                 break;
             case R.id.btnPickPhoto:
-                startPickPhoto();
+                photoPickerLauncher.launch("image/*");
                 break;
             case R.id.btnGenerateQrCode:
                 startGenerateCodeActivity(true, ((Button) v).getText().toString());

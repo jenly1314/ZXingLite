@@ -1,7 +1,7 @@
 // App
 def app_version = [:]
-app_version.versionCode = 44
-app_version.versionName = "3.4.0"
+app_version.versionCode = 45
+app_version.versionName = "3.4.1"
 ext.app_version = app_version
 
 // build version
@@ -50,7 +50,7 @@ deps.test = test
 deps.zxing = "com.google.zxing:core:3.5.4"
 
 // CameraScan
-deps.camera_scan = "com.github.jenly1314:camera-scan:1.4.0"
+deps.camera_scan = "com.github.jenly1314:camera-scan:1.4.1"
 // ViewfinderView
 deps.viewfinderview = "com.github.jenly1314:viewfinderview:1.4.0"
 

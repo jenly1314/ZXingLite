@@ -2,7 +2,6 @@ package com.king.zxing.app
 
 import android.app.Activity
 import android.content.Intent
-import android.widget.Toast
 import com.google.zxing.Result
 import com.king.camera.scan.AnalyzeResult
 import com.king.camera.scan.CameraScan
@@ -76,8 +75,8 @@ class FullScreenQRCodeScanActivity : BarcodeCameraScanActivity() {
      * 显示结果点
      */
     private fun displayResultPoint(result: AnalyzeResult<Result>) {
-        var width = result.imageWidth
-        var height = result.imageHeight
+        val width = result.imageWidth
+        val height = result.imageHeight
 
         val resultPoints = result.result.resultPoints
         val size = resultPoints.size
@@ -88,8 +87,8 @@ class FullScreenQRCodeScanActivity : BarcodeCameraScanActivity() {
                 x += it.x
                 y += it.y
             }
-            var centerX = x / size
-            var centerY = y / size
+            val centerX = x / size
+            val centerY = y / size
             //将实际的结果中心点坐标转换成界面预览的坐标
             val point = PointUtils.transform(
                 centerX.toInt(),
