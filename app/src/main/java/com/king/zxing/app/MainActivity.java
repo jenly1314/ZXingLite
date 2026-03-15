@@ -15,6 +15,7 @@
  */
 package com.king.zxing.app;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -147,6 +148,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    @SuppressLint("NonConstantResourceId")
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnMultiFormat:
