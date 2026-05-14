@@ -11,8 +11,8 @@ android {
         applicationId = "com.king.zxing.app"
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
-        versionCode = properties["VERSION_CODE"].toString().toInt()
-        versionName = properties["VERSION_NAME"].toString()
+        versionCode = (properties["VERSION_CODE"] ?: libs.versions.versionCode.get()).toString().toInt()
+        versionName = (properties["VERSION_NAME"] ?: libs.versions.versionName.get()).toString()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
