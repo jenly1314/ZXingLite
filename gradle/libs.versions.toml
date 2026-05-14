@@ -3,10 +3,7 @@ compileSdk = "35"
 minSdk = "23"
 targetSdk = "35"
 
-versionCode = "45"
-versionName = "3.4.1"
-
-androidGradle = "8.13.0"
+agp = "8.13.0"
 kotlin = "1.9.20"
 dokka = "1.9.20"
 mavenPublish = "0.34.0"
@@ -37,8 +34,8 @@ camera-scan = { group = "com.github.jenly1314", name = "camera-scan", version.re
 viewfinderview = { group = "com.github.jenly1314", name = "viewfinderview", version.ref = "viewfinderview" }
 
 [plugins]
-android-application = { id = "com.android.application", version.ref = "androidGradle" }
-android-library = { id = "com.android.library", version.ref = "androidGradle" }
+android-application = { id = "com.android.application", version.ref = "agp" }
+android-library = { id = "com.android.library", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 maven-publish = { id = "com.vanniktech.maven.publish", version.ref = "mavenPublish" }
