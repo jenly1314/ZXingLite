@@ -57,50 +57,13 @@ object CodeUtils {
 
     @JvmStatic
     @JvmOverloads
-    fun createQRCode(content: String, size: Int, logo: Bitmap? = null, @ColorInt codeColor: Int = Color.BLACK): Bitmap? {
-        return createQRCode(content, size, logo, 0.2f, buildQRCodeHints(), codeColor)
-    }
-
-    @JvmStatic
-    fun createQRCode(content: String, size: Int, @ColorInt codeColor: Int): Bitmap? {
-        return createQRCode(content, size, null, codeColor)
-    }
-
-    @JvmStatic
-    fun createQRCode(content: String, size: Int, logo: Bitmap?, @FloatRange(from = 0.0, to = 1.0) ratio: Float): Bitmap? {
-        return createQRCode(content, size, logo, ratio, buildQRCodeHints())
-    }
-
-    @JvmStatic
     fun createQRCode(
         content: String,
         size: Int,
-        logo: Bitmap?,
-        @FloatRange(from = 0.0, to = 1.0) ratio: Float,
-        @ColorInt codeColor: Int
-    ): Bitmap? {
-        return createQRCode(content, size, logo, ratio, buildQRCodeHints(), codeColor)
-    }
-
-    @JvmStatic
-    fun createQRCode(
-        content: String,
-        size: Int,
-        logo: Bitmap?,
-        @FloatRange(from = 0.0, to = 1.0) ratio: Float,
-        hints: Map<EncodeHintType, *>?
-    ): Bitmap? {
-        return createQRCode(content, size, logo, ratio, hints, Color.BLACK)
-    }
-
-    @JvmStatic
-    fun createQRCode(
-        content: String,
-        size: Int,
-        logo: Bitmap?,
-        @FloatRange(from = 0.0, to = 1.0) ratio: Float,
-        hints: Map<EncodeHintType, *>?,
-        @ColorInt codeColor: Int
+        logo: Bitmap? = null,
+        @FloatRange(from = 0.0, to = 1.0) ratio: Float = 0.2f,
+        hints: Map<EncodeHintType, *>? = buildQRCodeHints(),
+        @ColorInt codeColor: Int = Color.BLACK
     ): Bitmap? {
         return try {
             val bitMatrix: BitMatrix = QRCodeWriter().encode(content, BarcodeFormat.QR_CODE, size, size, hints)
@@ -171,12 +134,8 @@ object CodeUtils {
     }
 
     @JvmStatic
-    fun parseCode(bitmapPath: String): String? {
-        return parseCode(bitmapPath, DecodeFormatManager.ALL_HINTS)
-    }
-
-    @JvmStatic
-    fun parseCode(bitmapPath: String, hints: Map<DecodeHintType, Any>?): String? {
+    @JvmOverloads
+    fun parseCode(bitmapPath: String, hints: Map<DecodeHintType, Any>? = DecodeFormatManager.ALL_HINTS): String? {
         return parseCodeResult(bitmapPath, hints)?.text
     }
 
@@ -186,38 +145,32 @@ object CodeUtils {
     }
 
     @JvmStatic
-    fun parseCode(bitmap: Bitmap): String? {
-        return parseCode(bitmap, DecodeFormatManager.ALL_HINTS)
-    }
-
-    @JvmStatic
-    fun parseCode(bitmap: Bitmap, hints: Map<DecodeHintType, Any>?): String? {
+    @JvmOverloads
+    fun parseCode(bitmap: Bitmap, hints: Map<DecodeHintType, Any>? = DecodeFormatManager.ALL_HINTS): String? {
         return parseCodeResult(bitmap, hints)?.text
     }
 
     @JvmStatic
-    fun parseCodeResult(bitmapPath: String, hints: Map<DecodeHintType, Any>?): Result? {
-        return parseCodeResult(bitmapPath, DEFAULT_REQ_WIDTH, DEFAULT_REQ_HEIGHT, hints)
-    }
-
-    @JvmStatic
-    fun parseCodeResult(bitmapPath: String, reqWidth: Int, reqHeight: Int, hints: Map<DecodeHintType, Any>?): Result? {
+    @JvmOverloads
+    fun parseCodeResult(
+        bitmapPath: String,
+        reqWidth: Int = DEFAULT_REQ_WIDTH,
+        reqHeight: Int = DEFAULT_REQ_HEIGHT,
+        hints: Map<DecodeHintType, Any>? = DecodeFormatManager.ALL_HINTS
+    ): Result? {
         val bitmap = compressBitmap(bitmapPath, reqWidth, reqHeight) ?: return null
         return parseCodeResult(bitmap, hints)
     }
 
     @JvmStatic
-    fun parseCodeResult(bitmap: Bitmap): Result? {
-        return parseCodeResult(getRGBLuminanceSource(bitmap), DecodeFormatManager.ALL_HINTS)
-    }
-
-    @JvmStatic
-    fun parseCodeResult(bitmap: Bitmap, hints: Map<DecodeHintType, Any>?): Result? {
+    @JvmOverloads
+    fun parseCodeResult(bitmap: Bitmap, hints: Map<DecodeHintType, Any>? = DecodeFormatManager.ALL_HINTS): Result? {
         return parseCodeResult(getRGBLuminanceSource(bitmap), hints)
     }
 
     @JvmStatic
-    fun parseCodeResult(source: LuminanceSource?, hints: Map<DecodeHintType, Any>?): Result? {
+    @JvmOverloads
+    fun parseCodeResult(source: LuminanceSource?, hints: Map<DecodeHintType, Any>? = DecodeFormatManager.ALL_HINTS): Result? {
         var result: Result? = null
         val reader = MultiFormatReader()
         try {
@@ -293,80 +246,30 @@ object CodeUtils {
     }
 
     @JvmStatic
-    fun createBarCode(content: String, format: BarcodeFormat, desiredWidth: Int, desiredHeight: Int): Bitmap? {
-        return createBarCode(content, format, desiredWidth, desiredHeight, null)
+    @JvmOverloads
+    fun createBarCode(
+        content: String,
+        desiredWidth: Int,
+        desiredHeight: Int,
+        hints: Map<EncodeHintType, *>? = null,
+        isShowText: Boolean = false,
+        textSize: Int = 40,
+        @ColorInt codeColor: Int = Color.BLACK
+    ): Bitmap? {
+        return createBarCode(content, BarcodeFormat.CODE_128, desiredWidth, desiredHeight, hints, isShowText, textSize, codeColor)
     }
 
     @JvmStatic
     @JvmOverloads
     fun createBarCode(
         content: String,
+        format: BarcodeFormat,
         desiredWidth: Int,
         desiredHeight: Int,
+        hints: Map<EncodeHintType, *>? = null,
         isShowText: Boolean = false,
+        textSize: Int = 40,
         @ColorInt codeColor: Int = Color.BLACK
-    ): Bitmap? {
-        return createBarCode(content, BarcodeFormat.CODE_128, desiredWidth, desiredHeight, null, isShowText, 40, codeColor)
-    }
-
-    @JvmStatic
-    fun createBarCode(
-        content: String,
-        format: BarcodeFormat,
-        desiredWidth: Int,
-        desiredHeight: Int,
-        hints: Map<EncodeHintType, *>?
-    ): Bitmap? {
-        return createBarCode(content, format, desiredWidth, desiredHeight, hints, false, 40, Color.BLACK)
-    }
-
-    @JvmStatic
-    fun createBarCode(
-        content: String,
-        format: BarcodeFormat,
-        desiredWidth: Int,
-        desiredHeight: Int,
-        hints: Map<EncodeHintType, *>?,
-        isShowText: Boolean
-    ): Bitmap? {
-        return createBarCode(content, format, desiredWidth, desiredHeight, hints, isShowText, 40, Color.BLACK)
-    }
-
-    @JvmStatic
-    fun createBarCode(
-        content: String,
-        format: BarcodeFormat,
-        desiredWidth: Int,
-        desiredHeight: Int,
-        isShowText: Boolean,
-        @ColorInt codeColor: Int
-    ): Bitmap? {
-        return createBarCode(content, format, desiredWidth, desiredHeight, null, isShowText, 40, codeColor)
-    }
-
-    @JvmStatic
-    fun createBarCode(
-        content: String,
-        format: BarcodeFormat,
-        desiredWidth: Int,
-        desiredHeight: Int,
-        hints: Map<EncodeHintType, *>?,
-        isShowText: Boolean,
-        @ColorInt codeColor: Int
-    ): Bitmap? {
-        return createBarCode(content, format, desiredWidth, desiredHeight, hints, isShowText, 40, codeColor)
-    }
-
-    @JvmStatic
-    fun createBarCode(
-        content: String,
-        format: BarcodeFormat,
-        desiredWidth: Int,
-        desiredHeight: Int,
-        hints: Map<EncodeHintType, *>?,
-        isShowText: Boolean,
-        textSize: Int,
-        @ColorInt codeColor: Int
     ): Bitmap? {
         if (TextUtils.isEmpty(content)) {
             return null
