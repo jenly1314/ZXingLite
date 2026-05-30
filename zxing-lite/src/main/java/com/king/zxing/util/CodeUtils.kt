@@ -293,11 +293,6 @@ object CodeUtils {
     }
 
     @JvmStatic
-    fun createBarCode(content: String, desiredWidth: Int, desiredHeight: Int): Bitmap? {
-        return createBarCode(content, BarcodeFormat.CODE_128, desiredWidth, desiredHeight, null)
-    }
-
-    @JvmStatic
     fun createBarCode(content: String, format: BarcodeFormat, desiredWidth: Int, desiredHeight: Int): Bitmap? {
         return createBarCode(content, format, desiredWidth, desiredHeight, null)
     }
@@ -425,7 +420,7 @@ object CodeUtils {
             paint.textSize = textSize.toFloat()
             paint.color = textColor
             paint.textAlign = Paint.Align.CENTER
-            canvas.drawText(code, srcWidth / 2f, srcHeight + textSize / 2f + offset, paint)
+            canvas.drawText(code!!, srcWidth / 2f, srcHeight + textSize / 2f + offset, paint)
             canvas.save()
             canvas.restore()
             bitmap
