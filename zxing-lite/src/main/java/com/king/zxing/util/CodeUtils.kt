@@ -136,7 +136,7 @@ object CodeUtils {
     @JvmStatic
     @JvmOverloads
     fun parseCode(bitmapPath: String, hints: Map<DecodeHintType, Any>? = DecodeFormatManager.ALL_HINTS): String? {
-        return parseCodeResult(bitmapPath, hints)?.text
+        return parseCodeResult(bitmapPath, hints = hints)?.text
     }
 
     @JvmStatic
