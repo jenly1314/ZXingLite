@@ -40,5 +40,11 @@ jobs:
       release-body: ${{ github.event.inputs.release-body }}
 
   docs:
+    permissions:
+      contents: write
+      id-token: write
+      pages: write
     needs: [release]
-    uses: ./.github/workflows/docs.yml
+    uses: jenly1314/actions/.github/workflows/reusable-docs.yml@v1
+    with:
+      java-version-file: '.github/workflows/.java-version'
