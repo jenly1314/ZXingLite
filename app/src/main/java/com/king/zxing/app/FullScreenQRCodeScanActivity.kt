@@ -26,7 +26,7 @@ class FullScreenQRCodeScanActivity : BarcodeCameraScanActivity() {
         super.initUI()
 
         // 设置取景框样式
-        viewfinderView.setViewfinderStyle(ViewfinderStyle.POPULAR)
+        viewfinderView!!.setViewfinderStyle(ViewfinderStyle.POPULAR)
 
     }
 
@@ -92,11 +92,11 @@ class FullScreenQRCodeScanActivity : BarcodeCameraScanActivity() {
                 centerY.toInt(),
                 width,
                 height,
-                viewfinderView.width,
-                viewfinderView.height
+                viewfinderView!!.width,
+                viewfinderView!!.height
             )
             //显示结果点信息
-            viewfinderView.showResultPoints(listOf(point))
+            viewfinderView!!.showResultPoints(listOf(point))
         }
     }
 

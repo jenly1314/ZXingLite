@@ -19,7 +19,7 @@ import com.king.zxing.analyze.MultiFormatAnalyzer
  */
 abstract class BarcodeCameraScanFragment : BaseCameraScanFragment<Result>() {
 
-    protected lateinit var viewfinderView: ViewfinderView
+    protected var viewfinderView: ViewfinderView? = null
 
     override fun initUI() {
         val viewfinderViewId = getViewfinderViewId()
