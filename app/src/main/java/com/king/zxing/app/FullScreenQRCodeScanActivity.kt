@@ -39,12 +39,9 @@ class FullScreenQRCodeScanActivity : BarcodeCameraScanActivity() {
 
     override fun createAnalyzer(): Analyzer<Result>? {
         // 初始化解码配置
-        val decodeConfig = DecodeConfig().apply {
-            // 如果只有识别二维码的需求，这样设置效率会更高，不设置默认为DecodeFormatManager.DEFAULT_HINTS
-            hints = DecodeFormatManager.QR_CODE_HINTS
-            // 设置是否全区域识别，默认false
-            isFullAreaScan = true
-        }
+        val decodeConfig = DecodeConfig()
+            .setHints(DecodeFormatManager.QR_CODE_HINTS)
+            .setFullAreaScan(true)
         // BarcodeCameraScanActivity默认使用的MultiFormatAnalyzer，这里可以改为使用QRCodeAnalyzer
         return QRCodeAnalyzer(decodeConfig)
     }
